@@ -12,6 +12,7 @@
 		89DB643D2099BECD00EE60CD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89DB643B2099BECD00EE60CD /* Main.storyboard */; };
 		89DB643F2099BECF00EE60CD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89DB643E2099BECF00EE60CD /* Assets.xcassets */; };
 		89DB64422099BECF00EE60CD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89DB64402099BECF00EE60CD /* LaunchScreen.storyboard */; };
+		89DB644A2099D24A00EE60CD /* MyObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89DB64492099D24A00EE60CD /* MyObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +23,7 @@
 		89DB643E2099BECF00EE60CD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		89DB64412099BECF00EE60CD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89DB64432099BECF00EE60CD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		89DB64492099D24A00EE60CD /* MyObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyObserver.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 			children = (
 				89DB64372099BECD00EE60CD /* AppDelegate.swift */,
 				89DB64392099BECD00EE60CD /* ViewController.swift */,
+				89DB64492099D24A00EE60CD /* MyObserver.swift */,
 				89DB643B2099BECD00EE60CD /* Main.storyboard */,
 				89DB643E2099BECF00EE60CD /* Assets.xcassets */,
 				89DB64402099BECF00EE60CD /* LaunchScreen.storyboard */,
@@ -136,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89DB643A2099BECD00EE60CD /* ViewController.swift in Sources */,
+				89DB644A2099D24A00EE60CD /* MyObserver.swift in Sources */,
 				89DB64382099BECD00EE60CD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -280,9 +284,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FQV8RJ48LQ;
 				INFOPLIST_FILE = "Demo-KVO/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -299,9 +305,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = FQV8RJ48LQ;
 				INFOPLIST_FILE = "Demo-KVO/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

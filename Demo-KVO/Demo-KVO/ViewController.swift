@@ -8,18 +8,22 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+@objc class ViewController: UIViewController {
 
+    @IBOutlet weak var observedButton: UIButton!
+
+    var myObserver = MyObserver()
+        
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        self.myObserver.objectToObserve = self
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
+    @IBAction func observedButtonAction(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        
+        print("observedButton is selected \(sender.isSelected) \n\n")
+    }    
 }
 
