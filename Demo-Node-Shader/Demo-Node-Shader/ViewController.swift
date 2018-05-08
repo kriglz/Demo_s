@@ -12,7 +12,11 @@ import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
 
+    // MARK: - Properties
+    
     @IBOutlet var sceneView: ARSCNView!
+    
+    // MARK: - Nodes
     
     lazy var circleNode: SCNNode = {
         let circle = SCNSphere(radius: 0.5)
@@ -25,45 +29,57 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         let node = SCNNode(geometry: circle)
         node.name = "node"
-                
+        
         return node
     }()
+    
+    lazy var cameraNode: SCNNode = {
+        let node = SCNNode()
+        let cameraNode = SCNCamera()
+        
+        node.camera = cameraNode
+        
+        node.addChildNode(self.lightNode)
+        
+        return node
+    }()
+    
+    lazy var lightNode: SCNNode = {
+        let node = SCNNode()
+        
+        node.light = SCNLight()
+        node.light?.type = .spot
+        
+        return node
+    }()
+
+    // MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the view's delegate
         sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
         configuration.isLightEstimationEnabled = true
 
-        // Run the view's session
         sceneView.session.run(configuration)
         
-        self.circleNode.position = SCNVector3(0, 0, -1.4)
+        self.circleNode.position = SCNVector3(0, 0, -1)
 
         sceneView.scene.rootNode.addChildNode(self.circleNode)
+        sceneView.scene.rootNode.addChildNode(self.cameraNode)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // Pause the view's session
         sceneView.session.pause()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
 
     // MARK: - ARSCNViewDelegate
