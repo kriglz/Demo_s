@@ -48,7 +48,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let node = SCNNode()
         
         node.light = SCNLight()
-        node.light?.type = .spot
+        node.light?.type = SCNLight.LightType.omni
         
         return node
     }()
