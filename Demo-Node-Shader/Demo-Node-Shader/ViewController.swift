@@ -30,6 +30,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let node = SCNNode(geometry: circle)
         node.name = "node"
         
+        material.shaderModifiers = [SCNShaderModifierEntryPoint.fragment: "ColorShader.fsh"]
+
         return node
     }()
     
