@@ -30,32 +30,40 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let node = SCNNode(geometry: circle)
         node.name = "node"
         
-        material.specular.contents = UIColor.blue
-//        material.shaderModifiers = [
-//            SCNShaderModifierEntryPoint.surface:
-//                "uniform float Scale = 12.0;\n" +
-//                    "uniform float Width = 0.5;\n" +
-//                    "uniform float Blend = 0.0;\n" +
-//                    "vec2 position = fract(_surface.diffuseTexcoord * Scale);" +
-//                    "float f1 = clamp(position.y / Blend, 0.0, 1.0);" +
-//                    "float f2 = clamp((position.y - Width) / Blend, 0.0, 1.0);" +
-//                    "f1 = f1 * (1.0 - f2);" +
-//                    "f1 = f1 * f1 * 2.0 * (3. * 2. * f1);" +
+//        material.specular.contents = UIColor.blue
+        
+//        material.shaderModifiers = [SCNShaderModifierEntryPoint.surface:
+//            "uniform float Scale = 12.0;\n" +
+//            "uniform float Width = 0.5;\n" +
+//            "uniform float Blend = 0.0;\n" +
+//
+//            "vec2 position = fract(_surface.diffuseTexcoord * Scale);" +
+//
+//            "float f1 = clamp(position.y / Blend, 0.0, 1.0);" +
+//            "float f2 = clamp((position.y - Width) / Blend, 0.0, 1.0);" +
+//
+//            "f1 = f1 * (1.0 - f2);" +
+//            "f1 = f1 * f1 * 2.0 * (3. * 2. * f1);" +
 //            "_surface.diffuse = mix(vec4(1.0), vec4(0.0), f1);"
 //        ]
-        
         
 //        material.shaderModifiers = [SCNShaderModifierEntryPoint.fragment :
 //            "_output.color = vec4 ( 0.0);"
 //        ]
         
-        
-        material.shaderModifiers = [SCNShaderModifierEntryPoint.fragment :
-            "uniform float mixLevel = 0.5;\n" +
-            "vec3 gray = vec3(dot(vec3(0.3, 0.59, 0.11), _output.color.rgb));\n" +
-            "_output.color = mix(_output.color, vec4(gray, 1.0), mixLevel);"
-        ]
+//        material.shaderModifiers = [SCNShaderModifierEntryPoint.fragment :
+//            "uniform float mixLevel = 0.5;\n" +
+//            "vec3 gray = vec3(dot(vec3(0.3, 0.59, 0.11), _output.color.rgb));\n" +
+//            "_output.color = mix(_output.color, vec4(gray, 1.0), mixLevel);"
+//        ]
       
+//        vertex_string   = [bundle pathForResource: @"Fire" ofType: @"vert"];
+//        vertex_string   = [NSString stringWithContentsOfFile: vertex_string];
+                
+        if let shaderBundle = Bundle.main.path(forResource: "Fire", ofType: "frag"), let shaderModifier = try? String(contentsOfFile: shaderBundle) {
+            material.shaderModifiers = [SCNShaderModifierEntryPoint.fragment : shaderModifier]
+        }
+        
         return node
     }()
     

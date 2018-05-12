@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8900E49320A74A0B00C80C1C /* Fire.frag in Resources */ = {isa = PBXBuildFile; fileRef = 8900E49220A74A0B00C80C1C /* Fire.frag */; };
 		8953A39D20A173E100DE27D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8953A39C20A173E100DE27D5 /* AppDelegate.swift */; };
 		8953A39F20A173E100DE27D5 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 8953A39E20A173E100DE27D5 /* art.scnassets */; };
 		8953A3A120A173E100DE27D5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8953A3A020A173E100DE27D5 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8900E49220A74A0B00C80C1C /* Fire.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Fire.frag; sourceTree = "<group>"; };
 		8953A39920A173E100DE27D5 /* Demo-Node-Shader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-Node-Shader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8953A39C20A173E100DE27D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8953A39E20A173E100DE27D5 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -60,6 +62,7 @@
 				8953A39E20A173E100DE27D5 /* art.scnassets */,
 				8953A3A020A173E100DE27D5 /* ViewController.swift */,
 				8953A3A220A173E100DE27D5 /* Main.storyboard */,
+				8900E49220A74A0B00C80C1C /* Fire.frag */,
 				8953A3A520A173E400DE27D5 /* Assets.xcassets */,
 				8953A3A720A173E400DE27D5 /* LaunchScreen.storyboard */,
 				8953A3AA20A173E400DE27D5 /* Info.plist */,
@@ -125,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8900E49320A74A0B00C80C1C /* Fire.frag in Resources */,
 				8953A39F20A173E100DE27D5 /* art.scnassets in Resources */,
 				8953A3A920A173E400DE27D5 /* LaunchScreen.storyboard in Resources */,
 				8953A3A620A173E400DE27D5 /* Assets.xcassets in Resources */,
