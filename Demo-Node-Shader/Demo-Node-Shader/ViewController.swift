@@ -61,7 +61,15 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 //        vertex_string   = [NSString stringWithContentsOfFile: vertex_string];
                 
         if let shaderBundle = Bundle.main.path(forResource: "Fire", ofType: "frag"), let shaderModifier = try? String(contentsOfFile: shaderBundle) {
+            
             material.shaderModifiers = [SCNShaderModifierEntryPoint.fragment : shaderModifier]
+            
+            material.setValue(NSValue(scnVector3: (SCNVector3(0, 0.7, 0))), forKey: "Color1")
+
+//            material.setValue(Float(0), forKey: "Noise")
+//            material.setValue(SCNVector3(0.6, 0.1, 0), forKey: "Color2")
+//            material.setValue(Float(1.2), forKey: "NoiseScale")
+
         }
         
         return node
