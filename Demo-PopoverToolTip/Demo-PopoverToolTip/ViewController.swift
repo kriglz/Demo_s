@@ -15,15 +15,18 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let popoverPresentationController = popoverViewController.popoverPresentationController {
+        if let popoverPresentationController = self.popoverViewController.popoverPresentationController {
             popoverPresentationController.sourceView = self.view
             popoverPresentationController.sourceRect = self.view.bounds
+            
 //            popoverPresentationController.delegate = self
         }
     }
     
     @IBAction func presentPopover(_ sender: UIButton) {
-         self.present(popoverViewController, animated: true, completion: nil)
+        self.present(popoverViewController, animated: false, completion: nil)
+        self.popoverViewController.preferredContentSize = CGSize(width: 100, height: 100)
+
     }
     
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
@@ -45,10 +48,10 @@ class PopoverLabelViewController: UIViewController {
         
         self.modalPresentationStyle = .popover
         self.popoverPresentationController?.backgroundColor = .green
-        self.popoverPresentationController?.permittedArrowDirections = .any
+        self.popoverPresentationController?.permittedArrowDirections = .up
         
         self.view.backgroundColor = .red
-        self.view.layer.cornerRadius = 4
+        self.view.layer.cornerRadius = 100
         self.view.clipsToBounds = true
         
         self.label.text = "text label"
@@ -62,16 +65,12 @@ class PopoverLabelViewController: UIViewController {
         super.viewDidLoad()
         
         self.view.addSubview(self.label)
-        
+
         self.label.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.label.setContentHuggingPriority(.defaultHigh, for: .vertical)
-        self.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
         self.label.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.label.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        
-        self.view.bottomAnchor.constraint(equalTo: self.label.bottomAnchor).isActive = true
-        self.view.trailingAnchor.constraint(equalTo: self.label.trailingAnchor).isActive = true
+        self.label.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        self.label.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
     }
 }
