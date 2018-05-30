@@ -8,14 +8,26 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIPopoverPresentationControllerDelegate {
 
+    let popoverViewController = PopoverLabelViewController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        let popoverViewController = PopoverLabelViewController()
-        self.view.addSubview(popoverViewController.view)
-        self.present(popoverViewController, animated: true, completion: nil)
+        
+        if let popoverPresentationController = popoverViewController.popoverPresentationController {
+            popoverPresentationController.sourceView = self.view
+            popoverPresentationController.sourceRect = self.view.bounds
+//            popoverPresentationController.delegate = self
+        }
+    }
+    
+    @IBAction func presentPopover(_ sender: UIButton) {
+         self.present(popoverViewController, animated: true, completion: nil)
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
 }
 
@@ -32,8 +44,6 @@ class PopoverLabelViewController: UIViewController {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         self.modalPresentationStyle = .popover
-        self.popoverPresentationController?.sourceView = self.parent?.view
-        self.popoverPresentationController?.sourceRect = self.view.bounds
         self.popoverPresentationController?.backgroundColor = .green
         self.popoverPresentationController?.permittedArrowDirections = .any
         
