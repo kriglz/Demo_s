@@ -12,20 +12,26 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
 
     let popoverViewController = PopoverLabelViewController()
     
+    @IBOutlet weak var presentButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let popoverPresentationController = self.popoverViewController.popoverPresentationController {
-            popoverPresentationController.sourceView = self.view
-            popoverPresentationController.sourceRect = self.view.bounds
-            
-//            popoverPresentationController.delegate = self
-        }
     }
     
     @IBAction func presentPopover(_ sender: UIButton) {
-        self.present(popoverViewController, animated: false, completion: nil)
-        self.popoverViewController.preferredContentSize = CGSize(width: 100, height: 100)
+        self.popoverViewController.modalPresentationStyle = .popover
+        
+        self.popoverViewController.popoverPresentationController?.backgroundColor = .green
+        self.popoverViewController.popoverPresentationController?.permittedArrowDirections = .any
+        
+        self.popoverViewController.popoverPresentationController?.delegate = self
+        
+        self.popoverViewController.popoverPresentationController?.sourceView = self.presentButton
+        self.popoverViewController.popoverPresentationController?.sourceRect = self.presentButton.bounds
+        
+        self.popoverViewController.preferredContentSize = CGSize(width: 100, height: 50)
+        
+        self.present(popoverViewController, animated: true, completion: nil)
 
     }
     
@@ -45,16 +51,8 @@ class PopoverLabelViewController: UIViewController {
         self.label = UILabel()
         
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        
-        self.modalPresentationStyle = .popover
-        self.popoverPresentationController?.backgroundColor = .green
-        self.popoverPresentationController?.permittedArrowDirections = .up
-        
-        self.view.backgroundColor = .red
-        self.view.layer.cornerRadius = 100
-        self.view.clipsToBounds = true
-        
-        self.label.text = "text label"
+   
+        self.label.text = "test_label_jgkjyghejywgjhr"
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -70,7 +68,15 @@ class PopoverLabelViewController: UIViewController {
 
         self.label.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
         self.label.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
-        self.label.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        self.label.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
+        self.view.bottomAnchor.constraint(equalTo: self.label.bottomAnchor).isActive = true
+        self.view.trailingAnchor.constraint(equalTo: self.label.trailingAnchor).isActive = true
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.view.layoutIfNeeded()
+        
+        self.preferredContentSize = self.view.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
     }
 }
