@@ -18,6 +18,14 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         super.viewDidLoad()
     }
     
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
     @IBAction func presentPopover(_ sender: UIButton) {
         self.popoverViewController.modalPresentationStyle = .popover
         
@@ -29,10 +37,7 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         self.popoverViewController.popoverPresentationController?.sourceView = self.presentButton
         self.popoverViewController.popoverPresentationController?.sourceRect = self.presentButton.bounds
         
-        self.popoverViewController.preferredContentSize = CGSize(width: 100, height: 50)
-        
         self.present(popoverViewController, animated: true, completion: nil)
-
     }
     
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
@@ -49,10 +54,13 @@ class PopoverLabelViewController: UIViewController {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         self.label = UILabel()
+        self.label.lineBreakMode = .byWordWrapping
+        self.label.numberOfLines = 0
+        self.label.textAlignment = .center
         
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
    
-        self.label.text = "test_label_jgkjyghejywgjhr"
+        self.label.text = "test_label_jgkjyghejywgjhrvjdbvahfkajsf-asdfjkaudhf kuds fgaf"
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -77,6 +85,11 @@ class PopoverLabelViewController: UIViewController {
         
         self.view.layoutIfNeeded()
         
-        self.preferredContentSize = self.view.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+        self.label.sizeToFit()
+        self.view.sizeToFit()
+        
+        self.preferredContentSize = self.label.intrinsicContentSize
+
+//        self.preferredContentSize = self.view.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
     }
 }
