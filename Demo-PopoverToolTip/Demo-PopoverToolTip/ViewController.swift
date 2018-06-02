@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    let wrapperViewController = WrapperController()
+    private let wrapperViewController = WrapperController()
     
     @IBOutlet weak var presentButton: UIButton!
     
@@ -29,24 +29,22 @@ class ViewController: UIViewController {
         self.wrapperViewController.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
     }
     
-//    override var shouldAutorotate: Bool {
-//        return false
-//    }
-//
-//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-//        return .portrait
-//    }
+    override var shouldAutorotate: Bool {
+        return false
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
     
     @IBAction func presentPopover(_ sender: UIButton) {
-        self.wrapperViewController.setupPopover(for: self.presentButton)
-        
-        self.present(self.wrapperViewController.popoverViewController, animated: true, completion: nil)
+        self.wrapperViewController.setupAndPresentPopover(for: self.presentButton)
     }
 }
 
 class WrapperController: UIViewController {
-    
-    let popoverViewController = PopoverLabelViewController()
+
+    private let popoverViewController = PopoverLabelViewController()
 
     convenience init() {
         self.init(nibName: nil, bundle: nil)
@@ -54,7 +52,7 @@ class WrapperController: UIViewController {
         self.view.backgroundColor = .blue
     }
     
-    func setupPopover(for anchorView: UIView) {
+    func setupAndPresentPopover(for anchorView: UIView) {
         self.popoverViewController.modalPresentationStyle = .popover
         
         self.popoverViewController.popoverPresentationController?.backgroundColor = .green
@@ -64,7 +62,8 @@ class WrapperController: UIViewController {
         
         self.popoverViewController.popoverPresentationController?.sourceView = anchorView
         self.popoverViewController.popoverPresentationController?.sourceRect = anchorView.bounds
-        
+
+        self.present(self.popoverViewController, animated: true, completion: nil)
     }
 }
 
@@ -76,6 +75,7 @@ extension WrapperController: UIPopoverPresentationControllerDelegate {
 }
 
 class PopoverLabelViewController: UIViewController {
+    
     private let label: UILabel
     
     convenience init() {
@@ -119,7 +119,5 @@ class PopoverLabelViewController: UIViewController {
         self.view.sizeToFit()
         
         self.preferredContentSize = self.label.intrinsicContentSize
-
-//        self.preferredContentSize = self.view.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
     }
 }
