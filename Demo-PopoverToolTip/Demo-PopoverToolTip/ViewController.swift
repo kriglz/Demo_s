@@ -8,9 +8,8 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIPopoverPresentationControllerDelegate {
+class ViewController: UIViewController {
 
-    let popoverViewController = PopoverLabelViewController()
     let wrapperViewController = WrapperController()
     
     @IBOutlet weak var presentButton: UIButton!
@@ -30,15 +29,32 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         self.wrapperViewController.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
     }
     
-    override var shouldAutorotate: Bool {
-        return false
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
+//    override var shouldAutorotate: Bool {
+//        return false
+//    }
+//
+//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+//        return .portrait
+//    }
     
     @IBAction func presentPopover(_ sender: UIButton) {
+        self.wrapperViewController.setupPopover(for: self.presentButton)
+        
+        self.present(self.wrapperViewController.popoverViewController, animated: true, completion: nil)
+    }
+}
+
+class WrapperController: UIViewController {
+    
+    let popoverViewController = PopoverLabelViewController()
+
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
+        
+        self.view.backgroundColor = .blue
+    }
+    
+    func setupPopover(for anchorView: UIView) {
         self.popoverViewController.modalPresentationStyle = .popover
         
         self.popoverViewController.popoverPresentationController?.backgroundColor = .green
@@ -46,23 +62,16 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
         
         self.popoverViewController.popoverPresentationController?.delegate = self
         
-        self.popoverViewController.popoverPresentationController?.sourceView = self.presentButton
-        self.popoverViewController.popoverPresentationController?.sourceRect = self.presentButton.bounds
+        self.popoverViewController.popoverPresentationController?.sourceView = anchorView
+        self.popoverViewController.popoverPresentationController?.sourceRect = anchorView.bounds
         
-        self.present(popoverViewController, animated: true, completion: nil)
-    }
-    
-    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
-        return .none
     }
 }
 
-class WrapperController: UIViewController {
+extension WrapperController: UIPopoverPresentationControllerDelegate {
     
-    convenience init() {
-        self.init(nibName: nil, bundle: nil)
-        
-        self.view.backgroundColor = .blue
+    func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
+        return .none
     }
 }
 
