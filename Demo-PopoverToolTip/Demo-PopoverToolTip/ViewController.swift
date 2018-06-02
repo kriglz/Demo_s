@@ -118,6 +118,8 @@ class PopoverLabelViewController: UIViewController {
         self.label.sizeToFit()
         self.view.sizeToFit()
         
-        self.preferredContentSize = self.label.intrinsicContentSize
+        let contentSize = CGSize(width: self.label.intrinsicContentSize.width + 20, height: self.label.intrinsicContentSize.height + 20)
+        
+        self.preferredContentSize = contentSize
     }
 }
