@@ -11,11 +11,23 @@ import UIKit
 class ViewController: UIViewController, UIPopoverPresentationControllerDelegate {
 
     let popoverViewController = PopoverLabelViewController()
+    let wrapperViewController = WrapperController()
     
     @IBOutlet weak var presentButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.addChildViewController(self.wrapperViewController)
+        self.view.addSubview(self.wrapperViewController.view)
+        self.wrapperViewController.willMove(toParentViewController: self)
+        
+        self.wrapperViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.wrapperViewController.view.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 50).isActive = true
+        self.wrapperViewController.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -50).isActive = true
+        self.wrapperViewController.view.leadingAnchor.constraint(equalTo: self.view.leadingAnchor).isActive = true
+        self.wrapperViewController.view.trailingAnchor.constraint(equalTo: self.view.trailingAnchor).isActive = true
     }
     
     override var shouldAutorotate: Bool {
@@ -42,6 +54,15 @@ class ViewController: UIViewController, UIPopoverPresentationControllerDelegate 
     
     func adaptivePresentationStyle(for controller: UIPresentationController, traitCollection: UITraitCollection) -> UIModalPresentationStyle {
         return .none
+    }
+}
+
+class WrapperController: UIViewController {
+    
+    convenience init() {
+        self.init(nibName: nil, bundle: nil)
+        
+        self.view.backgroundColor = .blue
     }
 }
 
