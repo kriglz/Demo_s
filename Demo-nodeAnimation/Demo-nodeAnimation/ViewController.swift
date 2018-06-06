@@ -54,18 +54,20 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
-    @objc func animationAction(_ sender: Any?) {
-//        if sender.state == .ended {
-//            let location: CGPoint = sender.location(in: sceneView)
-//            let hits = self.sceneView.hitTest(location, options: nil)
-//            if !hits.isEmpty{
-//                let tappedNode = hits.first?.node
-//            }
-//        }
-//        shipNode.simdPosition += float3(-1, 0, 0)
-        
-        let transitionAction = SCNAction.move(to: SCNVector3(float3(-1, 0, 0)), duration: 3)
-        self.shipNode.runAction(transitionAction, forKey: "transition")
+    @objc func animationAction(_ sender: UITapGestureRecognizer?) {
+        if let sender = sender, sender.state == .ended {
+            let location = sender.location(in: self.sceneView)
+            let hit = self.sceneView.hitTest(location, options: nil).first
+            
+            if let hitTestPosition = hit?.worldCoordinates {
+                self.shipNode.simdPosition = float3(hitTestPosition) //float3(-1, 0, 0)
+            }
+            
+//            let transitionAction = SCNAction.move(to: SCNVector3(float3(-1, 0, 0)), duration: 3)
+//            let rotateRansition = SCNAction.rotateTo(x: .pi / 5, y: 0, z: 0, duration: 1)
+//            self.shipNode.runAction(rotateRansition, forKey: "rotation")
+//            self.shipNode.runAction(transitionAction, forKey: "transition")
+        }
     }
 
 }
