@@ -68,10 +68,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let hit = self.sceneView.hitTest(location, types: .estimatedHorizontalPlane)
             
             if let hitTestPosition = hit.first?.worldTransform {
-                
                 let hitMatrix = hitTestPosition.columns.3
-                let hitPosition = SCNVector3(hitMatrix.x, hitMatrix.y, hitMatrix.z)
-                
+                let hitPosition = SCNVector3(hitMatrix.x, hitMatrix.y, hitMatrix.z)                
                 self.pole.position = hitPosition
             }
         }
