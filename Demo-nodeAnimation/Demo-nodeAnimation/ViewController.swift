@@ -28,7 +28,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Create a new scene
         let scene = SCNScene(named: "art.scnassets/pole.scn")!
         
-        pole = scene.rootNode.childNode(withName: "pole", recursively: false)!
+        self.pole = scene.rootNode.childNode(withName: "pole", recursively: false)!
         
         // Set the scene to the view
         sceneView.scene = scene
@@ -81,6 +81,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if let cylinder = self.pole.geometry as? SCNCylinder {
             SCNTransaction.begin()
             SCNTransaction.animationDuration = 0.5
+            self.pole.pivot = SCNMatrix4MakeTranslation(0, 0.5, 0)
             cylinder.height = 0
             SCNTransaction.commit()
         }
@@ -90,7 +91,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         if let cylinder = self.pole.geometry as? SCNCylinder {
             SCNTransaction.begin()
             SCNTransaction.animationDuration = 0.5
-            cylinder.height = 2
+            self.pole.pivot = SCNMatrix4Identity
+            cylinder.height = 1
             SCNTransaction.commit()
         }
     }
