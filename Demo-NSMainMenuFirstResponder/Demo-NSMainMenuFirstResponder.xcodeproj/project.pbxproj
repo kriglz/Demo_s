@@ -15,7 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		896D97352063AB6900472DB4 /* Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Demo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		896D97352063AB6900472DB4 /* Demo-NSMainMenuFirstResponder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-NSMainMenuFirstResponder.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		896D97382063AB6900472DB4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		896D973A2063AB6900472DB4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		896D973D2063AB6900472DB4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -39,7 +39,7 @@
 		896D972C2063AB6900472DB4 = {
 			isa = PBXGroup;
 			children = (
-				896D97372063AB6900472DB4 /* Demo */,
+				896D97372063AB6900472DB4 /* Demo-NSMainMenuFirstResponder */,
 				896D97362063AB6900472DB4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -47,12 +47,12 @@
 		896D97362063AB6900472DB4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				896D97352063AB6900472DB4 /* Demo.app */,
+				896D97352063AB6900472DB4 /* Demo-NSMainMenuFirstResponder.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		896D97372063AB6900472DB4 /* Demo */ = {
+		896D97372063AB6900472DB4 /* Demo-NSMainMenuFirstResponder */ = {
 			isa = PBXGroup;
 			children = (
 				896D973F2063AB6900472DB4 /* Info.plist */,
@@ -63,15 +63,15 @@
 				896D97462063AB7600472DB4 /* TestWindow.swift */,
 				896D97472063AB7600472DB4 /* TestWindow.xib */,
 			);
-			path = Demo;
+			path = "Demo-NSMainMenuFirstResponder";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		896D97342063AB6900472DB4 /* Demo */ = {
+		896D97342063AB6900472DB4 /* Demo-NSMainMenuFirstResponder */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 896D97432063AB6900472DB4 /* Build configuration list for PBXNativeTarget "Demo" */;
+			buildConfigurationList = 896D97432063AB6900472DB4 /* Build configuration list for PBXNativeTarget "Demo-NSMainMenuFirstResponder" */;
 			buildPhases = (
 				896D97312063AB6900472DB4 /* Sources */,
 				896D97322063AB6900472DB4 /* Frameworks */,
@@ -81,9 +81,9 @@
 			);
 			dependencies = (
 			);
-			name = Demo;
+			name = "Demo-NSMainMenuFirstResponder";
 			productName = asdasdasd;
-			productReference = 896D97352063AB6900472DB4 /* Demo.app */;
+			productReference = 896D97352063AB6900472DB4 /* Demo-NSMainMenuFirstResponder.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -102,7 +102,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 896D97302063AB6900472DB4 /* Build configuration list for PBXProject "Demo" */;
+			buildConfigurationList = 896D97302063AB6900472DB4 /* Build configuration list for PBXProject "Demo-NSMainMenuFirstResponder" */;
 			compatibilityVersion = "Xcode 8.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -115,7 +115,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				896D97342063AB6900472DB4 /* Demo */,
+				896D97342063AB6900472DB4 /* Demo-NSMainMenuFirstResponder */,
 			);
 		};
 /* End PBXProject section */
@@ -271,10 +271,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Demo/Demo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Demo-NSMainMenuFirstResponder/Demo.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Demo-NSMainMenuFirstResponder/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = asdasd.asdasdasd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -286,10 +286,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = Demo/Demo.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Demo-NSMainMenuFirstResponder/Demo.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/Demo/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Demo-NSMainMenuFirstResponder/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = asdasd.asdasdasd;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -300,7 +300,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		896D97302063AB6900472DB4 /* Build configuration list for PBXProject "Demo" */ = {
+		896D97302063AB6900472DB4 /* Build configuration list for PBXProject "Demo-NSMainMenuFirstResponder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				896D97412063AB6900472DB4 /* Debug */,
@@ -309,7 +309,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		896D97432063AB6900472DB4 /* Build configuration list for PBXNativeTarget "Demo" */ = {
+		896D97432063AB6900472DB4 /* Build configuration list for PBXNativeTarget "Demo-NSMainMenuFirstResponder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				896D97442063AB6900472DB4 /* Debug */,
