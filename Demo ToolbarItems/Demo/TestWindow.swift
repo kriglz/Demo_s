@@ -10,36 +10,14 @@ import Cocoa
 
 class TestWindow: NSWindowController, NSToolbarDelegate, NSUserInterfaceValidations {
     
-    
-    func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
-        
-        if item.action == #selector(doSOmething(_:)) {
-            if let menuItem = item as? NSMenuItem {
-//                print("validate \((item as? NSMenuItem)?.state.rawValue), \(item.action)")
-
-//                menuItem.state = .on
-                
-                print(menuItem.state)
-                
-//                DispatchQueue.main.asyncAfter(deadline: DispatchTime.init(uptimeNanoseconds: 1000000000)) {
-//                    print(menuItem.debugDescription)
-//
-//                }
-                
-            }
-        }
-        
-        return true
-    }
-    
-    
-    let toolbar = NSToolbar()
+    private let toolbar = NSToolbar()
     
     private let itemId = NSToolbarItem.Identifier("ItemID")
+    
     private lazy var item: NSToolbarItem = {
         let item = NSToolbarItem(itemIdentifier: itemId)
         
-        let button = NSButton(title:  "ITEM button", target: self, action: #selector(doSOmething))
+        let button = NSButton(title:  "ITEM button", target: self, action: #selector(self.doSomething))
         button.imageHugsTitle = true
         button.setButtonType(NSButton.ButtonType.onOff)
         button.bezelStyle = NSButton.BezelStyle.texturedRounded
@@ -57,7 +35,7 @@ class TestWindow: NSWindowController, NSToolbarDelegate, NSUserInterfaceValidati
         menu.addItem(menuItem)
         menu.showsStateColumn = true
         
-        menuItem.action = #selector(doSOmething)
+        menuItem.action = #selector(self.doSomething)
         menuItem.target = self
         
         item.validateMenuItem(menuItem)
@@ -87,20 +65,25 @@ class TestWindow: NSWindowController, NSToolbarDelegate, NSUserInterfaceValidati
         self.toolbar.displayMode = .iconOnly
     }
     
+    func validateUserInterfaceItem(_ item: NSValidatedUserInterfaceItem) -> Bool {
+        if item.action == #selector(doSomething) {
+            if let menuItem = item as? NSMenuItem {
+                print("validate \((item as? NSMenuItem)?.state.rawValue), \(item.action)")
+                print(menuItem.state)
+            }
+        }
+        return true
+    }
+    
     @IBAction func buttonAction(_ sender: Any) {
         self.window?.close()
     }
     
-    @objc func doSOmething(_ sender: Any?) {
-        
-//        if let control = sender as? NSControl {
-//            print("item was selected \(control), its state \(control.debugDescription)")
-//        }
-//
-//        if let button = sender as? NSButton {
-//            print("item was selected \(button), its state \(button.state)")
-//        }
-        
+    @objc func doSomething(_ sender: Any?) {
+        if let control = sender as? NSControl {
+            print("item was selected \(control), its state \(control.debugDescription)")
+        }
+
         if let item = sender as? NSMenuItem {
             item.state = item.state == .on ? .off : .on
         }
