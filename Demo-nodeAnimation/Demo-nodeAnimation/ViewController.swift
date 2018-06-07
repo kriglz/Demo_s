@@ -14,7 +14,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
     
-    var shipNode = SCNNode()
+    var pole = SCNNode()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,15 +26,23 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let scene = SCNScene(named: "art.scnassets/pole.scn")!
         
-        shipNode = scene.rootNode.childNode(withName: "ship", recursively: false)!
+        pole = scene.rootNode.childNode(withName: "pole", recursively: false)!
         
         // Set the scene to the view
         sceneView.scene = scene
         
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.animationAction(_:)))
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.addObject(_:)))
         self.sceneView.addGestureRecognizer(tapGestureRecognizer)
+        
+        let swipeDownGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(self.animateHeightDown(_:)))
+        swipeDownGestureRecognizer.direction = .down
+        self.sceneView.addGestureRecognizer(swipeDownGestureRecognizer)
+        
+        let swipeUpGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(self.animateHeightUp(_:)))
+        swipeUpGestureRecognizer.direction = .up
+        self.sceneView.addGestureRecognizer(swipeUpGestureRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -54,20 +62,36 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
-    @objc func animationAction(_ sender: UITapGestureRecognizer?) {
+    @objc func addObject(_ sender: UITapGestureRecognizer?) {
         if let sender = sender, sender.state == .ended {
             let location = sender.location(in: self.sceneView)
-            let hit = self.sceneView.hitTest(location, options: nil).first
+            let hit = self.sceneView.hitTest(location, types: .estimatedHorizontalPlane)
             
-            if let hitTestPosition = hit?.worldCoordinates {
-                self.shipNode.simdPosition = float3(hitTestPosition) //float3(-1, 0, 0)
+            if let hitTestPosition = hit.first?.worldTransform {
+                
+                let hitMatrix = hitTestPosition.columns.3
+                let hitPosition = SCNVector3(hitMatrix.x, hitMatrix.y, hitMatrix.z)
+                
+                self.pole.position = hitPosition
             }
-            
-//            let transitionAction = SCNAction.move(to: SCNVector3(float3(-1, 0, 0)), duration: 3)
-//            let rotateRansition = SCNAction.rotateTo(x: .pi / 5, y: 0, z: 0, duration: 1)
-//            self.shipNode.runAction(rotateRansition, forKey: "rotation")
-//            self.shipNode.runAction(transitionAction, forKey: "transition")
         }
     }
-
+    
+    @objc func animateHeightDown(_ sender: UISwipeGestureRecognizer?) {
+        if let cylinder = self.pole.geometry as? SCNCylinder {
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0.5
+            cylinder.height = 0
+            SCNTransaction.commit()
+        }
+    }
+    
+    @objc func animateHeightUp(_ sender: UISwipeGestureRecognizer?) {
+        if let cylinder = self.pole.geometry as? SCNCylinder {
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0.5
+            cylinder.height = 2
+            SCNTransaction.commit()
+        }
+    }
 }
