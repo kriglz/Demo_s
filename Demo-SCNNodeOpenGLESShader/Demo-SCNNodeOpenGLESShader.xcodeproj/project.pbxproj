@@ -18,7 +18,7 @@
 
 /* Begin PBXFileReference section */
 		8900E49220A74A0B00C80C1C /* Fire.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Fire.frag; sourceTree = "<group>"; };
-		8953A39920A173E100DE27D5 /* Demo-Node-Shader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-Node-Shader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8953A39920A173E100DE27D5 /* Demo-SCNNodeOpenGLESShader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-SCNNodeOpenGLESShader.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8953A39C20A173E100DE27D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8953A39E20A173E100DE27D5 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
 		8953A3A020A173E100DE27D5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -42,7 +42,7 @@
 		8953A39020A173E100DE27D5 = {
 			isa = PBXGroup;
 			children = (
-				8953A39B20A173E100DE27D5 /* Demo-Node-Shader */,
+				8953A39B20A173E100DE27D5 /* Demo-SCNNodeOpenGLESShader */,
 				8953A39A20A173E100DE27D5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -50,12 +50,12 @@
 		8953A39A20A173E100DE27D5 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8953A39920A173E100DE27D5 /* Demo-Node-Shader.app */,
+				8953A39920A173E100DE27D5 /* Demo-SCNNodeOpenGLESShader.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8953A39B20A173E100DE27D5 /* Demo-Node-Shader */ = {
+		8953A39B20A173E100DE27D5 /* Demo-SCNNodeOpenGLESShader */ = {
 			isa = PBXGroup;
 			children = (
 				8953A39C20A173E100DE27D5 /* AppDelegate.swift */,
@@ -67,15 +67,15 @@
 				8953A3A720A173E400DE27D5 /* LaunchScreen.storyboard */,
 				8953A3AA20A173E400DE27D5 /* Info.plist */,
 			);
-			path = "Demo-Node-Shader";
+			path = "Demo-SCNNodeOpenGLESShader";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8953A39820A173E100DE27D5 /* Demo-Node-Shader */ = {
+		8953A39820A173E100DE27D5 /* Demo-SCNNodeOpenGLESShader */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8953A3AD20A173E400DE27D5 /* Build configuration list for PBXNativeTarget "Demo-Node-Shader" */;
+			buildConfigurationList = 8953A3AD20A173E400DE27D5 /* Build configuration list for PBXNativeTarget "Demo-SCNNodeOpenGLESShader" */;
 			buildPhases = (
 				8953A39520A173E100DE27D5 /* Sources */,
 				8953A39620A173E100DE27D5 /* Frameworks */,
@@ -85,9 +85,9 @@
 			);
 			dependencies = (
 			);
-			name = "Demo-Node-Shader";
+			name = "Demo-SCNNodeOpenGLESShader";
 			productName = "Demo-Node-Shader";
-			productReference = 8953A39920A173E100DE27D5 /* Demo-Node-Shader.app */;
+			productReference = 8953A39920A173E100DE27D5 /* Demo-SCNNodeOpenGLESShader.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -105,7 +105,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 8953A39420A173E100DE27D5 /* Build configuration list for PBXProject "Demo-Node-Shader" */;
+			buildConfigurationList = 8953A39420A173E100DE27D5 /* Build configuration list for PBXProject "Demo-SCNNodeOpenGLESShader" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -118,7 +118,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8953A39820A173E100DE27D5 /* Demo-Node-Shader */,
+				8953A39820A173E100DE27D5 /* Demo-SCNNodeOpenGLESShader */,
 			);
 		};
 /* End PBXProject section */
@@ -290,7 +290,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PJ8U3CQ43A;
-				INFOPLIST_FILE = "Demo-Node-Shader/Info.plist";
+				INFOPLIST_FILE = "Demo-SCNNodeOpenGLESShader/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -308,7 +308,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PJ8U3CQ43A;
-				INFOPLIST_FILE = "Demo-Node-Shader/Info.plist";
+				INFOPLIST_FILE = "Demo-SCNNodeOpenGLESShader/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -323,7 +323,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8953A39420A173E100DE27D5 /* Build configuration list for PBXProject "Demo-Node-Shader" */ = {
+		8953A39420A173E100DE27D5 /* Build configuration list for PBXProject "Demo-SCNNodeOpenGLESShader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8953A3AB20A173E400DE27D5 /* Debug */,
@@ -332,7 +332,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8953A3AD20A173E400DE27D5 /* Build configuration list for PBXNativeTarget "Demo-Node-Shader" */ = {
+		8953A3AD20A173E400DE27D5 /* Build configuration list for PBXNativeTarget "Demo-SCNNodeOpenGLESShader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8953A3AE20A173E400DE27D5 /* Debug */,
