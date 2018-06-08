@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8919DE7120CA74BF009E6D0E /* Plane.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8919DE7020CA74BF009E6D0E /* Plane.swift */; };
 		897AEB9320C858D300D70E55 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897AEB9220C858D300D70E55 /* AppDelegate.swift */; };
 		897AEB9520C858D300D70E55 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 897AEB9420C858D300D70E55 /* art.scnassets */; };
 		897AEB9720C858D300D70E55 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897AEB9620C858D300D70E55 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8919DE7020CA74BF009E6D0E /* Plane.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plane.swift; sourceTree = "<group>"; };
 		897AEB8F20C858D300D70E55 /* Demo-SCNNodeAnimation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-SCNNodeAnimation.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		897AEB9220C858D300D70E55 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		897AEB9420C858D300D70E55 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -59,6 +61,7 @@
 				897AEB9220C858D300D70E55 /* AppDelegate.swift */,
 				897AEB9420C858D300D70E55 /* art.scnassets */,
 				897AEB9620C858D300D70E55 /* ViewController.swift */,
+				8919DE7020CA74BF009E6D0E /* Plane.swift */,
 				897AEB9820C858D300D70E55 /* Main.storyboard */,
 				897AEB9B20C858D500D70E55 /* Assets.xcassets */,
 				897AEB9D20C858D500D70E55 /* LaunchScreen.storyboard */,
@@ -141,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				897AEB9720C858D300D70E55 /* ViewController.swift in Sources */,
+				8919DE7120CA74BF009E6D0E /* Plane.swift in Sources */,
 				897AEB9320C858D300D70E55 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

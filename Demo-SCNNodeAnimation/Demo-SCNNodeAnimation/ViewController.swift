@@ -30,8 +30,19 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         self.pole = scene.rootNode.childNode(withName: "pole", recursively: false)!
         
+        let bouncingPhysicalBody = SCNPhysicsShape(node: SCNNode(geometry: SCNSphere(radius: 0.5)), options: nil)
+        
+        self.pole.physicsBody = SCNPhysicsBody(type: .dynamic, shape: bouncingPhysicalBody)
+        self.pole.physicsBody?.isAffectedByGravity = true
+        self.pole.physicsBody?.friction = 1
+        self.pole.physicsBody?.restitution = 0.65
+        self.pole.physicsBody?.angularDamping = 1
+        
         // Set the scene to the view
         sceneView.scene = scene
+        sceneView.autoenablesDefaultLighting = true
+        self.sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+//        self.sceneView.scene.physicsWorld.contactDelegate = self
         
         let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.animateDropping(_:)))
         doubleTapGestureRecognizer.numberOfTapsRequired = 2
@@ -56,6 +67,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = [.horizontal]
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -75,7 +87,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             if let hitTestPosition = hit.first?.worldTransform {
                 let hitMatrix = hitTestPosition.columns.3
-                let hitPosition = SCNVector3(hitMatrix.x, hitMatrix.y, hitMatrix.z)                
+                let hitPosition = SCNVector3(hitMatrix.x, hitMatrix.y, hitMatrix.z)
+                
+                let plane = Plane(with: hitPosition)
+                plane.eulerAngles.x = .pi / 2
+                self.sceneView.scene.rootNode.addChildNode(plane)
+                
                 self.pole.position = hitPosition
             }
         }
@@ -83,12 +100,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     @objc func animateDropping(_ sender: UITapGestureRecognizer?) {
         if let sender = sender, sender.state == .recognized {
-//            if let cylinder = self.pole.geometry as? SCNCylinder {
-                SCNTransaction.begin()
-                SCNTransaction.animationDuration = 0.5
-                self.pole.pivot = SCNMatrix4MakeTranslation(0, -1, 0)
-                SCNTransaction.commit()
-//            }
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0.5
+            self.pole.pivot = SCNMatrix4MakeTranslation(0, -0.25, 0)
+            SCNTransaction.commit()
         }
     }
     
@@ -111,4 +126,3 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             SCNTransaction.commit()
         }
     }
-}
