@@ -33,7 +33,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         sceneView.scene = scene
         
+        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.animateDropping(_:)))
+        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        self.sceneView.addGestureRecognizer(doubleTapGestureRecognizer)
+        
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.addObject(_:)))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
         self.sceneView.addGestureRecognizer(tapGestureRecognizer)
         
         let swipeDownGestureRecognizer = UISwipeGestureRecognizer.init(target: self, action: #selector(self.animateHeightDown(_:)))
@@ -63,7 +69,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
     
     @objc func addObject(_ sender: UITapGestureRecognizer?) {
-        if let sender = sender, sender.state == .ended {
+        if let sender = sender, sender.state == .recognized {
             let location = sender.location(in: self.sceneView)
             let hit = self.sceneView.hitTest(location, types: .estimatedHorizontalPlane)
             
@@ -72,6 +78,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
                 let hitPosition = SCNVector3(hitMatrix.x, hitMatrix.y, hitMatrix.z)                
                 self.pole.position = hitPosition
             }
+        }
+    }
+    
+    @objc func animateDropping(_ sender: UITapGestureRecognizer?) {
+        if let sender = sender, sender.state == .recognized {
+//            if let cylinder = self.pole.geometry as? SCNCylinder {
+                SCNTransaction.begin()
+                SCNTransaction.animationDuration = 0.5
+                self.pole.pivot = SCNMatrix4MakeTranslation(0, -1, 0)
+                SCNTransaction.commit()
+//            }
         }
     }
     
