@@ -12,11 +12,10 @@ import SceneKit
 
 class GameViewController: UIViewController {
 
+    private let scene = SCNScene()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // create a new scene
-        let scene = SCNScene()
         
         // create and add a camera to the scene
         let cameraNode = SCNNode()
@@ -59,7 +58,7 @@ class GameViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         scnView.addGestureRecognizer(tapGesture)
         
-        addCube()
+        generateCubeGrid()
     }
     
     @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
@@ -113,16 +112,21 @@ class GameViewController: UIViewController {
         }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
-    }
-    
     // MARK: - Node management
 
-    private func addCube() {
+    private func generateCubeGrid() {
+        for index in 0...10 {
+            addCube(index: index)
+        }
+    }
+    
+    private func addCube(index: Int) {
         let cube = setupCube()
         cube.name = "Cube"
+        
+        cube.simdPosition = float3(0)
+        cube.simdPosition.x += Float(index) * 0.6
+        
         scene.rootNode.addChildNode(cube)
     }
     
@@ -133,7 +137,6 @@ class GameViewController: UIViewController {
         geometry.materials.first?.diffuse.contents = UIColor.red
         
         let node = SCNNode(geometry: geometry)
-        node.simdPosition = float3(0.5)
         
         return node
     }
