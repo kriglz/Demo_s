@@ -13,6 +13,9 @@ import SceneKit
 class GameViewController: UIViewController {
 
     private let scene = SCNScene()
+    private let starImage = UIImage(named: "star")
+    
+    private lazy var starImagePixelData = starImage?.pixelColorData()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +26,8 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 2, y: 2, z: 10)
+        cameraNode.position = SCNVector3(x: 4, y: 2, z: 15)
+        cameraNode.rotation = SCNVector4(1, 0, 0.5, 0.25)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -122,10 +126,12 @@ class GameViewController: UIViewController {
         }
     }
     
+    // apr podcst
+
     // MARK: - Node setup
 
     private func generateCubeGrid() {
-        for index in 0..<100 {
+        for index in 0..<10000 {
             addCube(index: index)
         }
     }
@@ -136,24 +142,28 @@ class GameViewController: UIViewController {
         
         cube.simdPosition = float3(0)
         
-        let division = Double(index) / 10
+        let division = Double(index) / 100
         let row = division.rounded(.down)
         
-        var column = Double(index).truncatingRemainder(dividingBy: 10)
+        var column = Double(index).truncatingRemainder(dividingBy: 100)
         column.round(.toNearestOrEven)
         
-        cube.simdPosition.x += Float(column) * 0.6
-        cube.simdPosition.y += Float(row) * 0.6
+        cube.simdPosition.x += Float(column) * 0.11
+        cube.simdPosition.y += Float(row) * 0.1
 
+        if let pixelData = starImagePixelData {
+            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
+        }
+        
         scene.rootNode.addChildNode(cube)
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(row) / 10, execute: { [weak self] in
-            self?.flipAnimation(for: cube)
-        })
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(index), execute: { [weak self] in
+//            self?.flipAnimation(for: cube)
+//        })
     }
     
     private func setupCube() -> SCNNode {
-        let cubeWidth = CGFloat(0.5)
+        let cubeWidth = CGFloat(0.1)
         
         let geometry = SCNBox(width: cubeWidth, height: cubeWidth, length: cubeWidth, chamferRadius: 0)
         geometry.materials.first?.diffuse.contents = UIColor.red
@@ -169,6 +179,8 @@ class GameViewController: UIViewController {
         // get its material
         let material = node.geometry!.firstMaterial!
         
+        let nodeColor = material.diffuse.contents as? UIColor
+        
         // highlight it
         SCNTransaction.begin()
         SCNTransaction.animationDuration = 1
@@ -182,7 +194,7 @@ class GameViewController: UIViewController {
             SCNTransaction.begin()
             SCNTransaction.animationDuration = 0.3
             
-            material.diffuse.contents = UIColor.red
+            material.diffuse.contents = nodeColor ?? UIColor.red
             
             SCNTransaction.commit()
             
