@@ -13,9 +13,14 @@ import SceneKit
 class GameViewController: UIViewController {
 
     private let scene = SCNScene()
-    private let starImage = UIImage(named: "star")
     
+    private let starImage = UIImage(named: "star")?.compress(to: CGSize(width: 100, height: 100))?.scale(to: CGSize(width: 100, height: 100))
     private lazy var starImagePixelData = starImage?.pixelColorData()
+    
+    private let pipeImage = UIImage(named: "pipe")?.compress(to: CGSize(width: 100, height: 100))?.scale(to: CGSize(width: 100, height: 100))
+    private lazy var pipeImagePixelData = pipeImage?.pixelColorData()
+    
+    private lazy var originalImageView = UIImageView(image: starImage)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +71,9 @@ class GameViewController: UIViewController {
 //        scnView.addGestureRecognizer(panGesture)
         
         generateCubeGrid()
+        
+        originalImageView.frame.origin = .zero
+        scnView.addSubview(originalImageView)
     }
     
     @objc func handleTap(_ gestureRecognize: UIGestureRecognizer) {
@@ -126,8 +134,6 @@ class GameViewController: UIViewController {
         }
     }
     
-    // apr podcst
-
     // MARK: - Node setup
 
     private func generateCubeGrid() {
@@ -149,11 +155,15 @@ class GameViewController: UIViewController {
         column.round(.toNearestOrEven)
         
         cube.simdPosition.x += Float(column) * 0.11
-        cube.simdPosition.y += Float(row) * 0.1
+        cube.simdPosition.y += Float(row) * 0.11
 
         if let pixelData = starImagePixelData {
             cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
         }
+//
+//        if let pixelData = pipeImagePixelData {
+//            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
+//        }
         
         scene.rootNode.addChildNode(cube)
         
@@ -166,7 +176,7 @@ class GameViewController: UIViewController {
         let cubeWidth = CGFloat(0.1)
         
         let geometry = SCNBox(width: cubeWidth, height: cubeWidth, length: cubeWidth, chamferRadius: 0)
-        geometry.materials.first?.diffuse.contents = UIColor.red
+//        geometry.materials.first?.diffuse.contents = UIColor.red
         
         let node = SCNNode(geometry: geometry)
         
