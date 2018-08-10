@@ -23,7 +23,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        cameraNode.position = SCNVector3(x: 2, y: 2, z: 15)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -57,6 +57,9 @@ class GameViewController: UIViewController {
         // add a tap gesture recognizer
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         scnView.addGestureRecognizer(tapGesture)
+        
+//        let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
+//        scnView.addGestureRecognizer(panGesture)
         
         generateCubeGrid()
     }
@@ -96,6 +99,32 @@ class GameViewController: UIViewController {
         }
     }
     
+//    var currentPanPosition: CGPoint = .zero
+//
+//    @objc func handlePan(_ gestureRecognizer: UIGestureRecognizer) {
+//        let scnView = self.view as! SCNView
+//
+//        let point = gestureRecognizer.location(in: scnView)
+//
+//        if currentPanPosition != .zero {
+//            let deltaX = point.x - currentPanPosition.x
+//            let deltaY = point.y - currentPanPosition.y
+//
+//            print(point)
+//            print(scene.rootNode.position)
+//
+//            scene.rootNode.position.x += Float(deltaX / 500)
+//            scene.rootNode.position.y -= Float(deltaY / 500)
+//        }
+//
+//        switch gestureRecognizer.state {
+//        case .ended, .cancelled:
+//            currentPanPosition = .zero
+//        default:
+//            currentPanPosition = point
+//        }
+//    }
+    
     override var shouldAutorotate: Bool {
         return true
     }
@@ -115,7 +144,7 @@ class GameViewController: UIViewController {
     // MARK: - Node management
 
     private func generateCubeGrid() {
-        for index in 0...10 {
+        for index in 0...100 {
             addCube(index: index)
         }
     }
@@ -125,8 +154,16 @@ class GameViewController: UIViewController {
         cube.name = "Cube"
         
         cube.simdPosition = float3(0)
-        cube.simdPosition.x += Float(index) * 0.6
         
+        let division = Double(index) / 10
+        let row = division.rounded(.down)
+        
+        var column = Double(index).truncatingRemainder(dividingBy: 10)
+        column.round(.toNearestOrEven)
+        
+        cube.simdPosition.x += Float(column) * 0.6
+        cube.simdPosition.y += Float(row) * 0.6
+
         scene.rootNode.addChildNode(cube)
     }
     
