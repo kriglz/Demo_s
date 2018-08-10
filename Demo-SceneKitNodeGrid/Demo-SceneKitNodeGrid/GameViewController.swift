@@ -14,7 +14,7 @@ class GameViewController: UIViewController {
 
     private let scene = SCNScene()
     
-    private let starImage = UIImage(named: "star")?.compress(to: CGSize(width: 100, height: 100))?.scale(to: CGSize(width: 100, height: 100))
+    private let starImage = UIImage(named: "star")?.compress(to: CGSize(width: 10, height: 10))?.scale(to: CGSize(width: 100, height: 100))
     private lazy var starImagePixelData = starImage?.pixelColorData()
     
     private let pipeImage = UIImage(named: "pipe")?.compress(to: CGSize(width: 100, height: 100))?.scale(to: CGSize(width: 100, height: 100))

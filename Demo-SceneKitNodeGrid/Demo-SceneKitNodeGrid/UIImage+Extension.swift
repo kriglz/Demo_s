@@ -10,6 +10,38 @@ import UIKit
 
 extension UIImage {
     
+//    func pixelColorData() -> [UIColor] {
+//        guard let pixelData = self.cgImage?.dataProvider?.data else {
+//            return []
+//        }
+//
+//        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+//
+//        var pixelColors: [UIColor] = []
+//
+//        let pixelsWidth = Int(self.size.width)
+//        let pixelsHigh = Int(self.size.height)
+//
+//        for x in 0..<pixelsWidth {
+//
+//            for y in 0..<pixelsHigh {
+//
+//                let pixelIndex: Int = ((pixelsWidth * y) + x) * 4
+//
+//                let red = CGFloat(data[pixelIndex])
+//                let green = CGFloat(data[pixelIndex + 1])
+//                let blue = CGFloat(data[pixelIndex + 2])
+//                let alpha = CGFloat(data[pixelIndex + 3])
+//
+//                let color = UIColor(r: red, g: green, b: blue, alpha: alpha)
+//
+//                pixelColors.append(color)
+//            }
+//        }
+//
+//        return pixelColors
+//    }
+
     func pixelColorData() -> [UIColor] {
         guard let pixelData = self.cgImage?.dataProvider?.data else {
             return []
@@ -19,24 +51,27 @@ extension UIImage {
         
         var pixelColors: [UIColor] = []
         
-        let pixelsWidth = Int(self.size.width)
-        let pixelsHigh = Int(self.size.height)
+        let pixelsWidth = self.size.width
+        let pixelsHigh = self.size.height
         
-        for x in 0..<pixelsWidth {
+        for index in 0..<Int(pixelsWidth*pixelsHigh) {
             
-            for y in 0..<pixelsHigh {
-                
-                let pixelIndex: Int = ((pixelsWidth * y) + x) * 4
-                
-                let red = CGFloat(data[pixelIndex])
-                let green = CGFloat(data[pixelIndex + 1])
-                let blue = CGFloat(data[pixelIndex + 2])
-                let alpha = CGFloat(data[pixelIndex + 3])
-                
-                let color = UIColor(r: red, g: green, b: blue, alpha: alpha)
-                
-                pixelColors.append(color)
-            }
+            var x = Double(index).truncatingRemainder(dividingBy: Double(pixelsWidth))
+            x.round(.toNearestOrEven)
+
+            let division = Double(index) / Double(pixelsHigh)
+            let y = division.rounded(.down)
+            
+            let pixelIndex  = Int((Double(pixelsWidth) * y) + x) * 4
+            
+            let red = CGFloat(data[pixelIndex])
+            let green = CGFloat(data[pixelIndex + 1])
+            let blue = CGFloat(data[pixelIndex + 2])
+            let alpha = CGFloat(data[pixelIndex + 3])
+            
+            let color = UIColor(r: red, g: green, b: blue, alpha: alpha)
+            
+            pixelColors.append(color)
         }
         
         return pixelColors
@@ -61,9 +96,10 @@ extension UIImage {
         return nil
     }
     
-    func scale(to size: CGSize) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(size, true, 1)
-        self.draw(in: CGRect(origin: .zero, size: size))
+    func scale(to scaledSize: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(scaledSize, false, 1)
+//        self.withHorizontallyFlippedOrientation()
+        self.draw(in: CGRect(origin: .zero, size: scaledSize))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         return newImage
