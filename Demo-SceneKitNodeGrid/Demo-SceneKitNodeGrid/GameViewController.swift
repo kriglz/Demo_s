@@ -23,7 +23,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 2, y: 2, z: 15)
+        cameraNode.position = SCNVector3(x: 2, y: 2, z: 10)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -76,26 +76,7 @@ class GameViewController: UIViewController {
             // retrieved the first clicked object
             let result = hitResults[0]
             
-            // get its material
-            let material = result.node.geometry!.firstMaterial!
-            
-            // highlight it
-            SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.5
-            
-            // on completion - unhighlight
-            SCNTransaction.completionBlock = {
-                SCNTransaction.begin()
-                SCNTransaction.animationDuration = 0.5
-                
-                material.emission.contents = UIColor.black
-                
-                SCNTransaction.commit()
-            }
-            
-            material.emission.contents = UIColor.red
-            
-            SCNTransaction.commit()
+            flipAnimation(for: result.node)
         }
     }
     
@@ -141,10 +122,10 @@ class GameViewController: UIViewController {
         }
     }
     
-    // MARK: - Node management
+    // MARK: - Node setup
 
     private func generateCubeGrid() {
-        for index in 0...100 {
+        for index in 0..<100 {
             addCube(index: index)
         }
     }
@@ -176,5 +157,32 @@ class GameViewController: UIViewController {
         let node = SCNNode(geometry: geometry)
         
         return node
+    }
+    
+    // MARK: - Node animation
+    
+    private func flipAnimation(for node: SCNNode) {
+        // get its material
+        let material = node.geometry!.firstMaterial!
+        
+        // highlight it
+        SCNTransaction.begin()
+        SCNTransaction.animationDuration = 0.5
+        
+        // set color to blue and rotate 360
+        material.diffuse.contents = UIColor.blue
+        node.rotation = SCNVector4(1, 1, 0, 3.14)
+        
+        // on completion - reset color to red
+        SCNTransaction.completionBlock = {
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0.1
+            
+            material.diffuse.contents = UIColor.red
+            
+            SCNTransaction.commit()
+        }
+        
+        SCNTransaction.commit()
     }
 }
