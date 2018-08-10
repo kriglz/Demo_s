@@ -146,6 +146,10 @@ class GameViewController: UIViewController {
         cube.simdPosition.y += Float(row) * 0.6
 
         scene.rootNode.addChildNode(cube)
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(row) / 10, execute: { [weak self] in
+            self?.flipAnimation(for: cube)
+        })
     }
     
     private func setupCube() -> SCNNode {
@@ -167,20 +171,22 @@ class GameViewController: UIViewController {
         
         // highlight it
         SCNTransaction.begin()
-        SCNTransaction.animationDuration = 0.5
+        SCNTransaction.animationDuration = 1
         
         // set color to blue and rotate 360
         material.diffuse.contents = UIColor.blue
-        node.rotation = SCNVector4(1, 1, 0, 3.14)
+        node.rotation = SCNVector4(1, 0, 0, 3.14)
         
         // on completion - reset color to red
         SCNTransaction.completionBlock = {
             SCNTransaction.begin()
-            SCNTransaction.animationDuration = 0.1
+            SCNTransaction.animationDuration = 0.3
             
             material.diffuse.contents = UIColor.red
             
             SCNTransaction.commit()
+            
+            node.rotation = SCNVector4(1, 0, 0, 0)
         }
         
         SCNTransaction.commit()
