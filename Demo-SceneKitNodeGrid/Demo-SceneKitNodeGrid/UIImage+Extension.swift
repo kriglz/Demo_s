@@ -41,6 +41,33 @@ extension UIImage {
         
         return pixelColors
     }
+    
+    func compress(to size: CGSize) -> UIImage? {
+        let currentSize = self.size
+        let scale = currentSize.width / currentSize.height
+        
+        var compressQuality: CGFloat
+        
+        if scale < 1 {
+            compressQuality = size.height / currentSize.height
+        } else {
+            compressQuality = size.width / currentSize.width
+        }
+        
+        if let data = UIImageJPEGRepresentation(self, compressQuality) {
+            return UIImage(data: data)
+        }
+        
+        return nil
+    }
+    
+    func scale(to size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, true, 1)
+        self.draw(in: CGRect(origin: .zero, size: size))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return newImage
+    }
 }
 
 extension UIColor {
