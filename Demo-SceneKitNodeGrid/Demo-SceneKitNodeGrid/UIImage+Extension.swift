@@ -54,15 +54,8 @@ extension UIImage {
         let pixelsWidth = self.size.width
         let pixelsHigh = self.size.height
         
-        for index in 0..<Int(pixelsWidth*pixelsHigh) {
-            
-            var x = Double(index).truncatingRemainder(dividingBy: Double(pixelsWidth))
-            x.round(.toNearestOrEven)
-
-            let division = Double(index) / Double(pixelsHigh)
-            let y = division.rounded(.down)
-            
-            let pixelIndex  = Int((Double(pixelsWidth) * y) + x) * 4
+        for index in 0..<Int(pixelsWidth * pixelsHigh) {
+            let pixelIndex  = Int(Double(index) * 4.0)
             
             let red = CGFloat(data[pixelIndex])
             let green = CGFloat(data[pixelIndex + 1])
@@ -98,7 +91,6 @@ extension UIImage {
     
     func scale(to scaledSize: CGSize) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(scaledSize, false, 1)
-//        self.withHorizontallyFlippedOrientation()
         self.draw(in: CGRect(origin: .zero, size: scaledSize))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()

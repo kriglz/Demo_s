@@ -12,12 +12,15 @@ import SceneKit
 
 class GameViewController: UIViewController {
 
+    let width = 104
+    let height = 100
+    
     private let scene = SCNScene()
     
-    private let starImage = UIImage(named: "star")?.compress(to: CGSize(width: 10, height: 10))?.scale(to: CGSize(width: 100, height: 100))
+    private let starImage = UIImage(named: "star")?.compress(to: CGSize(width: 100, height: 100))?.scale(to: CGSize(width: 100, height: 100))
     private lazy var starImagePixelData = starImage?.pixelColorData()
     
-    private let pipeImage = UIImage(named: "pipe")?.compress(to: CGSize(width: 100, height: 100))?.scale(to: CGSize(width: 100, height: 100))
+    private let pipeImage = UIImage(named: "pipe")?.compress(to: CGSize(width: 100, height: 100))//?.scale(to: CGSize(width: 100, height: 100))
     private lazy var pipeImagePixelData = pipeImage?.pixelColorData()
     
     private lazy var originalImageView = UIImageView(image: starImage)
@@ -137,7 +140,7 @@ class GameViewController: UIViewController {
     // MARK: - Node setup
 
     private func generateCubeGrid() {
-        for index in 0..<10000 {
+        for index in 0..<(width * height) {
             addCube(index: index)
         }
     }
@@ -148,19 +151,19 @@ class GameViewController: UIViewController {
         
         cube.simdPosition = float3(0)
         
-        let division = Double(index) / 100
+        let division = Double(index) / Double(height)
         let row = division.rounded(.down)
         
-        var column = Double(index).truncatingRemainder(dividingBy: 100)
+        var column = Double(index).truncatingRemainder(dividingBy: Double(width))
         column.round(.toNearestOrEven)
         
         cube.simdPosition.x += Float(column) * 0.11
         cube.simdPosition.y += Float(row) * 0.11
 
-        if let pixelData = starImagePixelData {
+        if let pixelData = starImagePixelData, index < pixelData.count - 1 {
             cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
         }
-//
+
 //        if let pixelData = pipeImagePixelData {
 //            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
 //        }
@@ -176,7 +179,7 @@ class GameViewController: UIViewController {
         let cubeWidth = CGFloat(0.1)
         
         let geometry = SCNBox(width: cubeWidth, height: cubeWidth, length: cubeWidth, chamferRadius: 0)
-//        geometry.materials.first?.diffuse.contents = UIColor.red
+        geometry.materials.first?.diffuse.contents = UIColor.white
         
         let node = SCNNode(geometry: geometry)
         
