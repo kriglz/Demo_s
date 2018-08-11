@@ -12,15 +12,17 @@ import SceneKit
 
 class GameViewController: UIViewController {
 
-    let width = 104
+    let width = 100
     let height = 100
+    
+    lazy var scaledSize = CGSize(width: width, height: height)
     
     private let scene = SCNScene()
     
-    private let starImage = UIImage(named: "star")?.compress(to: CGSize(width: 100, height: 100))?.scale(to: CGSize(width: 100, height: 100))
+    private lazy var starImage = UIImage(named: "star")?.compress(to: scaledSize)?.scale(to: scaledSize)
     private lazy var starImagePixelData = starImage?.pixelColorData()
     
-    private let pipeImage = UIImage(named: "pipe")?.compress(to: CGSize(width: 100, height: 100))//?.scale(to: CGSize(width: 100, height: 100))
+    private lazy var pipeImage = UIImage(named: "pipe")?.compress(to: scaledSize)?.scale(to: scaledSize)
     private lazy var pipeImagePixelData = pipeImage?.pixelColorData()
     
     private lazy var originalImageView = UIImageView(image: starImage)
@@ -34,7 +36,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 4, y: 2, z: 15)
+        cameraNode.position = SCNVector3(x: 4, y: -4, z: 15)
         cameraNode.rotation = SCNVector4(1, 0, 0.5, 0.25)
         
         // create and add a light to the scene
@@ -151,26 +153,26 @@ class GameViewController: UIViewController {
         
         cube.simdPosition = float3(0)
         
-        let division = Double(index) / Double(height)
+        let division = Double(index) / Double(width)
         let row = division.rounded(.down)
-        
+
         var column = Double(index).truncatingRemainder(dividingBy: Double(width))
         column.round(.toNearestOrEven)
-        
+
         cube.simdPosition.x += Float(column) * 0.11
-        cube.simdPosition.y += Float(row) * 0.11
+        cube.simdPosition.y -= Float(row) * 0.11
 
         if let pixelData = starImagePixelData, index < pixelData.count - 1 {
             cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
         }
 
-//        if let pixelData = pipeImagePixelData {
+//        if let pixelData = pipeImagePixelData, index < pixelData.count - 1 {
 //            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
 //        }
         
         scene.rootNode.addChildNode(cube)
         
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(index), execute: { [weak self] in
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(row) / Double(width), execute: { [weak self] in
 //            self?.flipAnimation(for: cube)
 //        })
     }
