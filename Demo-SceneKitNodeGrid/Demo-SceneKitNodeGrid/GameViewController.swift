@@ -12,10 +12,10 @@ import SceneKit
 
 class GameViewController: UIViewController {
 
-    let width = 100
-    let height = 100
+    private let width = 60
+    private let height = 120
     
-    lazy var scaledSize = CGSize(width: width, height: height)
+    private lazy var scaledSize = CGSize(width: width, height: height)
     
     private let scene = SCNScene()
     
@@ -25,7 +25,10 @@ class GameViewController: UIViewController {
     private lazy var pipeImage = UIImage(named: "pipe")?.compress(to: scaledSize)?.scale(to: scaledSize)
     private lazy var pipeImagePixelData = pipeImage?.pixelColorData()
     
-    private lazy var originalImageView = UIImageView(image: starImage)
+    private lazy var meImage = UIImage(named: "me")?.compress(to: scaledSize)?.scale(to: scaledSize)
+    private lazy var meImagePixelData = meImage?.pixelColorData()
+    
+    private lazy var originalImageView = UIImageView(image: meImage)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +39,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 4, y: -4, z: 15)
+        cameraNode.position = SCNVector3(x: 4, y: -8, z: 15)
         cameraNode.rotation = SCNVector4(1, 0, 0.5, 0.25)
         
         // create and add a light to the scene
@@ -162,13 +165,17 @@ class GameViewController: UIViewController {
         cube.simdPosition.x += Float(column) * 0.11
         cube.simdPosition.y -= Float(row) * 0.11
 
-        if let pixelData = starImagePixelData, index < pixelData.count - 1 {
-            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
-        }
+//        if let pixelData = starImagePixelData, index < pixelData.count - 1 {
+//            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
+//        }
 
 //        if let pixelData = pipeImagePixelData, index < pixelData.count - 1 {
 //            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
 //        }
+        
+        if let pixelData = meImagePixelData, index < pixelData.count - 1 {
+            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
+        }
         
         scene.rootNode.addChildNode(cube)
         
