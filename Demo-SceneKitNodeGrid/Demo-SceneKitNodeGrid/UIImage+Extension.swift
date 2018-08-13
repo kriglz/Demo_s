@@ -92,16 +92,14 @@ extension UIImage {
     
     func scale(to scaledSize: CGSize) -> UIImage? {
         let cgImage = self.cgImage!
-        
-        let aspectRatio = Int(self.size.width / scaledSize.width)
-        
+
         let width = Int(scaledSize.width)
         let height = Int(scaledSize.height)
         let bitsPerComponent = cgImage.bitsPerComponent
-        let bytesPerRow = cgImage.bytesPerRow / aspectRatio
+        let bytesPerRow = cgImage.bitsPerComponent * Int(scaledSize.width) / 2
         let colorSpace = cgImage.colorSpace
         let bitmapInfo = cgImage.bitmapInfo
-        
+
         let context = CGContext(data: nil,
                                 width: width,
                                 height: height,
@@ -109,20 +107,14 @@ extension UIImage {
                                 bytesPerRow: bytesPerRow,
                                 space: colorSpace!,
                                 bitmapInfo: bitmapInfo.rawValue)!
-        
+
         context.interpolationQuality = CGInterpolationQuality.high
-        
+
         let rect = CGRect(origin: .zero, size: CGSize(width: CGFloat(width), height: CGFloat(height)))
         context.draw(cgImage, in: rect)
-        
+
         let scaledImage = context.makeImage().flatMap { UIImage(cgImage: $0) }
         return scaledImage
-
-//        UIGraphicsBeginImageContextWithOptions(scaledSize, true, 1)
-//        self.draw(in: CGRect(origin: .zero, size: scaledSize))
-//        let newImage = UIGraphicsGetImageFromCurrentImageContext()!
-//        UIGraphicsEndImageContext()
-//        return newImage
     }
 }
 
