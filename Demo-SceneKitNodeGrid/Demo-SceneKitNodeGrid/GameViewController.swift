@@ -12,8 +12,8 @@ import SceneKit
 
 class GameViewController: UIViewController {
 
-    private let width = 60
-    private let height = 120
+    private let width = 30
+    private let height = 30
     
     private lazy var scaledSize = CGSize(width: width, height: height)
     
@@ -39,7 +39,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 4, y: -8, z: 15)
+        cameraNode.position = SCNVector3(x: 2, y: -4, z: 5)
         cameraNode.rotation = SCNVector4(1, 0, 0.5, 0.25)
         
         // create and add a light to the scene
@@ -179,9 +179,9 @@ class GameViewController: UIViewController {
         
         scene.rootNode.addChildNode(cube)
         
-//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(row) / Double(width), execute: { [weak self] in
-//            self?.flipAnimation(for: cube)
-//        })
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(row) / Double(width), execute: { [weak self] in
+            self?.flipAnimation(for: cube)
+        })
     }
     
     private func setupCube() -> SCNNode {
