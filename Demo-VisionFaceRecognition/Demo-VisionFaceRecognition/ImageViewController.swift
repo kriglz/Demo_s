@@ -18,16 +18,17 @@ class ImageViewController: UIViewController {
     var image: UIImage?
     
     // MARK: - Lifecycle functions
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
-        imageView.image = image
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        imageView?.image = image
     }
     
     // MARK: - Actions
     
     @IBAction func closeAction(_ sender: UIButton) {
+        imageView.image = nil
         image = nil
         self.dismiss(animated: true, completion: nil)
     }
@@ -127,12 +128,12 @@ class ImageViewController: UIViewController {
         
         // Left eyebrow
         if let leftEyebrowContourPoints = face.landmarks?.leftEyebrow?.normalizedPoints {
-            context.drawCustomShape(using: leftEyebrowContourPoints, pointOrigin: CGPoint(x: originX, y: originY), imageSize: CGSize(width: width, height: height))
+            context.drawCustomShape(using: leftEyebrowContourPoints, pointOrigin: CGPoint(x: originX, y: originY), imageSize: CGSize(width: width, height: height), isPathClosed: false)
         }
         
         // Right eyebrow
         if let rightEyebrowContourPoints = face.landmarks?.rightEyebrow?.normalizedPoints {
-            context.drawCustomShape(using: rightEyebrowContourPoints, pointOrigin: CGPoint(x: originX, y: originY), imageSize: CGSize(width: width, height: height))
+            context.drawCustomShape(using: rightEyebrowContourPoints, pointOrigin: CGPoint(x: originX, y: originY), imageSize: CGSize(width: width, height: height), isPathClosed: false)
         }
         
         // Nose
