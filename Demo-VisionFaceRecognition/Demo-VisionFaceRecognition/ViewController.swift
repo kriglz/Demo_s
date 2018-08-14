@@ -12,6 +12,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     @IBOutlet weak var takePhotoButton: UIButton!
     
+    private var imageViewController: ImageViewController?
     
     // MARK: - Lifecycle functions
 
@@ -31,6 +32,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let alert = setupImagePickerAlert()
         self.present(alert, animated: true, completion: nil)
     }
+    
+    // MARK: - View setup
     
     private func setupImagePickerAlert() -> UIAlertController {
         let imagePicker = UIImagePickerController()
@@ -58,6 +61,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return alert
     }
     
+    // MARK: - UIImagePickerControllerDelegate implementation
     
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        self.dismiss(animated: true, completion: nil)
+        
+        let pickedImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        
+        if imageViewController == nil {
+            imageViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ImageViewController") as? ImageViewController
+        }
+        
+        guard let imageViewController = self.imageViewController else { return }
+        
+        imageViewController.image = pickedImage
+        present(imageViewController, animated: true, completion: nil)
+    }
 }
 
