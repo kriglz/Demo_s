@@ -13,16 +13,19 @@ class GameScene: SKScene {
     
     // MARK: - Properties
     
-    private var boidNode = BoidNode()
+    private let boidNode = BoidNode()
+    private let obstacleNode = ObstacleNode()
     
     // MARK: - Lifecycle functions
 
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
-        boidNode = BoidNode()
         self.addChild(boidNode)
         boidNode.position = CGPoint(x: 50, y: 50)
+        
+        self.addChild(obstacleNode)
+        obstacleNode.position = CGPoint(x: 100, y: 100)
     }
     
     override func update(_ currentTime: TimeInterval) {

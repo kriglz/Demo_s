@@ -14,6 +14,7 @@
 		89384CB6212F17E400807344 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 89384CB5212F17E400807344 /* Assets.xcassets */; };
 		89384CB9212F17E400807344 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 89384CB7212F17E400807344 /* LaunchScreen.storyboard */; };
 		89384CE6212F276F00807344 /* BoidNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89384CE5212F276F00807344 /* BoidNode.swift */; };
+		89384CE8212F5D6800807344 /* ObstacleNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89384CE7212F5D6800807344 /* ObstacleNode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		89384CB8212F17E400807344 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89384CBA212F17E400807344 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		89384CE5212F276F00807344 /* BoidNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoidNode.swift; sourceTree = "<group>"; };
+		89384CE7212F5D6800807344 /* ObstacleNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObstacleNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				89384CB0212F17E200807344 /* GameViewController.swift */,
 				89384CAE212F17E200807344 /* GameScene.swift */,
 				89384CE5212F276F00807344 /* BoidNode.swift */,
+				89384CE7212F5D6800807344 /* ObstacleNode.swift */,
 				89384CC0212F186900807344 /* Supporting Files */,
 				89384CBA212F17E400807344 /* Info.plist */,
 			);
@@ -150,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				89384CAF212F17E200807344 /* GameScene.swift in Sources */,
+				89384CE8212F5D6800807344 /* ObstacleNode.swift in Sources */,
 				89384CE6212F276F00807344 /* BoidNode.swift in Sources */,
 				89384CB1212F17E200807344 /* GameViewController.swift in Sources */,
 				89384CA9212F17E200807344 /* AppDelegate.swift in Sources */,

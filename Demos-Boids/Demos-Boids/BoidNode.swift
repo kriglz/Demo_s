@@ -23,7 +23,7 @@ class BoidNode: SKShapeNode {
     override init() {
         super.init()
         
-        self.path = boidPath
+        path = boidPath
         fillColor = .white
     }
     
