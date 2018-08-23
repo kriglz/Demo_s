@@ -13,18 +13,12 @@ class GameScene: SKScene {
     
     // MARK: - Properties
     
-    private var label = SKLabelNode(text: "HelloLabel")
     private var boidNode = BoidNode()
     
     // MARK: - Lifecycle functions
 
     override func didMove(to view: SKView) {
-        self.addChild(label)
-
-        label.position = CGPoint(x: view.frame.size.width / 2, y: view.frame.size.height / 2)
-        label.fontSize = 30
-        label.alpha = 0.0
-        label.run(SKAction.fadeIn(withDuration: 2.0))
+        super.didMove(to: view)
         
         boidNode = BoidNode()
         self.addChild(boidNode)
