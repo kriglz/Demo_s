@@ -35,6 +35,20 @@ class GameScene: SKScene {
         // Called before each frame is rendered
     }
     
+    // MARK: - Event control
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+    }
+    
+    private func touchDown(atPoint pos : CGPoint) {
+        if let newBoidNode = boidNode.copy() as? BoidNode {
+            newBoidNode.position = pos
+            newBoidNode.fillColor = SKColor.green
+            self.addChild(newBoidNode)
+        }
+    }
+    
     // MARK: - Node setup
 
 }
