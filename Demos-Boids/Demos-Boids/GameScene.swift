@@ -26,6 +26,15 @@ class GameScene: SKScene {
         
         self.addChild(obstacleNode)
         obstacleNode.position = CGPoint(x: 100, y: 100)
+        
+        let doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap(_:)))
+        doubleTapGestureRecognizer.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubleTapGestureRecognizer)
+        
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        tapGestureRecognizer.require(toFail: doubleTapGestureRecognizer)
+        view.addGestureRecognizer(tapGestureRecognizer)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -34,16 +43,27 @@ class GameScene: SKScene {
     
     // MARK: - Event control
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+    @objc private func handleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+        guard let view = self.view else { return }
+        
+        let flipTransform = CGAffineTransform(scaleX: 1, y: -1).concatenating(CGAffineTransform.init(translationX: 0, y: view.frame.height))
+        let position = gestureRecognizer.location(in: view).applying(flipTransform)
+        
+        guard let newBoidNode = boidNode.copy() as? BoidNode else { return }
+        newBoidNode.position = position
+        newBoidNode.fillColor = SKColor.green
+        self.addChild(newBoidNode)
     }
     
-    private func touchDown(atPoint pos : CGPoint) {
-        if let newBoidNode = boidNode.copy() as? BoidNode {
-            newBoidNode.position = pos
-            newBoidNode.fillColor = SKColor.green
-            self.addChild(newBoidNode)
-        }
+    @objc private func handleDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
+        guard let view = self.view else { return }
+        
+        let flipTransform = CGAffineTransform(scaleX: 1, y: -1).concatenating(CGAffineTransform.init(translationX: 0, y: view.frame.height))
+        let position = gestureRecognizer.location(in: view).applying(flipTransform)
+
+        guard let newObstacleNode = obstacleNode.copy() as? ObstacleNode else { return }
+        newObstacleNode.position = position
+        self.addChild(newObstacleNode)
     }
     
     // MARK: - Node setup
