@@ -52,11 +52,6 @@ class BoidNode: SKShapeNode {
     }
     
     private var averageDirectionToGo: CGVector {
-        if canUpdateBoidsDirection {
-            recentDirections.append(direction)
-            recentDirections = Array(recentDirections.suffix(30))
-        }
-        
         return recentDirections.averageForCGVectors
     }
     
@@ -95,17 +90,21 @@ class BoidNode: SKShapeNode {
             direction = averageNeighbourhoodBoidPosition
         }
         
-        updatePositionAndRotation()
+        if canUpdateBoidsDirection {
+            recentDirections.append(direction)
+            recentDirections = Array(recentDirections.suffix(30))
+        }
+        
+        updatePosition()
+        updateRotation()
     }
     
     @objc private func updateDirectionRandomness() {
         direction = CGVector.random(min: -10, max: 10)
     }
 
-    private func updatePositionAndRotation() {
+    private func updatePosition() {
         let directionToGo = averageDirectionToGo
-        
-        zRotation = directionToGo.angleToNormal
         
         position.x += directionToGo.dx /// 10
         position.y += directionToGo.dy /// 10
@@ -118,6 +117,10 @@ class BoidNode: SKShapeNode {
                 self?.canUpdateBoidsDirection = true
             }
         }
+    }
+    
+    private func updateRotation() {
+        zRotation = averageDirectionToGo.angleToNormal
     }
     
     private func returnBoidToConfinementFrame() {
