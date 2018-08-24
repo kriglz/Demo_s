@@ -12,8 +12,14 @@ extension CGVector {
     
     /// Returns angle in radians.
     var angleToNormal: CGFloat {
-        let angle = atan2(dy, dx) //(dy / dx)
+        let angle = atan2(dy, dx)
         return CGFloat(angle)
+    }
+    
+    /// Returns normalized CGVector.
+    var normalize: CGVector {
+        let maxComponent = abs(max(dx, dy))
+        return self.divide(by: maxComponent)
     }
     
     /// Retrurns CGVector divided by specified value.

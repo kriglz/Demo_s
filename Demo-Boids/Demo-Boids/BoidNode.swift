@@ -92,7 +92,7 @@ class BoidNode: SKShapeNode {
         
         if canUpdateBoidsDirection {
             recentDirections.append(direction)
-            recentDirections = Array(recentDirections.suffix(30))
+            recentDirections = Array(recentDirections.suffix(20))
         }
         
         updatePosition()
@@ -120,7 +120,7 @@ class BoidNode: SKShapeNode {
     }
     
     private func updateRotation() {
-        zRotation = averageDirectionToGo.angleToNormal
+        zRotation = averageDirectionToGo.normalize.angleToNormal
     }
     
     private func returnBoidToConfinementFrame() {
