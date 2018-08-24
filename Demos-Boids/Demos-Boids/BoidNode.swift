@@ -15,7 +15,7 @@ class BoidNode: SKShapeNode {
     static let uniqueName = "Boid"
     static let length = 30
 
-    private let timeCounterConstant = 20
+    private let timeCounterConstant = 60
 
     // MARK: - Properties
     
@@ -27,10 +27,9 @@ class BoidNode: SKShapeNode {
     
     private var boidPath: CGPath {
         let triangleBezierPath = UIBezierPath()
-        triangleBezierPath.move(to: CGPoint.zero)
-        triangleBezierPath.addLine(to: CGPoint(x: 20, y: 0))
-        triangleBezierPath.addLine(to: CGPoint(x: 20, y: 0))
-        triangleBezierPath.addLine(to: CGPoint(x: 10, y: BoidNode.length))
+        triangleBezierPath.move(to: CGPoint(x: -BoidNode.length, y: -10))
+        triangleBezierPath.addLine(to: CGPoint(x: -BoidNode.length, y: 10))
+        triangleBezierPath.addLine(to: CGPoint(x: 0, y: 0))
         triangleBezierPath.close()
         return triangleBezierPath.cgPath
     }
@@ -71,6 +70,8 @@ class BoidNode: SKShapeNode {
             direction = neightbourBoidNodePositions.average
         }
         
-        position = position.applying(CGAffineTransform(translationX: direction.dx, y: direction.dy))
+        zRotation = direction.angleToNormal
+        position.x += direction.dx
+        position.y += direction.dy
     }
 }

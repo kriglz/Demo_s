@@ -18,6 +18,7 @@
 		89384CEA212F8F7E00807344 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89384CE9212F8F7E00807344 /* Array+Extensions.swift */; };
 		89384CEC212F8FA700807344 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89384CEB212F8FA700807344 /* CGFloat+Extension.swift */; };
 		89384CEE212F8FED00807344 /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89384CED212F8FED00807344 /* CGPoint+Extension.swift */; };
+		89384CF1212F9AFF00807344 /* CGVector+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89384CF0212F9AFF00807344 /* CGVector+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		89384CE9212F8F7E00807344 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		89384CEB212F8FA700807344 /* CGFloat+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extension.swift"; sourceTree = "<group>"; };
 		89384CED212F8FED00807344 /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
+		89384CF0212F9AFF00807344 /* CGVector+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGVector+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +96,7 @@
 				89384CE9212F8F7E00807344 /* Array+Extensions.swift */,
 				89384CEB212F8FA700807344 /* CGFloat+Extension.swift */,
 				89384CED212F8FED00807344 /* CGPoint+Extension.swift */,
+				89384CF0212F9AFF00807344 /* CGVector+Extension.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 				89384CE8212F5D6800807344 /* ObstacleNode.swift in Sources */,
 				89384CE6212F276F00807344 /* BoidNode.swift in Sources */,
 				89384CB1212F17E200807344 /* GameViewController.swift in Sources */,
+				89384CF1212F9AFF00807344 /* CGVector+Extension.swift in Sources */,
 				89384CEC212F8FA700807344 /* CGFloat+Extension.swift in Sources */,
 				89384CEE212F8FED00807344 /* CGPoint+Extension.swift in Sources */,
 				89384CA9212F17E200807344 /* AppDelegate.swift in Sources */,
