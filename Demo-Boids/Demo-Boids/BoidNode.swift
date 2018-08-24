@@ -21,11 +21,15 @@ class BoidNode: SKShapeNode {
     
     var neightbourBoidNodes = [BoidNode]()
     
+    private lazy var directionRandomnessTimeCounter = timeCounterConstant + 1
+    
     private(set) var direction = CGVector.zero
+    
     private var recentDirections = [CGVector]()
+    private var confinementFrame = CGRect.zero
     
-    private lazy var timeCounter = timeCounterConstant + 1
-    
+    private var canUpdateBoidsDirection = true
+
     private var boidPath: CGPath {
         let triangleBezierPath = UIBezierPath()
         triangleBezierPath.move(to: CGPoint(x: -BoidNode.length, y: -10))
@@ -39,6 +43,10 @@ class BoidNode: SKShapeNode {
         return !neightbourBoidNodes.isEmpty
     }
     
+    private var isBoidNodeInConfinementFrame: Bool {
+        return confinementFrame.contains(position)
+    }
+    
     private var averageNeighbourhoodBoidPosition: CGVector {
         var neightbourBoidNodePositions = [direction]
         for neighbour in neightbourBoidNodes {
@@ -47,8 +55,23 @@ class BoidNode: SKShapeNode {
         return neightbourBoidNodePositions.averageForCGVectors
     }
     
-    // MARK: - Initialization
+    private var averageDirectionToGo: CGVector {
+        if canUpdateBoidsDirection {
+            recentDirections.append(direction)
+            recentDirections = Array(recentDirections.suffix(30))
+        }
         
+        return recentDirections.averageForCGVectors
+    }
+    
+    // MARK: - Initialization
+    
+    convenience init(constrainedIn frame: CGRect) {
+        self.init()
+        
+        confinementFrame = frame
+    }
+    
     override init() {
         super.init()
         
@@ -61,12 +84,18 @@ class BoidNode: SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Movement
+    // MARK: - Boid confinement
+    
+    func updateConfinementFrame(frame: CGRect) {
+        confinementFrame = frame
+    }
+    
+    // MARK: - Boid movement
     
     func move() {
         updateDirectionRandomnessIfNeeded()
         
-        if hasNeighbourBoidNodes {
+        if canUpdateBoidsDirection, hasNeighbourBoidNodes {
             direction = averageNeighbourhoodBoidPosition
         }
         
@@ -74,25 +103,44 @@ class BoidNode: SKShapeNode {
     }
     
     private func updateDirectionRandomnessIfNeeded() {
-        timeCounter += 1
+        directionRandomnessTimeCounter += 1
         
-        if timeCounter > timeCounterConstant {
+        if directionRandomnessTimeCounter > timeCounterConstant {
             let x = CGFloat.random(min: -10, max: 10)
             let y = CGFloat.random(min: -10, max: 10)
             
             direction = CGVector(dx: x, dy: y)
-            timeCounter = 0
+            directionRandomnessTimeCounter = 0
         }
     }
 
     private func updatePositionAndRotation() {
-        recentDirections.append(direction)
-        recentDirections = Array(recentDirections.suffix(30))
-        let averageDirection = recentDirections.averageForCGVectors
+        let directionToGo = averageDirectionToGo
         
-        position.x += averageDirection.dx /// 10
-        position.y += averageDirection.dy /// 10
+        zRotation = directionToGo.angleToNormal
         
-        zRotation = averageDirection.angleToNormal
+        position.x += directionToGo.dx /// 10
+        position.y += directionToGo.dy /// 10
+        
+        if canUpdateBoidsDirection, !isBoidNodeInConfinementFrame {
+            returnBoidToConfinementFrame()
+            
+            canUpdateBoidsDirection = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+                self?.canUpdateBoidsDirection = true
+            }
+        }
+    }
+    
+    private func returnBoidToConfinementFrame() {
+        if position.x < confinementFrame.origin.x || position.x > confinementFrame.origin.x + confinementFrame.size.width {
+            let flipTransformation = CGAffineTransform(scaleX: -1, y: 1).concatenating(CGAffineTransform(translationX: confinementFrame.size.width, y: 0))
+            position = position.applying(flipTransformation)
+        }
+        
+        if position.y < confinementFrame.origin.y || position.y > confinementFrame.origin.y + confinementFrame.size.height {
+            let flipTransformation = CGAffineTransform(scaleX: 1, y: -1).concatenating(CGAffineTransform(translationX: 0, y: confinementFrame.size.height))
+            position = position.applying(flipTransformation)
+        }
     }
 }

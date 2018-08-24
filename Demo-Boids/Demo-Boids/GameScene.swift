@@ -13,7 +13,13 @@ class GameScene: SKScene {
     
     // MARK: - Properties
     
-    private let boidNode = BoidNode()
+//    private lazy var gameSceneWorldFrame = CGRect(origin: CGPoint(x: -view!.frame.size.width, y: -view!.frame.size.height),
+//                                                  size: CGSize(width: 3 * view!.frame.size.width, height: 3 * view!.frame.size.height))
+    
+    private lazy var gameSceneWorldFrame = CGRect(origin: CGPoint(x: 10, y: 10),
+                                                  size: CGSize(width: view!.frame.size.width - 20, height: view!.frame.size.height - 20))
+    
+    private lazy var boidNode = BoidNode(constrainedIn: gameSceneWorldFrame)
     private let obstacleNode = ObstacleNode()
     
     private var allBoids = [BoidNode]()
@@ -26,6 +32,11 @@ class GameScene: SKScene {
         self.addChild(boidNode)
         boidNode.position = CGPoint(x: 50, y: 50)
         allBoids.append(boidNode)
+        
+        
+        let test = SKShapeNode.init(rect: gameSceneWorldFrame)
+        test.strokeColor = .white
+        self.addChild(test)
         
 //        self.addChild(obstacleNode)
 //        obstacleNode.position = CGPoint(x: 100, y: 100)
@@ -41,7 +52,7 @@ class GameScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        evaluateNeighborBoids()
+        scanBoidsInNeighborhood()
         allBoids.forEach { $0.move() }
     }
     
@@ -54,6 +65,7 @@ class GameScene: SKScene {
         let position = gestureRecognizer.location(in: view).applying(flipTransform)
         
         guard let newBoidNode = boidNode.copy() as? BoidNode else { return }
+        newBoidNode.updateConfinementFrame(frame: gameSceneWorldFrame)
         newBoidNode.position = position
         newBoidNode.fillColor = SKColor.green
         self.addChild(newBoidNode)
@@ -73,14 +85,17 @@ class GameScene: SKScene {
     
     // MARK: - Node control
     
-    private func evaluateNeighborBoids() {
+    private func scanBoidsInNeighborhood() {
         for boid in allBoids {
             let neighbourBoids = allBoids.filter { possiblyNeighbourBoid in
-                guard boid != possiblyNeighbourBoid else { return false }
+                guard boid != possiblyNeighbourBoid else {
+                    return false
+                }
                 
                 if boid.position.distance(to: possiblyNeighbourBoid.position) < CGFloat(BoidNode.length * 2) {
                     return true
                 }
+                
                 return false
             }
             
