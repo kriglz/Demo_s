@@ -15,7 +15,7 @@ class BoidNode: SKShapeNode {
     static let uniqueName = "Boid"
     static let length = 30
 
-    private let timeCounterConstant = 60
+    private let timeCounterConstant = 120
 
     // MARK: - Properties
     
@@ -34,6 +34,18 @@ class BoidNode: SKShapeNode {
         return triangleBezierPath.cgPath
     }
     
+    private var hasNeighbourBoidNodes: Bool {
+        return !neightbourBoidNodes.isEmpty
+    }
+    
+    private var averageNeighbourhoodBoidPosition: CGVector {
+        var neightbourBoidNodePositions = [direction]
+        for neighbour in neightbourBoidNodes {
+            neightbourBoidNodePositions.append(neighbour.direction)
+        }
+        return neightbourBoidNodePositions.average
+    }
+    
     // MARK: - Initialization
         
     override init() {
@@ -48,9 +60,19 @@ class BoidNode: SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Actions
+    // MARK: - Movement
     
     func move() {
+        updateDirectionRandomnessIfNeeded()
+        
+        if hasNeighbourBoidNodes {
+            direction = averageNeighbourhoodBoidPosition
+        }
+        
+        updatePositionAndRotation()
+    }
+    
+    private func updateDirectionRandomnessIfNeeded() {
         timeCounter += 1
         
         if timeCounter > timeCounterConstant {
@@ -60,16 +82,9 @@ class BoidNode: SKShapeNode {
             direction = CGVector(dx: x, dy: y)
             timeCounter = 0
         }
-        
-        if !neightbourBoidNodes.isEmpty {
-            var neightbourBoidNodePositions = [direction]
-            for neighbour in neightbourBoidNodes {
-                neightbourBoidNodePositions.append(neighbour.direction)
-            }
-            
-            direction = neightbourBoidNodePositions.average
-        }
-        
+    }
+
+    private func updatePositionAndRotation() {
         zRotation = direction.angleToNormal
         position.x += direction.dx
         position.y += direction.dy
