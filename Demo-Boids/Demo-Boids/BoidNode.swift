@@ -15,15 +15,11 @@ class BoidNode: SKShapeNode {
     static let uniqueName = "Boid"
     static let length = 30
 
-    private let timeCounterConstant = 60
-
     // MARK: - Properties
     
     var neightbourBoidNodes = [BoidNode]()
     
-    private lazy var directionRandomnessTimeCounter = timeCounterConstant + 1
-    
-    private(set) var direction = CGVector.zero
+    private(set) var direction = CGVector.random(min: -10, max: 10)
     
     private var recentDirections = [CGVector]()
     private var confinementFrame = CGRect.zero
@@ -78,6 +74,8 @@ class BoidNode: SKShapeNode {
         name = BoidNode.uniqueName
         path = boidPath
         fillColor = .white
+        
+        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateDirectionRandomness), userInfo: nil, repeats: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -93,8 +91,6 @@ class BoidNode: SKShapeNode {
     // MARK: - Boid movement
     
     func move() {
-        updateDirectionRandomnessIfNeeded()
-        
         if canUpdateBoidsDirection, hasNeighbourBoidNodes {
             direction = averageNeighbourhoodBoidPosition
         }
@@ -102,16 +98,8 @@ class BoidNode: SKShapeNode {
         updatePositionAndRotation()
     }
     
-    private func updateDirectionRandomnessIfNeeded() {
-        directionRandomnessTimeCounter += 1
-        
-        if directionRandomnessTimeCounter > timeCounterConstant {
-            let x = CGFloat.random(min: -10, max: 10)
-            let y = CGFloat.random(min: -10, max: 10)
-            
-            direction = CGVector(dx: x, dy: y)
-            directionRandomnessTimeCounter = 0
-        }
+    @objc private func updateDirectionRandomness() {
+        direction = CGVector.random(min: -10, max: 10)
     }
 
     private func updatePositionAndRotation() {

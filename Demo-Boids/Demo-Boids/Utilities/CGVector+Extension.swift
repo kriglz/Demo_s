@@ -20,4 +20,12 @@ extension CGVector {
     func divide(by value: CGFloat) -> CGVector {
         return CGVector(dx: dx / value, dy: dy / value)
     }
+    
+    /// Returns random vector from the range.
+    static func random(min: CGFloat, max: CGFloat) -> CGVector {
+        let x = CGFloat.random(min: min, max: max)
+        let y = CGFloat.random(min: min, max: max)
+        
+        return CGVector(dx: x, dy: y)
+    }
 }
