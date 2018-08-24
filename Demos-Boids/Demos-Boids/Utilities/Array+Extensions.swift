@@ -8,40 +8,15 @@
 
 import UIKit
 
-
-extension Array where Element: Numeric {
-    
-    /// Returns the total sum of all elements in the array.
-    var total: Element { return reduce(0, +) }
-}
-
-extension Array where Element: FloatingPoint {
-    
-    /// Returns the average of all elements in the array.
-    var elementAverage: Element {
-        return isEmpty ? 0 : total / Element(count)
-    }
-}
-
 extension Array {
     
     /// Returns the average of all elements in the array of `CGVector`.
-    var average: CGVector {
-        if let vectors = self as? [CGVector] {
-            
-            var xArray = [CGFloat]()
-            var yArray = [CGFloat]()
-            
-            for vector in vectors {
-                xArray.append(vector.dx)
-                yArray.append(vector.dy)
-            }
-            
-            let averageX = xArray.elementAverage
-            let averageY = yArray.elementAverage
-            return CGVector(dx: averageX, dy: averageY)
+    var averageForCGVectors: CGVector {
+        let total = reduce(CGVector.zero) { (result, element) -> CGVector in
+            guard let element = element as? CGVector else { return .zero }
+            return CGVector(dx: result.dx + element.dx, dy: result.dy + element.dy)
         }
         
-        return CGVector.zero
+        return total.divide(by: CGFloat(count))
     }
 }

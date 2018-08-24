@@ -15,4 +15,9 @@ extension CGVector {
         let angle = atan2(dy, dx) //(dy / dx)
         return CGFloat(angle)
     }
+    
+    /// Retrurns CGVector divided by specified value.
+    func divide(by value: CGFloat) -> CGVector {
+        return CGVector(dx: dx / value, dy: dy / value)
+    }
 }

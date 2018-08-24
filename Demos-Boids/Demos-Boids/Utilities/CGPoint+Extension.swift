@@ -14,4 +14,9 @@ extension CGPoint {
     func distance(to point: CGPoint) -> CGFloat {
         return sqrt(pow(x - point.x, 2) + pow(y - point.y, 2))
     }
+    
+    /// Retrurns CGPoint divided by specified value.
+    func divide(by value: CGFloat) -> CGPoint {
+        return CGPoint(x: x / value, y: y / value)
+    }
 }

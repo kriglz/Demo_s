@@ -15,13 +15,14 @@ class BoidNode: SKShapeNode {
     static let uniqueName = "Boid"
     static let length = 30
 
-    private let timeCounterConstant = 120
+    private let timeCounterConstant = 60
 
     // MARK: - Properties
     
     var neightbourBoidNodes = [BoidNode]()
     
     private(set) var direction = CGVector.zero
+    private var recentDirections = [CGVector]()
     
     private lazy var timeCounter = timeCounterConstant + 1
     
@@ -43,7 +44,7 @@ class BoidNode: SKShapeNode {
         for neighbour in neightbourBoidNodes {
             neightbourBoidNodePositions.append(neighbour.direction)
         }
-        return neightbourBoidNodePositions.average
+        return neightbourBoidNodePositions.averageForCGVectors
     }
     
     // MARK: - Initialization
@@ -76,8 +77,8 @@ class BoidNode: SKShapeNode {
         timeCounter += 1
         
         if timeCounter > timeCounterConstant {
-            let x = CGFloat.random(min: -10, max: 10) / 10
-            let y = CGFloat.random(min: -10, max: 10) / 10
+            let x = CGFloat.random(min: -10, max: 10)
+            let y = CGFloat.random(min: -10, max: 10)
             
             direction = CGVector(dx: x, dy: y)
             timeCounter = 0
@@ -85,8 +86,13 @@ class BoidNode: SKShapeNode {
     }
 
     private func updatePositionAndRotation() {
-        zRotation = direction.angleToNormal
-        position.x += direction.dx
-        position.y += direction.dy
+        recentDirections.append(direction)
+        recentDirections = Array(recentDirections.suffix(30))
+        let averageDirection = recentDirections.averageForCGVectors
+        
+        position.x += averageDirection.dx /// 10
+        position.y += averageDirection.dy /// 10
+        
+        zRotation = averageDirection.angleToNormal
     }
 }
