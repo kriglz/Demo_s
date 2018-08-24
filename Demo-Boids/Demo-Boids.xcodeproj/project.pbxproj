@@ -22,7 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		89384CA5212F17E200807344 /* Demos-Boids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demos-Boids.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		89384CA5212F17E200807344 /* Demo-Boids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Demo-Boids.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		89384CA8212F17E200807344 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		89384CAE212F17E200807344 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		89384CB0212F17E200807344 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -52,7 +52,7 @@
 		89384C9C212F17E100807344 = {
 			isa = PBXGroup;
 			children = (
-				89384CA7212F17E200807344 /* Demos-Boids */,
+				89384CA7212F17E200807344 /* Demo-Boids */,
 				89384CA6212F17E200807344 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -60,12 +60,12 @@
 		89384CA6212F17E200807344 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				89384CA5212F17E200807344 /* Demos-Boids.app */,
+				89384CA5212F17E200807344 /* Demo-Boids.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		89384CA7212F17E200807344 /* Demos-Boids */ = {
+		89384CA7212F17E200807344 /* Demo-Boids */ = {
 			isa = PBXGroup;
 			children = (
 				89384CB0212F17E200807344 /* GameViewController.swift */,
@@ -76,7 +76,7 @@
 				89384CC0212F186900807344 /* Supporting Files */,
 				89384CBA212F17E400807344 /* Info.plist */,
 			);
-			path = "Demos-Boids";
+			path = "Demo-Boids";
 			sourceTree = "<group>";
 		};
 		89384CC0212F186900807344 /* Supporting Files */ = {
@@ -104,9 +104,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		89384CA4212F17E200807344 /* Demos-Boids */ = {
+		89384CA4212F17E200807344 /* Demo-Boids */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 89384CBD212F17E400807344 /* Build configuration list for PBXNativeTarget "Demos-Boids" */;
+			buildConfigurationList = 89384CBD212F17E400807344 /* Build configuration list for PBXNativeTarget "Demo-Boids" */;
 			buildPhases = (
 				89384CA1212F17E200807344 /* Sources */,
 				89384CA2212F17E200807344 /* Frameworks */,
@@ -116,9 +116,9 @@
 			);
 			dependencies = (
 			);
-			name = "Demos-Boids";
+			name = "Demo-Boids";
 			productName = "Demos-Boids";
-			productReference = 89384CA5212F17E200807344 /* Demos-Boids.app */;
+			productReference = 89384CA5212F17E200807344 /* Demo-Boids.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -136,7 +136,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 89384CA0212F17E100807344 /* Build configuration list for PBXProject "Demos-Boids" */;
+			buildConfigurationList = 89384CA0212F17E100807344 /* Build configuration list for PBXProject "Demo-Boids" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -149,7 +149,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				89384CA4212F17E200807344 /* Demos-Boids */,
+				89384CA4212F17E200807344 /* Demo-Boids */,
 			);
 		};
 /* End PBXProject section */
@@ -326,12 +326,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PJ8U3CQ43A;
-				INFOPLIST_FILE = "Demos-Boids/Info.plist";
+				INFOPLIST_FILE = "Demo-Boids/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "KG.Demos-Boids";
+				PRODUCT_BUNDLE_IDENTIFIER = "KG.Demo-Boids";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -344,12 +344,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PJ8U3CQ43A;
-				INFOPLIST_FILE = "Demos-Boids/Info.plist";
+				INFOPLIST_FILE = "Demo-Boids/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "KG.Demos-Boids";
+				PRODUCT_BUNDLE_IDENTIFIER = "KG.Demo-Boids";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -359,7 +359,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		89384CA0212F17E100807344 /* Build configuration list for PBXProject "Demos-Boids" */ = {
+		89384CA0212F17E100807344 /* Build configuration list for PBXProject "Demo-Boids" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89384CBB212F17E400807344 /* Debug */,
@@ -368,7 +368,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		89384CBD212F17E400807344 /* Build configuration list for PBXNativeTarget "Demos-Boids" */ = {
+		89384CBD212F17E400807344 /* Build configuration list for PBXNativeTarget "Demo-Boids" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89384CBE212F17E400807344 /* Debug */,
