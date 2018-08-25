@@ -22,9 +22,19 @@ extension CGVector {
         return self.divide(by: maxComponent)
     }
     
-    /// Retrurns CGVector divided by specified value.
+    /// Returns CGVector divided by specified value.
     func divide(by value: CGFloat) -> CGVector {
         return CGVector(dx: dx / value, dy: dy / value)
+    }
+    
+    /// Returns CGVector multiplied by specified value.
+    func multiply(by value: CGFloat) -> CGVector {
+        return CGVector(dx: dx * value, dy: dy * value)
+    }
+    
+    /// Returns CGVector added to specified value.
+    func add(_ value: CGVector) -> CGVector {
+        return CGVector(dx: dx + value.dx, dy: dy + value.dy)
     }
     
     /// Returns random vector from the range.

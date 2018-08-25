@@ -15,8 +15,18 @@ extension CGPoint {
         return sqrt(pow(x - point.x, 2) + pow(y - point.y, 2))
     }
     
-    /// Retrurns CGPoint divided by specified value.
+    /// Returns CGPoint divided by specified value.
     func divide(by value: CGFloat) -> CGPoint {
         return CGPoint(x: x / value, y: y / value)
+    }
+    
+    /// Returns CGPoint after adding vector to original CGPoint.
+    func add(vector: CGVector) -> CGPoint {
+        return CGPoint(x: x + vector.dx, y: y + vector.dy)
+    }
+    
+    /// Returns CGVector to the specified point.
+    func vector(to point: CGPoint) -> CGVector {
+        return CGVector(dx: point.x - x, dy: point.y - y)
     }
 }
