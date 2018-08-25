@@ -19,6 +19,10 @@ class BoidNode: SKShapeNode {
     
     var neightbourBoidNodes = [BoidNode]()
     
+    var separationCoeficient = CGFloat(1.0)
+    var alignmentCoeficient = CGFloat(1.0)
+    var cohesionCoeficient = CGFloat(1.0)
+    
     private(set) var direction = CGVector.random(min: -10, max: 10)
     
     private var recentDirections = [CGVector]()
@@ -46,21 +50,21 @@ class BoidNode: SKShapeNode {
     
     
     
-    private var alignment: CGVector {
+
+    
+    
+    
+    private var alignmentVector: CGVector {
         return averageNeighbourhoodBoidDirection
     }
     
-    private var cohesion: CGVector {
+    private var cohesionVector: CGVector {
         return position.vector(to: averageNeighbourhoodBoidPosition)
     }
     
-    private var separation: CGVector {
+    private var separationVector: CGVector {
         return averageNeighbourhoodBoidDistance.multiply(by: -1.0)
     }
-    
-    
-    
-    
     
     private var averageNeighbourhoodBoidDirection: CGVector {
         var neightbourBoidNodeDirection = [direction]
@@ -124,15 +128,15 @@ class BoidNode: SKShapeNode {
     @objc private func updateDirectionRandomness() {
         direction = CGVector.random(min: -10, max: 10)
     }
-    
+
     func move() {
         if canUpdateBoidsPosition {
             if hasNeighbourBoids {
-                let aligmentVector = alignment.normalized.multiply(by: 1)
-                let cohesionVector = cohesion.normalized.multiply(by: 1)
-                let separationVector = separation.normalized.multiply(by: 1)
+                let aligment = alignmentVector.normalized.multiply(by: alignmentCoeficient)
+                let cohesion = cohesionVector.normalized.multiply(by: cohesionCoeficient)
+                let separation = separationVector.normalized.multiply(by: separationCoeficient)
                 
-                direction = aligmentVector.add(cohesionVector).add(separationVector).multiply(by: 10)
+                direction = aligment.add(cohesion).add(separation).multiply(by: 10)
             }
 
             recentDirections.append(direction)

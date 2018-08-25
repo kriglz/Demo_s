@@ -11,8 +11,16 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
+    
+    // MARK: - Properties
 
     let scene = GameScene()
+    
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
+    // MARK: - Lifecycle functions
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,8 +41,18 @@ class GameViewController: UIViewController {
         
         scene.size = view.frame.size
     }
-
-    override var prefersStatusBarHidden: Bool {
-        return true
+    
+    // MARK: - Actions
+    
+    @IBAction func updateSeparationCoeficient(_ sender: UISlider) {
+        scene.updateBoidSeparationCoeficient(to: CGFloat(sender.value))
+    }
+    
+    @IBAction func updateCohesionCoeficient(_ sender: UISlider) {
+        scene.updateBoidCohesionCoeficient(to: CGFloat(sender.value))
+    }
+    
+    @IBAction func updateAlignmentCoeficient(_ sender: UISlider) {
+        scene.updateBoidAlignmentCoeficient(to: CGFloat(sender.value))
     }
 }

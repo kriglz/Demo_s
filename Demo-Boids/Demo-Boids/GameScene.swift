@@ -85,6 +85,18 @@ class GameScene: SKScene {
     
     // MARK: - Node control
     
+    func updateBoidSeparationCoeficient(to value: CGFloat) {
+        allBoids.forEach { $0.separationCoeficient = value }
+    }
+    
+    func updateBoidAlignmentCoeficient(to value: CGFloat) {
+        allBoids.forEach { $0.alignmentCoeficient = value }
+    }
+    
+    func updateBoidCohesionCoeficient(to value: CGFloat) {
+        allBoids.forEach { $0.cohesionCoeficient = value }
+    }
+    
     private func scanBoidsInNeighborhood() {
         for boid in allBoids {
             let neighbourBoids = allBoids.filter { possiblyNeighbourBoid in
