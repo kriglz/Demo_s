@@ -22,9 +22,11 @@ class BoidNode: SKShapeNode {
     private(set) var direction = CGVector.random(min: -10, max: 10)
     
     private var recentDirections = [CGVector]()
+    private var recentPositions = [CGPoint]()
+
     private var confinementFrame = CGRect.zero
     
-    private var canUpdateBoidsDirection = true
+    private var canUpdateBoidsPosition = true
 
     private var boidPath: CGPath {
         let triangleBezierPath = UIBezierPath()
@@ -35,7 +37,7 @@ class BoidNode: SKShapeNode {
         return triangleBezierPath.cgPath
     }
     
-    private var hasNeighbourBoidNodes: Bool {
+    private var hasNeighbourBoids: Bool {
         return !neightbourBoidNodes.isEmpty
     }
     
@@ -43,17 +45,52 @@ class BoidNode: SKShapeNode {
         return confinementFrame.contains(position)
     }
     
-    private var averageNeighbourhoodBoidPosition: CGVector {
-        var neightbourBoidNodePositions = [direction]
-        for neighbour in neightbourBoidNodes {
-            neightbourBoidNodePositions.append(neighbour.direction)
-        }
-        return neightbourBoidNodePositions.averageForCGVectors
+    
+    
+    private var alignment: CGVector {
+        return averageNeighbourhoodBoidDirection
     }
     
-    private var averageDirectionToGo: CGVector {
-        return recentDirections.averageForCGVectors
+    private var cohesion: CGVector {
+        return position.vector(to: averageNeighbourhoodBoidPosition)
     }
+    
+    private var separation: CGVector {
+        return averageNeighbourhoodBoidDistance.multiply(by: -1.0)
+    }
+    
+    
+    
+    
+    
+    private var averageNeighbourhoodBoidDirection: CGVector {
+        var neightbourBoidNodeDirection = [direction]
+        for neighbour in neightbourBoidNodes {
+            neightbourBoidNodeDirection.append(neighbour.direction)
+        }
+        return neightbourBoidNodeDirection.averageForCGVectors
+    }
+    
+    private var averageNeighbourhoodBoidPosition: CGPoint {
+        var neightbourBoidNodePosition = [position]
+        for neighbour in neightbourBoidNodes {
+            neightbourBoidNodePosition.append(neighbour.position)
+        }
+        return neightbourBoidNodePosition.averageForCGPoint
+    }
+    
+    private var averageNeighbourhoodBoidDistance: CGVector {
+        var neightbourBoidNodeDistance = [CGVector]()
+        for neighbour in neightbourBoidNodes {
+            neightbourBoidNodeDistance.append(position.vector(to: neighbour.position))
+        }
+        return neightbourBoidNodeDistance.averageForCGVectors
+    }
+    
+    
+    
+    
+
     
     // MARK: - Initialization
     
@@ -70,7 +107,7 @@ class BoidNode: SKShapeNode {
         path = boidPath
         fillColor = .white
         
-        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateDirectionRandomness), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateDirectionRandomness), userInfo: nil, repeats: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -85,42 +122,48 @@ class BoidNode: SKShapeNode {
     
     // MARK: - Boid movement
     
+    @objc private func updateDirectionRandomness() {
+        direction = CGVector.random(min: -10, max: 10)
+    }
+    
     func move() {
-        if canUpdateBoidsDirection, hasNeighbourBoidNodes {
-            direction = averageNeighbourhoodBoidPosition
-        }
-        
-        if canUpdateBoidsDirection {
+        if canUpdateBoidsPosition {
+            if hasNeighbourBoids {
+                direction = alignment.add(cohesion).add(separation.multiply(by: 0.2))
+            }
+
             recentDirections.append(direction)
             recentDirections = Array(recentDirections.suffix(20))
         }
         
+        direction = recentDirections.averageForCGVectors
+        
         updatePosition()
         updateRotation()
     }
-    
-    @objc private func updateDirectionRandomness() {
-        direction = CGVector.random(min: -10, max: 10)
-    }
 
     private func updatePosition() {
-        let directionToGo = averageDirectionToGo
+        position.x += direction.dx /// 10
+        position.y += direction.dy /// 10
         
-        position.x += directionToGo.dx /// 10
-        position.y += directionToGo.dy /// 10
-        
-        if canUpdateBoidsDirection, !isBoidNodeInConfinementFrame {
+        if canUpdateBoidsPosition, !isBoidNodeInConfinementFrame {
             returnBoidToConfinementFrame()
             
-            canUpdateBoidsDirection = false
+            canUpdateBoidsPosition = false
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                self?.canUpdateBoidsDirection = true
+                self?.canUpdateBoidsPosition = true
             }
-        }
+        }        
     }
     
+
+    
+    
+    
+    
+    
     private func updateRotation() {
-        zRotation = averageDirectionToGo.normalize.angleToNormal
+        zRotation = direction.normalize.angleToNormal
     }
     
     private func returnBoidToConfinementFrame() {
