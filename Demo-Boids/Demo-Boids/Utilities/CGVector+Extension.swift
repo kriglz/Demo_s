@@ -17,8 +17,8 @@ extension CGVector {
     }
     
     /// Returns normalized CGVector.
-    var normalize: CGVector {
-        let maxComponent = abs(max(dx, dy))
+    var normalized: CGVector {
+        let maxComponent = max(abs(dx), abs(dy))
         return self.divide(by: maxComponent)
     }
     
