@@ -22,7 +22,6 @@ class BoidNode: SKShapeNode {
     private(set) var direction = CGVector.random(min: -10, max: 10)
     
     private var recentDirections = [CGVector]()
-    private var recentPositions = [CGPoint]()
 
     private var confinementFrame = CGRect.zero
     
@@ -129,22 +128,26 @@ class BoidNode: SKShapeNode {
     func move() {
         if canUpdateBoidsPosition {
             if hasNeighbourBoids {
-                direction = alignment.add(cohesion).add(separation.multiply(by: 0.2))
+                let aligmentVector = alignment.normalized.multiply(by: 1)
+                let cohesionVector = cohesion.normalized.multiply(by: 1)
+                let separationVector = separation.normalized.multiply(by: 1)
+                
+                direction = aligmentVector.add(cohesionVector).add(separationVector).multiply(by: 10)
             }
 
             recentDirections.append(direction)
             recentDirections = Array(recentDirections.suffix(20))
         }
         
-        direction = recentDirections.averageForCGVectors
-        
         updatePosition()
         updateRotation()
     }
 
     private func updatePosition() {
-        position.x += direction.dx /// 10
-        position.y += direction.dy /// 10
+        let averageDirection = recentDirections.averageForCGVectors
+        
+        position.x += averageDirection.dx
+        position.y += averageDirection.dy
         
         if canUpdateBoidsPosition, !isBoidNodeInConfinementFrame {
             returnBoidToConfinementFrame()
@@ -163,7 +166,8 @@ class BoidNode: SKShapeNode {
     
     
     private func updateRotation() {
-        zRotation = direction.normalize.angleToNormal
+        let averageDirection = recentDirections.averageForCGVectors
+        zRotation = averageDirection.normalized.angleToNormal * CGFloat.random(min: 0.95, max: 1.05)
     }
     
     private func returnBoidToConfinementFrame() {

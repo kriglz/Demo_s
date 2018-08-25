@@ -92,7 +92,7 @@ class GameScene: SKScene {
                     return false
                 }
                 
-                if boid.position.distance(to: possiblyNeighbourBoid.position) < CGFloat(BoidNode.length * 3) {
+                if boid.position.distance(to: possiblyNeighbourBoid.position) < CGFloat(BoidNode.length * 4) {
                     return true
                 }
                 
