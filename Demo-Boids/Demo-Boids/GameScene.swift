@@ -85,6 +85,10 @@ class GameScene: SKScene {
     
     // MARK: - Node control
     
+    func updateBoidSpeednCoeficient(to value: CGFloat) {
+        allBoids.forEach { $0.speedCoeficient = value }
+    }
+    
     func updateBoidSeparationCoeficient(to value: CGFloat) {
         allBoids.forEach { $0.separationCoeficient = value }
     }

@@ -44,6 +44,10 @@ class GameViewController: UIViewController {
     
     // MARK: - Actions
     
+    @IBAction func updateSpeedCoeficient(_ sender: UISlider) {
+        scene.updateBoidSpeednCoeficient(to: CGFloat(sender.value))
+    }
+    
     @IBAction func updateSeparationCoeficient(_ sender: UISlider) {
         scene.updateBoidSeparationCoeficient(to: CGFloat(sender.value))
     }

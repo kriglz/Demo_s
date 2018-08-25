@@ -19,6 +19,7 @@ class BoidNode: SKShapeNode {
     
     var neightbourBoidNodes = [BoidNode]()
     
+    var speedCoeficient = CGFloat(1.0)
     var separationCoeficient = CGFloat(1.0)
     var alignmentCoeficient = CGFloat(1.0)
     var cohesionCoeficient = CGFloat(1.0)
@@ -148,7 +149,7 @@ class BoidNode: SKShapeNode {
     }
 
     private func updatePosition() {
-        let averageDirection = recentDirections.averageForCGVectors
+        let averageDirection = recentDirections.averageForCGVectors.multiply(by: speedCoeficient)
         
         position.x += averageDirection.dx
         position.y += averageDirection.dy
