@@ -44,19 +44,19 @@ class GameViewController: UIViewController {
     
     // MARK: - Actions
     
-    @IBAction func updateSpeedCoeficient(_ sender: UISlider) {
-        scene.updateBoidSpeednCoeficient(to: CGFloat(sender.value))
+    @IBAction func updateSpeedCoefficient(_ sender: UISlider) {
+        scene.updateBoidSpeednCoefficient(to: CGFloat(sender.value))
     }
     
-    @IBAction func updateSeparationCoeficient(_ sender: UISlider) {
-        scene.updateBoidSeparationCoeficient(to: CGFloat(sender.value))
+    @IBAction func updateSeparationCoefficient(_ sender: UISlider) {
+        scene.updateBoidSeparationCoefficient(to: CGFloat(sender.value))
     }
     
-    @IBAction func updateCohesionCoeficient(_ sender: UISlider) {
-        scene.updateBoidCohesionCoeficient(to: CGFloat(sender.value))
+    @IBAction func updateCohesionCoefficient(_ sender: UISlider) {
+        scene.updateBoidCohesionCoefficient(to: CGFloat(sender.value))
     }
     
-    @IBAction func updateAlignmentCoeficient(_ sender: UISlider) {
-        scene.updateBoidAlignmentCoeficient(to: CGFloat(sender.value))
+    @IBAction func updateAlignmentCoefficient(_ sender: UISlider) {
+        scene.updateBoidAlignmentCoefficient(to: CGFloat(sender.value))
     }
 }

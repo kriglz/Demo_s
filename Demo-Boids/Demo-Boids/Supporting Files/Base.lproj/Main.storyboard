@@ -33,7 +33,7 @@
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="BA8-4G-rAH">
                                                 <rect key="frame" x="60" y="0.0" width="242" height="31"/>
                                                 <connections>
-                                                    <action selector="updateSpeedCoeficient:" destination="BV1-FR-VrT" eventType="valueChanged" id="ZXE-pr-RDH"/>
+                                                    <action selector="updateSpeedCoefficient:" destination="BV1-FR-VrT" eventType="valueChanged" id="ZXE-pr-RDH"/>
                                                 </connections>
                                             </slider>
                                         </subviews>
@@ -50,7 +50,7 @@
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="7tG-6q-3p2">
                                                 <rect key="frame" x="60" y="0.0" width="242" height="31"/>
                                                 <connections>
-                                                    <action selector="updateSeparationCoeficient:" destination="BV1-FR-VrT" eventType="valueChanged" id="bkE-cl-fNR"/>
+                                                    <action selector="updateSeparationCoefficient:" destination="BV1-FR-VrT" eventType="valueChanged" id="bkE-cl-fNR"/>
                                                 </connections>
                                             </slider>
                                         </subviews>
@@ -67,7 +67,7 @@
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="rdG-ha-U3f">
                                                 <rect key="frame" x="60" y="0.0" width="242" height="31"/>
                                                 <connections>
-                                                    <action selector="updateCohesionCoeficient:" destination="BV1-FR-VrT" eventType="valueChanged" id="qDQ-z0-oU6"/>
+                                                    <action selector="updateCohesionCoefficient:" destination="BV1-FR-VrT" eventType="valueChanged" id="qDQ-z0-oU6"/>
                                                 </connections>
                                             </slider>
                                         </subviews>
@@ -84,7 +84,7 @@
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minValue="0.0" maxValue="2" translatesAutoresizingMaskIntoConstraints="NO" id="hYA-qv-O3S">
                                                 <rect key="frame" x="60" y="0.0" width="242" height="31"/>
                                                 <connections>
-                                                    <action selector="updateAlignmentCoeficient:" destination="BV1-FR-VrT" eventType="valueChanged" id="gIN-3i-U0S"/>
+                                                    <action selector="updateAlignmentCoefficient:" destination="BV1-FR-VrT" eventType="valueChanged" id="gIN-3i-U0S"/>
                                                 </connections>
                                             </slider>
                                         </subviews>

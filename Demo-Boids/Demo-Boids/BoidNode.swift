@@ -19,10 +19,10 @@ class BoidNode: SKShapeNode {
     
     var neightbourBoidNodes = [BoidNode]()
     
-    var speedCoeficient = CGFloat(1.0)
-    var separationCoeficient = CGFloat(1.0)
-    var alignmentCoeficient = CGFloat(1.0)
-    var cohesionCoeficient = CGFloat(1.0)
+    var speedCoefficient = CGFloat(1.0)
+    var separationCoefficient = CGFloat(1.0)
+    var alignmentCoefficient = CGFloat(1.0)
+    var cohesionCoefficient = CGFloat(1.0)
     
     private(set) var direction = CGVector.random(min: -10, max: 10)
     
@@ -133,9 +133,9 @@ class BoidNode: SKShapeNode {
     func move() {
         if canUpdateBoidsPosition {
             if hasNeighbourBoids {
-                let aligment = alignmentVector.normalized.multiply(by: alignmentCoeficient)
-                let cohesion = cohesionVector.normalized.multiply(by: cohesionCoeficient)
-                let separation = separationVector.normalized.multiply(by: separationCoeficient)
+                let aligment = alignmentVector.normalized.multiply(by: alignmentCoefficient)
+                let cohesion = cohesionVector.normalized.multiply(by: cohesionCoefficient)
+                let separation = separationVector.normalized.multiply(by: separationCoefficient)
                 
                 direction = aligment.add(cohesion).add(separation).multiply(by: 10)
             }
@@ -149,7 +149,7 @@ class BoidNode: SKShapeNode {
     }
 
     private func updatePosition() {
-        let averageDirection = recentDirections.averageForCGVectors.multiply(by: speedCoeficient)
+        let averageDirection = recentDirections.averageForCGVectors.multiply(by: speedCoefficient)
         
         position.x += averageDirection.dx
         position.y += averageDirection.dy

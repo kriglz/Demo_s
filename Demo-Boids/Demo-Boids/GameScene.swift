@@ -85,20 +85,20 @@ class GameScene: SKScene {
     
     // MARK: - Node control
     
-    func updateBoidSpeednCoeficient(to value: CGFloat) {
-        allBoids.forEach { $0.speedCoeficient = value }
+    func updateBoidSpeednCoefficient(to value: CGFloat) {
+        allBoids.forEach { $0.speedCoefficient = value }
     }
     
-    func updateBoidSeparationCoeficient(to value: CGFloat) {
-        allBoids.forEach { $0.separationCoeficient = value }
+    func updateBoidSeparationCoefficient(to value: CGFloat) {
+        allBoids.forEach { $0.separationCoefficient = value }
     }
     
-    func updateBoidAlignmentCoeficient(to value: CGFloat) {
-        allBoids.forEach { $0.alignmentCoeficient = value }
+    func updateBoidAlignmentCoefficient(to value: CGFloat) {
+        allBoids.forEach { $0.alignmentCoefficient = value }
     }
     
-    func updateBoidCohesionCoeficient(to value: CGFloat) {
-        allBoids.forEach { $0.cohesionCoeficient = value }
+    func updateBoidCohesionCoefficient(to value: CGFloat) {
+        allBoids.forEach { $0.cohesionCoefficient = value }
     }
     
     private func scanBoidsInNeighborhood() {
