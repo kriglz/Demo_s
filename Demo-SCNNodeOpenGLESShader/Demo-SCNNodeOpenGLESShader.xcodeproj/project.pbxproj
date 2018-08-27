@@ -14,6 +14,7 @@
 		8953A3A420A173E100DE27D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8953A3A220A173E100DE27D5 /* Main.storyboard */; };
 		8953A3A620A173E400DE27D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8953A3A520A173E400DE27D5 /* Assets.xcassets */; };
 		8953A3A920A173E400DE27D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8953A3A720A173E400DE27D5 /* LaunchScreen.storyboard */; };
+		899CD10321346DD800AC7D52 /* Stripes.frag in Resources */ = {isa = PBXBuildFile; fileRef = 899CD10221346DD800AC7D52 /* Stripes.frag */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		8953A3A520A173E400DE27D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8953A3A820A173E400DE27D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8953A3AA20A173E400DE27D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		899CD10221346DD800AC7D52 /* Stripes.frag */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = Stripes.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,16 +60,25 @@
 		8953A39B20A173E100DE27D5 /* Demo-SCNNodeOpenGLESShader */ = {
 			isa = PBXGroup;
 			children = (
-				8953A39C20A173E100DE27D5 /* AppDelegate.swift */,
-				8953A39E20A173E100DE27D5 /* art.scnassets */,
 				8953A3A020A173E100DE27D5 /* ViewController.swift */,
-				8953A3A220A173E100DE27D5 /* Main.storyboard */,
 				8900E49220A74A0B00C80C1C /* Fire.frag */,
-				8953A3A520A173E400DE27D5 /* Assets.xcassets */,
-				8953A3A720A173E400DE27D5 /* LaunchScreen.storyboard */,
+				899CD10221346DD800AC7D52 /* Stripes.frag */,
+				899CD10421346E6A00AC7D52 /* Supporting FIles */,
 				8953A3AA20A173E400DE27D5 /* Info.plist */,
 			);
 			path = "Demo-SCNNodeOpenGLESShader";
+			sourceTree = "<group>";
+		};
+		899CD10421346E6A00AC7D52 /* Supporting FIles */ = {
+			isa = PBXGroup;
+			children = (
+				8953A3A220A173E100DE27D5 /* Main.storyboard */,
+				8953A3A520A173E400DE27D5 /* Assets.xcassets */,
+				8953A39E20A173E100DE27D5 /* art.scnassets */,
+				8953A3A720A173E400DE27D5 /* LaunchScreen.storyboard */,
+				8953A39C20A173E100DE27D5 /* AppDelegate.swift */,
+			);
+			path = "Supporting FIles";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,6 +141,7 @@
 			files = (
 				8900E49320A74A0B00C80C1C /* Fire.frag in Resources */,
 				8953A39F20A173E100DE27D5 /* art.scnassets in Resources */,
+				899CD10321346DD800AC7D52 /* Stripes.frag in Resources */,
 				8953A3A920A173E400DE27D5 /* LaunchScreen.storyboard in Resources */,
 				8953A3A620A173E400DE27D5 /* Assets.xcassets in Resources */,
 				8953A3A420A173E100DE27D5 /* Main.storyboard in Resources */,
