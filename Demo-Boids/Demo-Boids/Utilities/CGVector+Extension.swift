@@ -10,6 +10,11 @@ import UIKit
 
 extension CGVector {
     
+    /// Returns vector distnace.
+    var length: CGFloat {
+        return sqrt(pow(dx, 2) + pow(dy, 2))
+    }
+    
     /// Returns angle in radians.
     var angleToNormal: CGFloat {
         let angle = atan2(dy, dx)

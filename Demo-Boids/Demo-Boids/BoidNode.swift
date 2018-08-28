@@ -17,7 +17,45 @@ class BoidNode: SKShapeNode {
 
     // MARK: - Properties
     
-    var neightbourBoidNodes = [BoidNode]()
+    var neightbourBoidNodes = [BoidNode]() {
+        didSet {
+            guard neightbourBoidNodes.count != oldValue.count, neightbourBoidNodes.count > 0 else { return }
+            
+            var boidsCount = CGFloat(neightbourBoidNodes.count)
+            
+            if boidsCount > 15 {
+                boidsCount -= 15
+                fillColor = UIColor(red: 0.8 + 0.1 * (1 / boidsCount),
+                                    green: 1,
+                                    blue: 1,
+                                    alpha: 1)
+                return
+            }
+            
+            if boidsCount > 7 {
+                boidsCount -= 7
+                fillColor = UIColor(red: 1.0 - 0.8 / boidsCount,
+                                    green: 1.0 - 0.2 / boidsCount,
+                                    blue: 1.0 - 0.2 / boidsCount,
+                                    alpha: 1)
+                return
+            }
+            
+            if boidsCount > 3 {
+                boidsCount -= 3
+                fillColor = UIColor(red: 1.0 - 0.1 / boidsCount,
+                                    green: 1.0 - 0.3 / boidsCount,
+                                    blue: 1.0 - 0.1 / boidsCount,
+                                    alpha: 1)
+                return
+            }
+            
+            fillColor = UIColor(red: 1.0 - 0.7 / boidsCount,
+                                green: 1.0 - 0.2 / boidsCount,
+                                blue: 1.0 - 0.1 / boidsCount,
+                                alpha: 1)
+        }
+    }
     
     var speedCoefficient = CGFloat(1.0)
     var separationCoefficient = CGFloat(1.0)
@@ -88,7 +126,11 @@ class BoidNode: SKShapeNode {
         for neighbour in neightbourBoidNodes {
             neightbourBoidNodeDistance.append(position.vector(to: neighbour.position))
         }
-        return neightbourBoidNodeDistance.averageForCGVectors
+        
+        let averageDistance = neightbourBoidNodeDistance.averageForCGVectors
+        let distance = averageDistance.length > CGFloat(BoidNode.length) / 2 ? averageDistance : CGVector(dx: BoidNode.length / 2, dy: BoidNode.length / 2)
+        
+        return distance
     }
     
     
@@ -110,6 +152,7 @@ class BoidNode: SKShapeNode {
         name = BoidNode.uniqueName
         path = boidPath
         fillColor = .white
+        strokeColor = .clear
         
         Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateDirectionRandomness), userInfo: nil, repeats: true)
     }
@@ -146,6 +189,8 @@ class BoidNode: SKShapeNode {
         
         updatePosition()
         updateRotation()
+        
+        
     }
 
     private func updatePosition() {
@@ -172,7 +217,7 @@ class BoidNode: SKShapeNode {
     
     private func updateRotation() {
         let averageDirection = recentDirections.averageForCGVectors
-        zRotation = averageDirection.normalized.angleToNormal * CGFloat.random(min: 0.95, max: 1.05)
+        zRotation = averageDirection.normalized.angleToNormal * CGFloat.random(min: 0.97, max: 1.03)
     }
     
     private func returnBoidToConfinementFrame() {
