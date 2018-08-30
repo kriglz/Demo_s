@@ -13,11 +13,8 @@ class GameScene: SKScene {
     
     // MARK: - Properties
     
-//    private lazy var gameSceneWorldFrame = CGRect(origin: CGPoint(x: -view!.frame.size.width, y: -view!.frame.size.height),
-//                                                  size: CGSize(width: 3 * view!.frame.size.width, height: 3 * view!.frame.size.height))
-    
-    private lazy var gameSceneWorldFrame = CGRect(origin: CGPoint(x: 10, y: 10),
-                                                  size: CGSize(width: view!.frame.size.width - 20, height: view!.frame.size.height - 20))
+    private lazy var gameSceneWorldFrame = CGRect(origin: CGPoint(x: 300, y: 100),
+                                                  size: CGSize(width: view!.frame.size.width - 600, height: view!.frame.size.height - 200))
     
     private lazy var boidNode = BoidNode(constrainedIn: gameSceneWorldFrame)
     private let obstacleNode = ObstacleNode()
@@ -29,14 +26,19 @@ class GameScene: SKScene {
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         
+        self.backgroundColor = .black
+        
         self.addChild(boidNode)
         boidNode.position = CGPoint(x: 50, y: 50)
         allBoids.append(boidNode)
         
         
-        let test = SKShapeNode.init(rect: gameSceneWorldFrame)
-        test.strokeColor = .white
-        self.addChild(test)
+        //        Timer.scheduledTimer(timeInterval: 8, target: self, selector: #selector(updateAlignementCoedifient), userInfo: nil, repeats: true)
+        Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateBoidAlignmentCoefficient), userInfo: nil, repeats: true)
+        
+//        let test = SKShapeNode(rect: gameSceneWorldFrame)
+//        test.strokeColor = .clear
+//        self.addChild(test)
         
 //        self.addChild(obstacleNode)
 //        obstacleNode.position = CGPoint(x: 100, y: 100)
@@ -67,7 +69,6 @@ class GameScene: SKScene {
         guard let newBoidNode = boidNode.copy() as? BoidNode else { return }
         newBoidNode.updateConfinementFrame(frame: gameSceneWorldFrame)
         newBoidNode.position = position
-        newBoidNode.fillColor = SKColor.green
         self.addChild(newBoidNode)
         allBoids.append(newBoidNode)
     }
@@ -93,10 +94,20 @@ class GameScene: SKScene {
         allBoids.forEach { $0.separationCoefficient = value }
     }
     
-    func updateBoidAlignmentCoefficient(to value: CGFloat) {
-        allBoids.forEach { $0.alignmentCoefficient = value }
+    @objc func updateBoidAlignmentCoefficient(to value: CGFloat) {        
+        if value <= 2 {
+            allBoids.forEach { $0.alignmentCoefficient = value}
+        } else {
+            let random = CGFloat.random(min: 0, max: 1)
+
+            if let boid = allBoids.first, boid.alignmentCoefficient > 1 {
+                allBoids.forEach { $0.alignmentCoefficient -= random}
+            } else {
+                allBoids.forEach { $0.alignmentCoefficient += random}
+            }
+        }
     }
-    
+
     func updateBoidCohesionCoefficient(to value: CGFloat) {
         allBoids.forEach { $0.cohesionCoefficient = value }
     }

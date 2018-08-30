@@ -13,57 +13,45 @@ class BoidNode: SKShapeNode {
     // MARK: - Constants
     
     static let uniqueName = "Boid"
-    static let length = 30
+    static let length = 20
 
+    private let circle = SKShapeNode(rectOf: CGSize(width: 20, height: 20))
+    
+    private let defaultColor = UIColor(white: 1, alpha: 0.2)
+    
     // MARK: - Properties
     
     var neightbourBoidNodes = [BoidNode]() {
         didSet {
             guard neightbourBoidNodes.count != oldValue.count, neightbourBoidNodes.count > 0 else { return }
             
-            var boidsCount = CGFloat(neightbourBoidNodes.count)
+            let boidsCount = CGFloat(neightbourBoidNodes.count)
             
-            if boidsCount > 15 {
-                boidsCount -= 15
-                fillColor = UIColor(red: 0.8 + 0.1 * (1 / boidsCount),
-                                    green: 1,
-                                    blue: 1,
-                                    alpha: 1)
+            if boidsCount > 10 {
+                fillColor = UIColor(white: 1, alpha: 0.7)
                 return
             }
             
-            if boidsCount > 7 {
-                boidsCount -= 7
-                fillColor = UIColor(red: 1.0 - 0.8 / boidsCount,
-                                    green: 1.0 - 0.2 / boidsCount,
-                                    blue: 1.0 - 0.2 / boidsCount,
-                                    alpha: 1)
+            if boidsCount > 6 {
+                fillColor = UIColor(white: 1, alpha: 0.55)
                 return
             }
             
             if boidsCount > 3 {
-                boidsCount -= 3
-                fillColor = UIColor(red: 1.0 - 0.1 / boidsCount,
-                                    green: 1.0 - 0.3 / boidsCount,
-                                    blue: 1.0 - 0.1 / boidsCount,
-                                    alpha: 1)
+                fillColor = UIColor(white: 1, alpha: 0.4)
                 return
             }
             
-            fillColor = UIColor(red: 1.0 - 0.7 / boidsCount,
-                                green: 1.0 - 0.2 / boidsCount,
-                                blue: 1.0 - 0.1 / boidsCount,
-                                alpha: 1)
+            fillColor = defaultColor
         }
     }
     
-    var speedCoefficient = CGFloat(1.0)
-    var separationCoefficient = CGFloat(1.0)
+    var speedCoefficient = CGFloat(0.6)
+    var separationCoefficient = CGFloat(0.35)
     var alignmentCoefficient = CGFloat(1.0)
     var cohesionCoefficient = CGFloat(1.0)
     
     private(set) var direction = CGVector.random(min: -10, max: 10)
-    
     private var recentDirections = [CGVector]()
 
     private var confinementFrame = CGRect.zero
@@ -72,9 +60,15 @@ class BoidNode: SKShapeNode {
 
     private var boidPath: CGPath {
         let triangleBezierPath = UIBezierPath()
+//        triangleBezierPath.move(to: CGPoint(x: -BoidNode.length, y: -10))
+//        triangleBezierPath.addLine(to: CGPoint(x: -BoidNode.length, y: 10))
+//        triangleBezierPath.addLine(to: CGPoint(x: 0, y: 0))
+        
         triangleBezierPath.move(to: CGPoint(x: -BoidNode.length, y: -10))
         triangleBezierPath.addLine(to: CGPoint(x: -BoidNode.length, y: 10))
-        triangleBezierPath.addLine(to: CGPoint(x: 0, y: 0))
+        triangleBezierPath.addLine(to: CGPoint(x: 0, y: 10))
+        triangleBezierPath.addLine(to: CGPoint(x: 0, y: -10))
+
         triangleBezierPath.close()
         return triangleBezierPath.cgPath
     }
@@ -86,13 +80,7 @@ class BoidNode: SKShapeNode {
     private var isBoidNodeInConfinementFrame: Bool {
         return confinementFrame.contains(position)
     }
-    
-    
-    
 
-    
-    
-    
     private var alignmentVector: CGVector {
         return averageNeighbourhoodBoidDirection
     }
@@ -133,11 +121,6 @@ class BoidNode: SKShapeNode {
         return distance
     }
     
-    
-    
-    
-
-    
     // MARK: - Initialization
     
     convenience init(constrainedIn frame: CGRect) {
@@ -151,14 +134,35 @@ class BoidNode: SKShapeNode {
         
         name = BoidNode.uniqueName
         path = boidPath
-        fillColor = .white
+        fillColor = defaultColor
         strokeColor = .clear
         
-        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(updateDirectionRandomness), userInfo: nil, repeats: true)
+        let radom = Double(CGFloat.random(min: 0.2, max: 1.2))
+        Timer.scheduledTimer(timeInterval: radom, target: self, selector: #selector(updateDirectionRandomness), userInfo: nil, repeats: true)
+        
+        Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(boidParticles), userInfo: nil, repeats: true)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Boid particle setup
+
+    @objc func boidParticles() {
+        if let copyCircle = circle.copy() as? SKShapeNode {
+            copyCircle.fillColor = fillColor
+            copyCircle.strokeColor = .clear
+            copyCircle.position = position
+            
+            self.parent?.addChild(copyCircle)
+            
+            let fadeOut = SKAction.fadeOut(withDuration: 0.5)
+            
+            copyCircle.run(fadeOut) {
+                copyCircle.removeFromParent()
+            }
+        }
     }
     
     // MARK: - Boid confinement
@@ -189,8 +193,6 @@ class BoidNode: SKShapeNode {
         
         updatePosition()
         updateRotation()
-        
-        
     }
 
     private func updatePosition() {
@@ -208,27 +210,27 @@ class BoidNode: SKShapeNode {
             }
         }        
     }
-    
 
-    
-    
-    
-    
-    
     private func updateRotation() {
         let averageDirection = recentDirections.averageForCGVectors
         zRotation = averageDirection.normalized.angleToNormal * CGFloat.random(min: 0.97, max: 1.03)
     }
     
     private func returnBoidToConfinementFrame() {
-        if position.x < confinementFrame.origin.x || position.x > confinementFrame.origin.x + confinementFrame.size.width {
-            let flipTransformation = CGAffineTransform(scaleX: -1, y: 1).concatenating(CGAffineTransform(translationX: confinementFrame.size.width, y: 0))
-            position = position.applying(flipTransformation)
+        if position.x < confinementFrame.origin.x {
+            position.x = confinementFrame.origin.x + confinementFrame.size.width
         }
         
-        if position.y < confinementFrame.origin.y || position.y > confinementFrame.origin.y + confinementFrame.size.height {
-            let flipTransformation = CGAffineTransform(scaleX: 1, y: -1).concatenating(CGAffineTransform(translationX: 0, y: confinementFrame.size.height))
-            position = position.applying(flipTransformation)
+        if position.x > confinementFrame.origin.x + confinementFrame.size.width {
+            position.x = confinementFrame.origin.x
+        }
+        
+        if position.y < confinementFrame.origin.y {
+            position.y = confinementFrame.origin.y + confinementFrame.size.height
+        }
+        
+        if position.y > confinementFrame.origin.y + confinementFrame.size.height {
+            position.y = confinementFrame.origin.y
         }
     }
 }
