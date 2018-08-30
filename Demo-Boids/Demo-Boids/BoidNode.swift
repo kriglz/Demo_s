@@ -26,7 +26,7 @@ class BoidNode: SKShapeNode {
     override var position: CGPoint {
         didSet {
             let normalized = position.y.normalize(to: confinementFrame.size.height + confinementFrame.origin.y)
-            fillColor = UIColor(red: normalized, green: 0.1 * normalized, blue: 0.6 * normalized, alpha: boidsAlpha)
+            fillColor = UIColor(red: normalized * normalized + 0.1, green: 0.1 * normalized, blue: 0.6 * normalized + 0.05, alpha: boidsAlpha)
         }
     }
     

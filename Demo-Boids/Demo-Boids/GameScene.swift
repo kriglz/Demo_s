@@ -38,7 +38,8 @@ class GameScene: SKScene {
         }
         
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateBoidAlignmentCoefficient), userInfo: nil, repeats: true)
-        
+        Timer.scheduledTimer(timeInterval: 8, target: self, selector: #selector(updateBoidCohesionCoefficient), userInfo: nil, repeats: true)
+
 //        let test = SKShapeNode(rect: gameSceneWorldFrame)
 //        test.strokeColor = .clear
 //        self.addChild(test)
@@ -115,8 +116,18 @@ class GameScene: SKScene {
         }
     }
 
-    func updateBoidCohesionCoefficient(to value: CGFloat) {
-        allBoids.forEach { $0.cohesionCoefficient = value }
+    @objc func updateBoidCohesionCoefficient(to value: CGFloat) {
+        if value <= 2 {
+            allBoids.forEach { $0.cohesionCoefficient = value }
+        } else {
+            let random = CGFloat.random(min: 0, max: 1)
+            
+            if let boid = allBoids.first, boid.cohesionCoefficient > 1 {
+                allBoids.forEach { $0.cohesionCoefficient -= random}
+            } else {
+                allBoids.forEach { $0.cohesionCoefficient += random}
+            }
+        }
     }
     
     private func scanBoidsInNeighborhood() {
