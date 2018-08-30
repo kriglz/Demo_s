@@ -19,7 +19,16 @@ class BoidNode: SKShapeNode {
     
     private let defaultColor = UIColor(white: 1, alpha: 0.2)
     
+    private var boidsAlpha = CGFloat(0.3)
+    
     // MARK: - Properties
+    
+    override var position: CGPoint {
+        didSet {
+            let normalized = position.y.normalize(to: confinementFrame.size.height + confinementFrame.origin.y)
+            fillColor = UIColor(red: normalized, green: 0.1 * normalized, blue: 0.6 * normalized, alpha: boidsAlpha)
+        }
+    }
     
     var neightbourBoidNodes = [BoidNode]() {
         didSet {
@@ -28,21 +37,25 @@ class BoidNode: SKShapeNode {
             let boidsCount = CGFloat(neightbourBoidNodes.count)
             
             if boidsCount > 10 {
-                fillColor = UIColor(white: 1, alpha: 0.7)
+                boidsAlpha = 0.7
+//                fillColor = UIColor(white: 1, alpha: 0.7)
                 return
             }
             
             if boidsCount > 6 {
-                fillColor = UIColor(white: 1, alpha: 0.55)
+                boidsAlpha = 0.55
+//                fillColor = UIColor(white: 1, alpha: 0.55)
                 return
             }
             
             if boidsCount > 3 {
-                fillColor = UIColor(white: 1, alpha: 0.4)
+                boidsAlpha = 0.4
+//                fillColor = UIColor(white: 1, alpha: 0.4)
                 return
             }
             
-            fillColor = defaultColor
+            boidsAlpha = 0.3
+//            fillColor = defaultColor
         }
     }
     
@@ -134,7 +147,7 @@ class BoidNode: SKShapeNode {
         
         name = BoidNode.uniqueName
         path = boidPath
-        fillColor = defaultColor
+//        fillColor = defaultColor
         strokeColor = .clear
         
         let radom = Double(CGFloat.random(min: 0.2, max: 1.2))

@@ -98,7 +98,7 @@ class GameScene: SKScene {
         if value <= 2 {
             allBoids.forEach { $0.alignmentCoefficient = value}
         } else {
-            let random = CGFloat.random(min: 0, max: 1)
+            let random = CGFloat.random(min: 0, max: 0.5)
 
             if let boid = allBoids.first, boid.alignmentCoefficient > 1 {
                 allBoids.forEach { $0.alignmentCoefficient -= random}
