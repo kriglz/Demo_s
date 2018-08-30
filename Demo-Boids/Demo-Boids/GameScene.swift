@@ -32,8 +32,11 @@ class GameScene: SKScene {
         boidNode.position = CGPoint(x: 50, y: 50)
         allBoids.append(boidNode)
         
+        for _ in 0...30 {
+            spitNewBoid(at: CGPoint(x: CGFloat.random(min: gameSceneWorldFrame.origin.x, max: gameSceneWorldFrame.origin.x + gameSceneWorldFrame.size.width),
+                                    y: CGFloat.random(min: gameSceneWorldFrame.origin.y, max: gameSceneWorldFrame.origin.y + gameSceneWorldFrame.size.height)))
+        }
         
-        //        Timer.scheduledTimer(timeInterval: 8, target: self, selector: #selector(updateAlignementCoedifient), userInfo: nil, repeats: true)
         Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(updateBoidAlignmentCoefficient), userInfo: nil, repeats: true)
         
 //        let test = SKShapeNode(rect: gameSceneWorldFrame)
@@ -66,11 +69,7 @@ class GameScene: SKScene {
         let flipTransform = CGAffineTransform(scaleX: 1, y: -1).concatenating(CGAffineTransform.init(translationX: 0, y: view.frame.height))
         let position = gestureRecognizer.location(in: view).applying(flipTransform)
         
-        guard let newBoidNode = boidNode.copy() as? BoidNode else { return }
-        newBoidNode.updateConfinementFrame(frame: gameSceneWorldFrame)
-        newBoidNode.position = position
-        self.addChild(newBoidNode)
-        allBoids.append(newBoidNode)
+        spitNewBoid(at: position)
     }
     
 //    @objc private func handleDoubleTap(_ gestureRecognizer: UITapGestureRecognizer) {
@@ -85,6 +84,14 @@ class GameScene: SKScene {
 //    }
     
     // MARK: - Node control
+    
+    func spitNewBoid(at position: CGPoint) {
+        guard let newBoidNode = boidNode.copy() as? BoidNode else { return }
+        newBoidNode.updateConfinementFrame(frame: gameSceneWorldFrame)
+        newBoidNode.position = position
+        self.addChild(newBoidNode)
+        allBoids.append(newBoidNode)
+    }
     
     func updateBoidSpeednCoefficient(to value: CGFloat) {
         allBoids.forEach { $0.speedCoefficient = value }
