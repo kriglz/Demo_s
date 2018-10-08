@@ -67,11 +67,11 @@ class ViewController: UIViewController {
         endAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         endAnimation.beginTime = startAnimation.beginTime + delay
 
-        let show = CAAnimationGroup()
-        show.animations = [startAnimation, endAnimation]
-        show.duration = duration + delay
-        show.repeatCount = .infinity
-        lineLayer.add(show, forKey: "show")
+        let strokeAnimation = CAAnimationGroup()
+        strokeAnimation.animations = [startAnimation, endAnimation]
+        strokeAnimation.duration = duration + delay
+        strokeAnimation.repeatCount = .infinity
+        lineLayer.add(strokeAnimation, forKey: "strokeAnimation")
         
         let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
         rotationAnimation.byValue = -CGFloat.pi / 3
@@ -83,22 +83,21 @@ class ViewController: UIViewController {
         
         let colorAnimation = CABasicAnimation(keyPath: "strokeColor")
         colorAnimation.toValue = UIColor.red.cgColor
-        colorAnimation.duration = duration / 2
-        colorAnimation.repeatCount = .infinity
-        colorAnimation.isCumulative = true
+        colorAnimation.duration = (duration + delay) / 2
         colorAnimation.autoreverses = true
 
         lineLayer.add(colorAnimation, forKey: colorAnimation.keyPath)
         
         let shadowColorAnimation = CABasicAnimation(keyPath: "shadowColor")
         shadowColorAnimation.toValue = UIColor.red.cgColor
-        shadowColorAnimation.duration = duration / 2
+        shadowColorAnimation.duration = (duration + delay) / 2
         shadowColorAnimation.autoreverses = true
-        shadowColorAnimation.repeatCount = .infinity
-        shadowColorAnimation.isCumulative = true
         
-        lineLayer.add(shadowColorAnimation, forKey: shadowColorAnimation.keyPath)
-
+        let strokeColorAnimation = CAAnimationGroup()
+        strokeColorAnimation.animations = [colorAnimation, shadowColorAnimation]
+        strokeColorAnimation.duration = duration + delay
+        strokeColorAnimation.repeatCount = .infinity
+        lineLayer.add(strokeColorAnimation, forKey: "strokeColorAnimation")
     }
 }
 
