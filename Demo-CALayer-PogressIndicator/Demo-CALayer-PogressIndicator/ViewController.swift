@@ -18,15 +18,15 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        for _ in 0...10 {
+        for _ in 0...15 {
             lineAnimation()
         }
     }
 
     private func lineAnimation() {
         let width = CGFloat.random(in: view.frame.width - 250...view.frame.width - 200)
-        let rect = CGRect(x: view.frame.size.width / 2 - width / 2,
-                          y: view.frame.size.height / 2 - width / 2,
+        let rect = CGRect(x: -width / 2,
+                          y: -width / 2,
                           width: width,
                           height: width)
         
@@ -43,10 +43,14 @@ class ViewController: UIViewController {
         lineLayer.shadowOpacity = 1
         lineLayer.masksToBounds = false
         
+        lineLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        lineLayer.anchorPointZ = 0.5
+        lineLayer.position = view.center
+        
         view.layer.addSublayer(lineLayer)
         
-        let duration = 1.0
-        let dalay = 0.3
+        let duration = 2.0
+        let delay = 0.5
         
         let startAnimation = CABasicAnimation(keyPath: "strokeStart")
         startAnimation.fromValue = 1
@@ -61,13 +65,23 @@ class ViewController: UIViewController {
         endAnimation.toValue = 0
         endAnimation.duration = duration
         endAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        endAnimation.beginTime = startAnimation.beginTime + dalay
+        endAnimation.beginTime = startAnimation.beginTime + delay
+
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotationAnimation.byValue = -CGFloat.pi / 3
+        rotationAnimation.duration = duration / 6
+        rotationAnimation.isRemovedOnCompletion = false
+        rotationAnimation.isCumulative = true
+        rotationAnimation.fillMode = .forwards
+        rotationAnimation.repeatCount = .infinity
         
         let show = CAAnimationGroup()
         show.animations = [startAnimation, endAnimation]
-        show.duration = duration + dalay
+        show.duration = duration + delay
         show.repeatCount = .infinity
         lineLayer.add(show, forKey: "show")
+        
+        lineLayer.add(rotationAnimation, forKey: rotationAnimation.keyPath)
     }
 }
 
