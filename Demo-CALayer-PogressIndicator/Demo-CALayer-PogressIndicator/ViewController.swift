@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        for _ in 0...15 {
+        for _ in 0...7 {
             lineAnimation()
         }
     }
@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         let lineLayer = CAShapeLayer()
         lineLayer.path = CGPath(ellipseIn: rect, transform: nil)
         
-        lineLayer.lineWidth = 1
+        lineLayer.lineWidth = 2
         lineLayer.fillColor = UIColor.clear.cgColor
         lineLayer.strokeColor = UIColor.blue.cgColor
         
@@ -67,21 +67,38 @@ class ViewController: UIViewController {
         endAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         endAnimation.beginTime = startAnimation.beginTime + delay
 
-        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotationAnimation.byValue = -CGFloat.pi / 3
-        rotationAnimation.duration = duration / 6
-        rotationAnimation.isRemovedOnCompletion = false
-        rotationAnimation.isCumulative = true
-        rotationAnimation.fillMode = .forwards
-        rotationAnimation.repeatCount = .infinity
-        
         let show = CAAnimationGroup()
         show.animations = [startAnimation, endAnimation]
         show.duration = duration + delay
         show.repeatCount = .infinity
         lineLayer.add(show, forKey: "show")
         
+        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotationAnimation.byValue = -CGFloat.pi / 3
+        rotationAnimation.duration = duration / 6
+        rotationAnimation.isCumulative = true
+        rotationAnimation.repeatCount = .infinity
+        
         lineLayer.add(rotationAnimation, forKey: rotationAnimation.keyPath)
+        
+        let colorAnimation = CABasicAnimation(keyPath: "strokeColor")
+        colorAnimation.toValue = UIColor.red.cgColor
+        colorAnimation.duration = duration / 2
+        colorAnimation.repeatCount = .infinity
+        colorAnimation.isCumulative = true
+        colorAnimation.autoreverses = true
+
+        lineLayer.add(colorAnimation, forKey: colorAnimation.keyPath)
+        
+        let shadowColorAnimation = CABasicAnimation(keyPath: "shadowColor")
+        shadowColorAnimation.toValue = UIColor.red.cgColor
+        shadowColorAnimation.duration = duration / 2
+        shadowColorAnimation.autoreverses = true
+        shadowColorAnimation.repeatCount = .infinity
+        shadowColorAnimation.isCumulative = true
+        
+        lineLayer.add(shadowColorAnimation, forKey: shadowColorAnimation.keyPath)
+
     }
 }
 
