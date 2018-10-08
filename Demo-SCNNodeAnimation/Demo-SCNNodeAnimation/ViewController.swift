@@ -126,3 +126,4 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             SCNTransaction.commit()
         }
     }
+}
