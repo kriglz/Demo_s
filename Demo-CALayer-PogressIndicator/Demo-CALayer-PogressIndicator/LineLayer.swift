@@ -10,23 +10,25 @@ import UIKit
 
 class LineLayer: CAShapeLayer {
     
-    convenience init(path: CGPath) {
+    convenience init(path: CGPath? = nil, hasShadow: Bool = true) {
         self.init()
         self.path = path
-    }
-    
-    override init() {
-        super.init()
         
         self.lineWidth = 2
         self.fillColor = UIColor.clear.cgColor
         self.strokeColor = UIColor.blue.cgColor
         
-        self.shadowColor = self.strokeColor
-        self.shadowOffset = .zero
-        self.shadowRadius = 4
-        self.shadowOpacity = 1
-        self.masksToBounds = false
+        if hasShadow {
+            self.shadowColor = self.strokeColor
+            self.shadowOffset = .zero
+            self.shadowRadius = 4
+            self.shadowOpacity = 1
+            self.masksToBounds = false
+        }
+    }
+
+    override init() {
+        super.init()
     }
     
     required init?(coder aDecoder: NSCoder) {
