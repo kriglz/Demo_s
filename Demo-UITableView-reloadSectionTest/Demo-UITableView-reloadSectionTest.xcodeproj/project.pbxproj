@@ -54,14 +54,22 @@
 		63EB97012181FFA600E765A9 /* Demo-UITableView-reloadSectionTest */ = {
 			isa = PBXGroup;
 			children = (
-				63EB97022181FFA600E765A9 /* AppDelegate.swift */,
 				63EB97042181FFA600E765A9 /* ViewController.swift */,
-				63EB97062181FFA600E765A9 /* Main.storyboard */,
-				63EB97092181FFA700E765A9 /* Assets.xcassets */,
-				63EB970B2181FFA700E765A9 /* LaunchScreen.storyboard */,
+				63EB971421820C8100E765A9 /* Supporting FIles */,
 				63EB970E2181FFA700E765A9 /* Info.plist */,
 			);
 			path = "Demo-UITableView-reloadSectionTest";
+			sourceTree = "<group>";
+		};
+		63EB971421820C8100E765A9 /* Supporting FIles */ = {
+			isa = PBXGroup;
+			children = (
+				63EB97022181FFA600E765A9 /* AppDelegate.swift */,
+				63EB97062181FFA600E765A9 /* Main.storyboard */,
+				63EB97092181FFA700E765A9 /* Assets.xcassets */,
+				63EB970B2181FFA700E765A9 /* LaunchScreen.storyboard */,
+			);
+			path = "Supporting FIles";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
