@@ -23,9 +23,14 @@ class GameViewController: UIViewController {
         // create and add a camera to the scene
         cameraNode.camera = SCNCamera()
         scene.rootNode.addChildNode(cameraNode)
+        cameraNode.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 0, z: 15, duration: 200)))
+
+        let move = SCNAction.moveBy(x: 0, y: 0, z: 100, duration: 20)
+        let moveBack = move.reversed()
+        cameraNode.runAction(SCNAction.repeatForever(SCNAction.sequence([move, moveBack])))
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        cameraNode.position = SCNVector3(x: 0.5, y: 0.5, z: 10.5)
         
         // create and add a light to the scene
         let lightNode = SCNNode()
@@ -76,15 +81,19 @@ class GameViewController: UIViewController {
     }
 
     func buildGrid() {
-        let node = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
-        for row in 0...10 {
-            for column in 0...10 {
-                for depth in 0...10 {
+        let count = 20
+        let length: CGFloat = 0.05
+        let node = SCNNode(geometry: SCNBox(width: length, height: length, length: length, chamferRadius: 0))
+        
+        for row in 0...count {
+            for column in 0...count {
+                for depth in 0...count {
+                    
                     let boxNode = node.flattenedClone()
-                    boxNode.worldPosition = SCNVector3(-5 + row, -5 + column, depth)
+                    boxNode.worldPosition = SCNVector3(-count/2 + row, -count/2 + column, -count/2 + depth)
                     scene.rootNode.addChildNode(boxNode)
                     
-                    boxNode.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+                    boxNode.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: CGFloat(Int.random(in: -1...1)), y: CGFloat(Int.random(in: -1...1)), z: CGFloat(Int.random(in: -1...1)), duration: 1)))
                 }
             }
         }
