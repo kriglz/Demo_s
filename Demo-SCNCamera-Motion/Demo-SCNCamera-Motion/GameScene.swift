@@ -13,7 +13,10 @@ import GameplayKit
 class GameScene: SCNScene, SCNSceneRendererDelegate {
 
     let cameraNode = SCNNode()
+    let ambientLightNode = SCNNode()
     let count = 25
+    let length: CGFloat = 0.05
+    lazy var node = SCNNode(geometry: SCNBox(width: length, height: length, length: length, chamferRadius: 0))
 
     override init() {
         super.init()
@@ -21,7 +24,6 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         // create and add a camera to the scene
         cameraNode.camera = SCNCamera()
         self.rootNode.addChildNode(cameraNode)
-//        cameraNode.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 0, z: 15, duration: 200)))
 
         // place the camera
         let position: Float = 0.0
@@ -34,7 +36,6 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         let moveBack = move.reversed()
         cameraNode.runAction(SCNAction.repeatForever(SCNAction.sequence([move, moveBack])))
         
-        
         // create and add a light to the scene
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
@@ -43,10 +44,8 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         self.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
-        let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = .ambient
-        ambientLightNode.light!.color = UIColor.darkGray
         self.rootNode.addChildNode(ambientLightNode)
 
         buildGrid()        
@@ -56,47 +55,25 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    X = x + (a * Math.cos(alpha));
-//    Y = y + (b * Math.sin(alpha));
-        
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        
-//        cameraNode.position.z -= 0.1
-        
-        cameraNode.position.x = Float(cos(time / Double.pi)) //* Float(count) / 2
-//        cameraNode.position.y = Float(sin(time))
-//        cameraNode.position.z = Float(cos(time)) + Float(sin(time))
-        
-        node.geometry?.materials.first?.diffuse.contents = UIColor(red: CGFloat.random(in: 0...0.3), green: CGFloat.random(in: 0...0.1), blue: 0.5, alpha: 1)
+        cameraNode.position.x = Float(cos(time / Double.pi))
 
- 
+        ambientLightNode.light!.color = UIColor(red: CGFloat.random(in: 0.7...1), green: CGFloat.random(in: 0...1), blue: 0.5, alpha: 1)
+        background.contents = UIColor(red: CGFloat.random(in: 0.7...1), green: CGFloat.random(in: 0...1), blue: 0.5, alpha: 1)
     }
     
-    let length: CGFloat = 0.05
-
-    lazy var node = SCNNode(geometry: SCNBox(width: length, height: length, length: length, chamferRadius: 0))
-
     func buildGrid() {
-        
         let container = SCNNode()
-
         for row in 0...count {
             for column in 0...count {
                 for depth in 0...count {
-                    
-//                    node.geometry?.materials.first?.diffuse.contents = UIColor(red: 0, green: 0, blue: CGFloat.random(in: 0...1), alpha: 1)
-
                     let boxNode = node.flattenedClone()
                     boxNode.worldPosition = SCNVector3(-count/2 + row, -count/2 + column, -count/2 + depth)
-//                    self.rootNode.addChildNode(boxNode)
                     container.addChildNode(boxNode)
                 }
             }
         }
         
         self.rootNode.addChildNode(container.flattenedClone())
-
     }
-    
-    
 }
