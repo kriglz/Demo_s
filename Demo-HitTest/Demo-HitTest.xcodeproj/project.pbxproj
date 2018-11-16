@@ -55,8 +55,8 @@
 		89848032219F424B006B6A39 /* Demo-HitTest */ = {
 			isa = PBXGroup;
 			children = (
-				89848045219F42CE006B6A39 /* SupportingFiles */,
 				89848035219F424B006B6A39 /* GameViewController.swift */,
+				89848045219F42CE006B6A39 /* SupportingFiles */,
 				8984803E219F424C006B6A39 /* Info.plist */,
 				8984803F219F424C006B6A39 /* Demo_HitTest.entitlements */,
 			);
