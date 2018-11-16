@@ -35,7 +35,7 @@ class GameViewController: NSViewController {
         scene.rootNode.addChildNode(ambientLightNode)
         
         box = scene.rootNode.childNode(withName: "box", recursively: true)!
-        box.position = SCNVector3(x: 0.5, y: 1, z: -1)
+        box.position = SCNVector3(x: 0.5, y: 3, z: -1)
         
         let scnView = self.view as! SCNView
         scnView.scene = scene
@@ -75,23 +75,19 @@ class GameViewController: NSViewController {
         let planeTransform = SCNMatrix4Identity
         planeNode.transform = planeTransform
         
-
         let cameraToPlaneX = box.position.x - cameraNode.position.x
-        let cameraToPlaneY = box.position.y - cameraNode.position.y
+        let cameraToPlaneY = CGFloat(0)
         let cameraToPlaneZ = box.position.z - cameraNode.position.z
-        
-        let cameraToPlane = SCNVector3(x: cameraToPlaneX, y: cameraToPlaneY, z: cameraToPlaneZ).normalized
+
+        let cameraToPlane = SCNVector3(x: cameraToPlaneX, y: cameraToPlaneY, z: cameraToPlaneZ)
         
         let rotationX = cameraToPlane.z
         let rotationY = cameraToPlane.y
         let rotationZ = -cameraToPlane.x
         
         let rotationTransform = SCNMatrix4MakeRotation(CGFloat.pi / 2, rotationX, rotationY, rotationZ)
-        planeNode.transform = SCNMatrix4Mult(rotationTransform, planeNode.transform)
-        
-        
         let translationTransform = SCNMatrix4MakeTranslation(box.position.x, box.position.y, box.position.z)
-        planeNode.transform = SCNMatrix4Mult(translationTransform, planeNode.transform)
-
+        let transform = SCNMatrix4Mult(rotationTransform, translationTransform)
+        planeNode.transform = SCNMatrix4Mult(transform, planeNode.transform)
     }
 }
