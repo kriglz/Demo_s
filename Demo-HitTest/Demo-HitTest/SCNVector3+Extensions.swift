@@ -11,6 +11,13 @@ import SceneKit
 
 extension SCNVector3 {
     
+    var perpendicular: SCNVector3 {
+        let rotationX = self.z
+        let rotationY = self.y
+        let rotationZ = -self.x
+        return SCNVector3(x: rotationX, y: rotationY, z: rotationZ)
+    }
+    
     /**
      * Returns the length (magnitude) of the vector described by the SCNVector3
      */
