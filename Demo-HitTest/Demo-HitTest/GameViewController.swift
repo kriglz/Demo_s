@@ -11,12 +11,14 @@ import QuartzCore
 
 class GameViewController: NSViewController {
     
+    let cameraNode = SCNNode()
+    var box: SCNNode!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let scene = SCNScene(named: "art.scnassets/ship.scn")!
         
-        let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
         scene.rootNode.addChildNode(cameraNode)
         cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
@@ -32,8 +34,8 @@ class GameViewController: NSViewController {
         ambientLightNode.light!.color = NSColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
         
-        let box = scene.rootNode.childNode(withName: "box", recursively: true)!
-        box.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+        box = scene.rootNode.childNode(withName: "box", recursively: true)!
+        box.position = SCNVector3(x: 0.5, y: 1, z: -1)
         
         let scnView = self.view as! SCNView
         scnView.scene = scene
@@ -46,6 +48,8 @@ class GameViewController: NSViewController {
         var gestureRecognizers = scnView.gestureRecognizers
         gestureRecognizers.insert(clickGesture, at: 0)
         scnView.gestureRecognizers = gestureRecognizers
+        
+        setupPlane()
     }
     
     @objc func handleClick(_ gestureRecognizer: NSGestureRecognizer) {
@@ -58,5 +62,36 @@ class GameViewController: NSViewController {
             
             
         }
+    }
+    
+    func setupPlane() {
+        let plane = SCNPlane(width: 10, height: 10)
+        plane.firstMaterial?.isDoubleSided = true
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.name = "Plane"
+        let scnView = self.view as! SCNView
+        scnView.scene?.rootNode.addChildNode(planeNode)
+        
+        let planeTransform = SCNMatrix4Identity
+        planeNode.transform = planeTransform
+        
+
+        let cameraToPlaneX = box.position.x - cameraNode.position.x
+        let cameraToPlaneY = box.position.y - cameraNode.position.y
+        let cameraToPlaneZ = box.position.z - cameraNode.position.z
+        
+        let cameraToPlane = SCNVector3(x: cameraToPlaneX, y: cameraToPlaneY, z: cameraToPlaneZ).normalized
+        
+        let rotationX = cameraToPlane.z
+        let rotationY = cameraToPlane.y
+        let rotationZ = -cameraToPlane.x
+        
+        let rotationTransform = SCNMatrix4MakeRotation(CGFloat.pi / 2, rotationX, rotationY, rotationZ)
+        planeNode.transform = SCNMatrix4Mult(rotationTransform, planeNode.transform)
+        
+        
+        let translationTransform = SCNMatrix4MakeTranslation(box.position.x, box.position.y, box.position.z)
+        planeNode.transform = SCNMatrix4Mult(translationTransform, planeNode.transform)
+
     }
 }
