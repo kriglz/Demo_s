@@ -18,7 +18,7 @@ class GameViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let scene = SCNScene()
         
         cameraNode.camera = SCNCamera()
         scene.rootNode.addChildNode(cameraNode)
@@ -35,7 +35,9 @@ class GameViewController: NSViewController {
         ambientLightNode.light!.color = NSColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
         
-        box = scene.rootNode.childNode(withName: "box", recursively: true)!
+        let boxGeometry = SCNBox(width: 1, height: 2, length: 1, chamferRadius: 0)
+        box = SCNNode(geometry: boxGeometry)
+        scene.rootNode.addChildNode(box)
         box.position = SCNVector3(x: 0.5, y: 3, z: -1)
         
         let scnView = self.view as! SCNView
@@ -99,9 +101,20 @@ class GameViewController: NSViewController {
         
         let cameraToTargetAngle = -CGFloat.pi / 6
         
-        let rotationTransform = SCNMatrix4MakeRotation(cameraToTargetAngle, rotation.x, rotation.y, rotation.z)
-        let translationTransform = SCNMatrix4MakeTranslation(point.x, point.y, point.z)
-        let transform = SCNMatrix4Mult(rotationTransform, translationTransform)
-        planeNode.transform = SCNMatrix4Mult(transform, planeNode.transform)
+        let translationX = planeNode.position.x - point.x
+        let translationY = planeNode.position.y - point.y
+        let translationZ = planeNode.position.z - point.z
+        let translationTransform = SCNMatrix4MakeTranslation(translationX, translationY, translationZ)
+
+        
+//        let rotationTransform = SCNMatrix4MakeRotation(cameraToTargetAngle, rotation.x, rotation.y, rotation.z)
+//        let transform = SCNMatrix4Mult(rotationTransform, planeNode.transform)
+        
+//        var planeTransfrom = planeNode.transform
+//        planeTransfrom.m41 = 0
+//        planeTransfrom.m42 = 0
+//        planeTransfrom.m43 = 0
+//
+        planeNode.transform = SCNMatrix4Mult(translationTransform, planeNode.transform)
     }
 }
