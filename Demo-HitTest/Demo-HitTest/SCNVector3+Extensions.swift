@@ -12,17 +12,14 @@ import SceneKit
 extension SCNVector3 {
     
     var perpendicular: SCNVector3 {
-        let rotationX = self.z
-        let rotationY = self.y
-        let rotationZ = -self.x
-        return SCNVector3(x: rotationX, y: rotationY, z: rotationZ)
+        return SCNVector3(x: self.z, y: self.y, z: -self.x)
     }
     
     /**
      * Returns the length (magnitude) of the vector described by the SCNVector3
      */
     var length: CGFloat {
-        return sqrt(x * x + y * y + z * z)
+        return sqrt(pow(self.x, 2) + pow(self.y, 2) + pow(self.z, 2))
     }
     
     /**
@@ -30,7 +27,7 @@ extension SCNVector3 {
      * the result as a new SCNVector3.
      */
     var normalized: SCNVector3 {
-        return self.divide(by: length)
+        return self.divide(by: self.length)
     }
     
     /**

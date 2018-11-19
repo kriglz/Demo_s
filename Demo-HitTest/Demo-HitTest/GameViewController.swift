@@ -13,7 +13,7 @@ class GameViewController: NSViewController {
     
     let cameraNode = SCNNode()
     var box: SCNNode!
-    var planeNode: SCNNode!
+    var planeNode: SCNNode?
     
     let angleLabel = NSTextField(labelWithString: "Angle")
     let cameraLabel = NSTextField(labelWithString: "Camera")
@@ -21,6 +21,11 @@ class GameViewController: NSViewController {
     var cameraPosition: SCNVector3 {
         let scnView = self.view as! SCNView
         return scnView.pointOfView!.position
+    }
+    
+    var cameraDirection: SCNVector3 {
+        let scnView = self.view as! SCNView
+        return SCNVector3(x: -scnView.pointOfView!.transform.m31, y: -scnView.pointOfView!.transform.m32, z: -scnView.pointOfView!.transform.m33)
     }
     
     override func viewDidLoad() {
@@ -43,17 +48,18 @@ class GameViewController: NSViewController {
         ambientLightNode.light!.color = NSColor.darkGray
         scene.rootNode.addChildNode(ambientLightNode)
         
-        let boxGeometry = SCNBox(width: 2, height: 10, length: 1, chamferRadius: 0)
+        let boxGeometry = SCNBox(width: 4, height: 10, length: 4, chamferRadius: 0)
         boxGeometry.firstMaterial?.diffuse.contents = NSColor.red
         self.box = SCNNode(geometry: boxGeometry)
         self.box.name = "box"
-        self.box.worldPosition = SCNVector3(x: 0.5, y: 3, z: -1)
+        self.box.worldPosition = SCNVector3(x: 0, y: 0, z: 0)
         scene.rootNode.addChildNode(self.box)
         
         let scnView = self.view as! SCNView
         scnView.scene = scene
         scnView.allowsCameraControl = true
         scnView.showsStatistics = true
+        scnView.debugOptions = .showCameras
         scnView.backgroundColor = NSColor.black
         
         self.angleLabel.textColor = .green
@@ -74,11 +80,10 @@ class GameViewController: NSViewController {
         gestureRecognizers.insert(clickGesture, at: 0)
         scnView.gestureRecognizers = gestureRecognizers
         
-        self.setupPlane()
-        
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] (timer) in
             guard let self = self else { return }
             self.cameraLabel.stringValue = "\(scnView.pointOfView!.position.x) \n \(scnView.pointOfView!.position.y) \n \(scnView.pointOfView!.position.z)"
+            self.cameraNode.worldPosition = scnView.pointOfView!.position
         }
     }
     
@@ -90,7 +95,7 @@ class GameViewController: NSViewController {
         let hitResults = scnView.hitTest(point, options: [:])
         for result in hitResults {
             if result.node.name == "box" {
-                self.adjustPlaneAngle(target: result.worldCoordinates)
+                self.setupPlane(for: result.worldCoordinates)
             }
         }
     }
@@ -99,51 +104,43 @@ class GameViewController: NSViewController {
         let plane = SCNPlane(width: 10, height: 10)
         plane.firstMaterial?.isDoubleSided = true
         self.planeNode = SCNNode(geometry: plane)
-        self.planeNode.name = "Plane"
+        
+        guard let planeNode = self.planeNode else { return }
+        planeNode.name = "Plane"
         let scnView = self.view as! SCNView
-        scnView.scene?.rootNode.addChildNode(self.planeNode)
-        
-        let planeTransform = SCNMatrix4Identity
-        self.planeNode.transform = planeTransform
-        
-        let cameraToPlaneX = self.box.position.x - self.cameraPosition.x
-        let cameraToPlaneY = CGFloat(0)
-        let cameraToPlaneZ = self.box.position.z - self.cameraPosition.z
-        let cameraToPlane = SCNVector3(x: cameraToPlaneX, y: cameraToPlaneY, z: cameraToPlaneZ)
-        
-        let rotation = cameraToPlane.perpendicular
-        
-        let rotationTransform = SCNMatrix4MakeRotation(CGFloat.pi / 2, rotation.x, rotation.y, rotation.z)
-        let translationTransform = SCNMatrix4MakeTranslation(self.box.position.x, self.box.position.y, self.box.position.z)
-        let transform = SCNMatrix4Mult(rotationTransform, translationTransform)
-        self.planeNode.transform = SCNMatrix4Mult(transform, self.planeNode.transform)
+        scnView.scene?.rootNode.addChildNode(planeNode)
     }
     
-    func adjustPlaneAngle(target point: SCNVector3) {
-        let translationX = point.x - self.planeNode.position.x
-        let translationY = point.y - self.planeNode.position.y
-        let translationZ = point.z - self.planeNode.position.z
+    func setupPlane(for point: SCNVector3) {
+        if self.planeNode != nil {
+            self.planeNode?.removeFromParentNode()
+            self.planeNode = nil
+        }
+        
+        self.setupPlane()
+        
+        guard let planeNode = self.planeNode else { return }
+        
+        let translationX = point.x
+        let translationY = point.y
+        let translationZ = point.z
         let translationTransform = SCNMatrix4MakeTranslation(translationX, translationY, translationZ)
-        self.planeNode.transform = SCNMatrix4Mult(planeNode.transform, translationTransform)
 
         let cameraToTargetX = point.x - self.cameraPosition.x
         let cameraToTargetY = point.y - self.cameraPosition.y
         let cameraToTargetZ = point.z - self.cameraPosition.z
-        let cameraToTarget = SCNVector3(x: cameraToTargetX, y: cameraToTargetY, z: cameraToTargetZ)
-        let rotationAxis = cameraToTarget.perpendicular
+        let cameraToTarget = SCNVector3(x: cameraToTargetX, y: cameraToTargetY, z: cameraToTargetZ).normalized
         
-        let cameraToTargetNormalized = cameraToTarget.normalized
-        let cameraToTargetSin = cameraToTargetNormalized.y / sqrt(pow(cameraToTargetNormalized.x, 2) + pow(cameraToTargetNormalized.y, 2) + pow(cameraToTargetNormalized.z, 2))
+        let cameraToTargetSin = cameraToTarget.y / cameraToTarget.length
         let cameraToTargetAngle = -asin(cameraToTargetSin)
-        angleLabel.stringValue = "\(cameraToTargetSin * 180 / CGFloat.pi)"
+        angleLabel.stringValue = "\(cameraToTargetAngle * 180 / CGFloat.pi)"
         
-        let rotationTransform = SCNMatrix4MakeRotation(cameraToTargetAngle + CGFloat.pi / 2, rotationAxis.x, rotationAxis.y, rotationAxis.z)
-        self.planeNode.eulerAngles = SCNVector3Zero
-        self.planeNode.transform = SCNMatrix4Mult(rotationTransform, planeNode.transform)
+//        let rotationAxis = SCNVector3(cameraToTarget.x, 0, cameraToTarget.z).perpendicular
+        let rotationAxis = SCNVector3(cameraDirection.x, 0, cameraDirection.z).perpendicular
+
+        let rotationTransform = SCNMatrix4MakeRotation(CGFloat.pi / 2, rotationAxis.x, rotationAxis.y, rotationAxis.z)
         
-        
-//        let transformation = SCNMatrix4Mult(translationTransform, rotationTransform)
-//        self.planeNode.transform = SCNMatrix4Mult( self.planeNode.transform, transformation)
-        
+        let transform = SCNMatrix4Mult(rotationTransform, planeNode.transform)
+        planeNode.transform = SCNMatrix4Mult(transform, translationTransform)
     }
 }
