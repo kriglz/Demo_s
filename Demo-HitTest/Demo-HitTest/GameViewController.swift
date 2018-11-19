@@ -59,7 +59,6 @@ class GameViewController: NSViewController {
         scnView.scene = scene
         scnView.allowsCameraControl = true
         scnView.showsStatistics = true
-        scnView.debugOptions = .showCameras
         scnView.backgroundColor = NSColor.black
         
         self.angleLabel.textColor = .green
