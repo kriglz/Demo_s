@@ -83,7 +83,6 @@ class GameViewController: NSViewController {
         Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] (timer) in
             guard let self = self else { return }
             self.cameraLabel.stringValue = "\(scnView.pointOfView!.position.x) \n \(scnView.pointOfView!.position.y) \n \(scnView.pointOfView!.position.z)"
-            self.cameraNode.worldPosition = scnView.pointOfView!.position
         }
     }
     
@@ -137,7 +136,7 @@ class GameViewController: NSViewController {
         
         let rotationAxis = SCNVector3(cameraDirection.x, 0, cameraDirection.z).perpendicular
         
-        let rotationTransform = SCNMatrix4MakeRotation(CGFloat.pi / 2, rotationAxis.x, rotationAxis.y, rotationAxis.z)
+        let rotationTransform = SCNMatrix4MakeRotation(CGFloat.pi / 2 - cameraToTargetAngle, rotationAxis.x, rotationAxis.y, rotationAxis.z)
         let transform = SCNMatrix4Mult(rotationTransform, planeNode.transform)
         
         planeNode.transform = SCNMatrix4Mult(transform, translationTransform)
