@@ -26,6 +26,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupColorLayer()
+    }
+    
+    func setupColorLayer() {
         let layer = ColorLayer()
         let width = CGFloat(100.0)
         layer.frame = CGRect(x: (self.view.frame.size.width - width) / 2,
