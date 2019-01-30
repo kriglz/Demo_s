@@ -3,21 +3,17 @@
 import PlaygroundSupport
 import SpriteKit
 
-class GameScene: SKScene {
-    
-    override func didMove(to view: SKView) {
-      
-    }
-}
+let sortingArray = [15, 09, 08, 01, 04, 11, 07, 12, 13, 06, 05, 03, 16, 02, 10, 14]
 
-// Load the SKScene from 'GameScene.sks'
-let sceneView = SKView(frame: CGRect(x:0 , y:0, width: 640, height: 480))
-if let scene = GameScene(fileNamed: "GameScene") {
-    // Set the scale mode to scale to fit the window
-    scene.scaleMode = .aspectFill
-    
-    // Present the scene
-    sceneView.presentScene(scene)
-}
+let graphView = GraphView(array: sortingArray)
+graphView.frame = CGRect(x: 0 , y: 0, width: 640, height: 480)
 
-PlaygroundSupport.PlaygroundPage.current.liveView = sceneView
+let scene = SKScene()
+scene.backgroundColor = .clear
+scene.scaleMode = .aspectFill
+graphView.presentScene(scene)
+
+graphView.setupGraph()
+graphView.sortByInsertion()
+
+PlaygroundSupport.PlaygroundPage.current.liveView = graphView

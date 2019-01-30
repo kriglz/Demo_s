@@ -2,8 +2,8 @@ import Foundation
 
 public class InsertionSortingAlgorithm {
     
-    weak var delegate: InsertionSortingAlgorithmDelegate?
-    private var sortingArray: [Int] = []
+    private var sortingArray = [Int]()
+    private(set) var sortingActions = [SortingAction]()
     
     init(for array: [Int]) {
         self.sortingArray = array
@@ -11,7 +11,6 @@ public class InsertionSortingAlgorithm {
     
     func sort() -> [Int] {
         insertion()
-        delegate?.insertionSortingAlgorithmDidFinishSorting(self)
         return sortingArray
     }
     
@@ -23,7 +22,8 @@ public class InsertionSortingAlgorithm {
             
             while (previousIndex >= 0 && compare(numberA: sortingArray[previousIndex], numberB: sortingArray[previousIndex + 1]) > 0) {
                 sortingArray.swapAt(previousIndex, previousIndex + 1)
-                delegate?.insertionSortingAlgorithm(self, didSwap: previousIndex, and: previousIndex + 1, actionIndex: actionIndex)
+                sortingActions.append(SortingAction(actionIndex, start: previousIndex, end: previousIndex + 1))
+                
                 previousIndex -= 1
                 actionIndex += 1
             }
@@ -37,10 +37,3 @@ public class InsertionSortingAlgorithm {
         return 0
     }
 }
-
-protocol InsertionSortingAlgorithmDelegate: class {
-    
-    func insertionSortingAlgorithm(_ algorithm: InsertionSortingAlgorithm, didSwap indexA: Int, and indexB: Int, actionIndex: Int)
-    func insertionSortingAlgorithmDidFinishSorting(_ algorithm: InsertionSortingAlgorithm)
-}
-
