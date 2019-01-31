@@ -1,6 +1,6 @@
 import SpriteKit
 
-public class ActionSpriteNode: SKSpriteNode {
+public class ActionLayer: CALayer {
     
     // MARK: - Properties
     
@@ -21,17 +21,17 @@ public class ActionSpriteNode: SKSpriteNode {
     private var previousHeightActionIndex = 0
     
     private var colorBlinkAction: SKAction {
-        let colorAction = SKAction.colorize(with: ActionSpriteNode.activeItemColor, colorBlendFactor: 1, duration: ActionSpriteNode.duration)
+        let colorAction = SKAction.colorize(with: ActionLayer.activeItemColor, colorBlendFactor: 1, duration: ActionLayer.duration)
         colorAction.timingMode = .easeOut
-        let colorActionReversed = SKAction.colorize(with: ActionSpriteNode.defaultColor, colorBlendFactor: 1, duration: 0)
+        let colorActionReversed = SKAction.colorize(with: ActionLayer.defaultColor, colorBlendFactor: 1, duration: 0)
         colorActionReversed.timingMode = .easeIn
         return SKAction.sequence([colorAction, colorActionReversed])
     }
     
     private var colorBlinkActionForRange: SKAction {
-        let colorAction = SKAction.colorize(with: ActionSpriteNode.activeItemColor, colorBlendFactor: 1, duration: ActionSpriteNode.duration)
+        let colorAction = SKAction.colorize(with: ActionLayer.activeItemColor, colorBlendFactor: 1, duration: ActionLayer.duration)
         colorAction.timingMode = .easeOut
-        let colorActionReversed = SKAction.colorize(with: ActionSpriteNode.activeRangeColor, colorBlendFactor: 1, duration: 0)
+        let colorActionReversed = SKAction.colorize(with: ActionLayer.activeRangeColor, colorBlendFactor: 1, duration: 0)
         colorActionReversed.timingMode = .easeIn
         return SKAction.sequence([colorAction, colorActionReversed])
     }
@@ -39,16 +39,16 @@ public class ActionSpriteNode: SKSpriteNode {
     // MARK: - Animation
     
     func addMoveByAction(translationLength: CGFloat, actionIndex: Int, isInActiveRange: Bool = false) {
-        let moveByAction =  SKAction.moveBy(x: translationLength, y: 0, duration: ActionSpriteNode.duration)
+        let moveByAction =  SKAction.moveBy(x: translationLength, y: 0, duration: ActionLayer.duration)
         let action = SKAction.group([moveByAction, isInActiveRange ? colorBlinkActionForRange : colorBlinkAction])
         
         let durationIndex = actionIndex - previousMoveActionIndex
         
         if let currentActions = self.moveActions {
-            let sequence = [currentActions, SKAction.wait(forDuration: ActionSpriteNode.duration * Double(durationIndex - 1)), action]
+            let sequence = [currentActions, SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex - 1)), action]
             moveActions = SKAction.sequence(sequence)
         } else {
-            let sequence = [SKAction.wait(forDuration: ActionSpriteNode.duration * Double(durationIndex)), action]
+            let sequence = [SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex)), action]
             moveActions = SKAction.sequence(sequence)
         }
         
@@ -56,15 +56,15 @@ public class ActionSpriteNode: SKSpriteNode {
     }
     
     func addColorAction(isColorized: Bool, actionIndex: Int) {
-        let action = SKAction.colorize(with: isColorized ? ActionSpriteNode.activeRangeColor : ActionSpriteNode.defaultColor, colorBlendFactor: 1, duration: ActionSpriteNode.duration)
+        let action = SKAction.colorize(with: isColorized ? ActionLayer.activeRangeColor : ActionLayer.defaultColor, colorBlendFactor: 1, duration: ActionLayer.duration)
         
         let durationIndex = actionIndex - previousColorActionIndex
         
         if let currentActions = self.colorActions {
-            let sequence = [currentActions, SKAction.wait(forDuration: ActionSpriteNode.duration * Double(durationIndex - 1)), action]
+            let sequence = [currentActions, SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex - 1)), action]
             colorActions = SKAction.sequence(sequence)
         } else {
-            let sequence = [SKAction.wait(forDuration: ActionSpriteNode.duration * Double(durationIndex)), action]
+            let sequence = [SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex)), action]
             colorActions = SKAction.sequence(sequence)
         }
         
@@ -72,16 +72,16 @@ public class ActionSpriteNode: SKSpriteNode {
     }
     
     func addHeightChangeAction(height: Int, actionIndex: Int) {
-        let resizeAction = SKAction.resize(toHeight: CGFloat(ActionSpriteNode.heightMultiplicationConstant) * CGFloat(height), duration: ActionSpriteNode.duration)
+        let resizeAction = SKAction.resize(toHeight: CGFloat(ActionLayer.heightMultiplicationConstant) * CGFloat(height), duration: ActionLayer.duration)
         let action = SKAction.group([resizeAction, colorBlinkAction])
         
         let durationIndex = actionIndex - previousHeightActionIndex
         
         if let currentActions = self.heightActions {
-            let sequence = [currentActions, SKAction.wait(forDuration: ActionSpriteNode.duration * Double(durationIndex - 1)), action]
+            let sequence = [currentActions, SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex - 1)), action]
             heightActions = SKAction.sequence(sequence)
         } else {
-            let sequence = [SKAction.wait(forDuration: ActionSpriteNode.duration * Double(durationIndex)), action]
+            let sequence = [SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex)), action]
             heightActions = SKAction.sequence(sequence)
         }
         
@@ -114,11 +114,11 @@ public class ActionSpriteNode: SKSpriteNode {
                 actions = colorActions
             }
         }
-        
-        guard let allActions = actions else { return }
-        run(allActions) { [weak self] in
-            self?.color = ActionSpriteNode.defaultColor
-        }
+//        
+//        guard let allActions = actions else { return }
+//        run(allActions) { [weak self] in
+//            self?.color = ActionLayer.defaultColor
+//        }
     }
 }
 
