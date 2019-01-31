@@ -20,7 +20,6 @@ public class ActionLayer: CALayer {
     
     func addMoveByAction(translationLength: CGFloat, actionIndex: Int) {
         let moveByAction =  SKAction.moveBy(x: translationLength, y: 0, duration: ActionLayer.duration)
-        let action = SKAction.group([moveByAction)
         
         let durationIndex = actionIndex - previousMoveActionIndex
         
@@ -28,7 +27,7 @@ public class ActionLayer: CALayer {
             let sequence = [currentActions, SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex - 1)), action]
             moveActions = SKAction.sequence(sequence)
         } else {
-            let sequence = [SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex)), action]
+            let sequence = [SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex)), moveByAction]
             moveActions = SKAction.sequence(sequence)
         }
         

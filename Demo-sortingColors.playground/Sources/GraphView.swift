@@ -11,10 +11,7 @@ public class GraphView: UIView {
         setupGraph(for: unsortedArray)
         
         let sortingResult = InsertionSortingAlgorithm.sort(unsortedArray)
-        let sortedArray = sortingResult.sortedArray
-        
-//        print(unsortedArray)
-//        print(sortedArray)
+        performSortingAnimation(sortingResult.sortiingActions)
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -25,10 +22,7 @@ public class GraphView: UIView {
         return [15, 09, 08, 01, 04, 11, 07, 12, 13, 06, 05, 03, 16, 02, 10, 14]
     }
     
-    // MARK: - SpriteKit setup
-    
-    /// Sets up graph view with unsorted children.
-    public func setupGraph(for unsortedArray: [Int]) {
+    func setupGraph(for unsortedArray: [Int]) {
         for (index, number) in unsortedArray.enumerated() {
             let rect = CGRect(x: Double(index) * ActionLayer.width * 1.2 + 30.0,
                               y: 30.0,
@@ -43,11 +37,14 @@ public class GraphView: UIView {
         }
     }
     
-    // MARK: - Animation
+    func performSortingAnimation(_ actions: [SortingAction]) {
+        for action in actions {
+            swapElements(action.start, action.end, actionIndex: action.index)
+        }
+    }
     
-    /// Swap specific elements of the array.
     func swapElements(_ i: Int, _ j: Int, actionIndex: Int) {
-        guard let iLayer = (self.layer.sublayers?.first { $0.name ==  "\(i)" } as? ActionLayer),
+        guard let iLayer = (self.layer.sublayers?.first { $0.name == "\(i)" } as? ActionLayer),
             let jLayer = (self.layer.sublayers?.first { $0.name == "\(j)" } as? ActionLayer) else { return }
         
         let deltaIndex = i.distance(to: j)
@@ -59,20 +56,5 @@ public class GraphView: UIView {
         
         iLayer.addMoveByAction(translationLength: iLayerTranslationLength, actionIndex: actionIndex)
         jLayer.addMoveByAction(translationLength: jLayerTranslationLength, actionIndex: actionIndex)
-    }
-    
-    /// Update elements value or/and height.
-    func updateElement(_ element: Int, to value: Int, actionIndex: Int) {
-        guard let layer = (self.layer.sublayers?.first { $0.name ==  "\(element)" }) as? ActionLayer else { return }
-        layer.addHeightChangeAction(height: value, actionIndex: actionIndex)
-    }
-    
-    /// Performs the sorting animation.
-    func runAnimation() {
-        self.layer.sublayers?.forEach { layer in
-            if let actionLayer = layer as? ActionLayer {
-                actionLayer.runActions()
-            }
-        }
     }
 }
