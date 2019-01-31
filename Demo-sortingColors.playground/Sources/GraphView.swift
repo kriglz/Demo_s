@@ -13,10 +13,8 @@ public class GraphView: UIView {
         let sortingResult = InsertionSortingAlgorithm.sort(unsortedArray)
         let sortedArray = sortingResult.sortedArray
         
-        print(unsortedArray)
-        print(sortedArray)
-        
-        
+//        print(unsortedArray)
+//        print(sortedArray)
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -48,7 +46,7 @@ public class GraphView: UIView {
     // MARK: - Animation
     
     /// Swap specific elements of the array.
-    func swapElements(_ i: Int, _ j: Int, actionIndex: Int, isInActiveRange: Bool = false) {
+    func swapElements(_ i: Int, _ j: Int, actionIndex: Int) {
         guard let iLayer = (self.layer.sublayers?.first { $0.name ==  "\(i)" } as? ActionLayer),
             let jLayer = (self.layer.sublayers?.first { $0.name == "\(j)" } as? ActionLayer) else { return }
         
@@ -59,8 +57,8 @@ public class GraphView: UIView {
         iLayer.name = "\(j)"
         jLayer.name = "\(i)"
         
-        iLayer.addMoveByAction(translationLength: iLayerTranslationLength, actionIndex: actionIndex, isInActiveRange: isInActiveRange)
-        jLayer.addMoveByAction(translationLength: jLayerTranslationLength, actionIndex: actionIndex, isInActiveRange: isInActiveRange)
+        iLayer.addMoveByAction(translationLength: iLayerTranslationLength, actionIndex: actionIndex)
+        jLayer.addMoveByAction(translationLength: jLayerTranslationLength, actionIndex: actionIndex)
     }
     
     /// Update elements value or/and height.
