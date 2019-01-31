@@ -14,41 +14,48 @@ public class ActionLayer: CALayer {
     
     private var moveActions: SKAction?
     
-    private var previousMoveActionIndex = 0
+//    private var previousMoveActionIndex = 0
     
     // MARK: - Animation
     
-    func addMoveByAction(translationLength: CGFloat, actionIndex: Int) {
-        let moveByAction =  SKAction.moveBy(x: translationLength, y: 0, duration: ActionLayer.duration)
-        
-        let durationIndex = actionIndex - previousMoveActionIndex
-        
-        if let currentActions = self.moveActions {
-            let sequence = [currentActions, SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex - 1)), action]
-            moveActions = SKAction.sequence(sequence)
-        } else {
-            let sequence = [SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex)), moveByAction]
-            moveActions = SKAction.sequence(sequence)
+    func moveAction(by translationLength: CGFloat, actionIndex: Int) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + ActionLayer.duration * Double(actionIndex)) { [weak self] in
+            print(self?.position)
+            self?.position.x += translationLength
+            print(self?.position)
+            print("\n")
         }
         
-        previousMoveActionIndex = actionIndex
+//        let moveByAction =  SKAction.moveBy(x: translationLength, y: 0, duration: ActionLayer.duration)
+//
+//        let durationIndex = actionIndex - previousMoveActionIndex
+//
+//        if let currentActions = self.moveActions {
+//            let sequence = [currentActions, SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex - 1)), action]
+//            moveActions = SKAction.sequence(sequence)
+//        } else {
+//            let sequence = [SKAction.wait(forDuration: ActionLayer.duration * Double(durationIndex)), moveByAction]
+//            moveActions = SKAction.sequence(sequence)
+//        }
+//
+//        previousMoveActionIndex = actionIndex
     }
     
-    func runActions() {
-        var actions: SKAction?
-        
-        if let moveActions = self.moveActions {
-            if let allActions = actions {
-                actions = SKAction.group([allActions, moveActions])
-            } else {
-                actions = moveActions
-            }
-        }
-        
-        guard let allActions = actions else { return }
-        run(allActions) { [weak self] in
-            self?.color = ActionLayer.defaultColor
-        }
-    }
+//    func runActions() {
+//        var actions: SKAction?
+//
+//        if let moveActions = self.moveActions {
+//            if let allActions = actions {
+//                actions = SKAction.group([allActions, moveActions])
+//            } else {
+//                actions = moveActions
+//            }
+//        }
+//
+//        guard let allActions = actions else { return }
+//        run(allActions) { [weak self] in
+//            self?.color = ActionLayer.defaultColor
+//        }
+//    }
 }
 

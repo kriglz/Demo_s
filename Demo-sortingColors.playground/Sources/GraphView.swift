@@ -11,7 +11,7 @@ public class GraphView: UIView {
         setupGraph(for: unsortedArray)
         
         let sortingResult = InsertionSortingAlgorithm.sort(unsortedArray)
-        performSortingAnimation(sortingResult.sortiingActions)
+        performSortingAnimation(sortingResult.sortingActions)
     }
     
     public required init?(coder aDecoder: NSCoder) {
@@ -48,13 +48,13 @@ public class GraphView: UIView {
             let jLayer = (self.layer.sublayers?.first { $0.name == "\(j)" } as? ActionLayer) else { return }
         
         let deltaIndex = i.distance(to: j)
-        let iLayerTranslationLength = CGFloat(ActionLayer.width * 1.2) * CGFloat(deltaIndex)
-        let jLayerTranslationLength = -CGFloat(ActionLayer.width * 1.2) * CGFloat(deltaIndex)
+        let iTranslation = CGFloat(ActionLayer.width * 1.2) * CGFloat(deltaIndex)
+        let jTranslation = -CGFloat(ActionLayer.width * 1.2) * CGFloat(deltaIndex)
         
         iLayer.name = "\(j)"
         jLayer.name = "\(i)"
         
-        iLayer.addMoveByAction(translationLength: iLayerTranslationLength, actionIndex: actionIndex)
-        jLayer.addMoveByAction(translationLength: jLayerTranslationLength, actionIndex: actionIndex)
+        iLayer.moveAction(by: iTranslation, actionIndex: actionIndex)
+        jLayer.moveAction(by: jTranslation, actionIndex: actionIndex)
     }
 }

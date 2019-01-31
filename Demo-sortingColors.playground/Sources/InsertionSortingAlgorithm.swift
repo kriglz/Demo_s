@@ -2,7 +2,7 @@ import Foundation
 
 public class InsertionSortingAlgorithm {
    
-    static func sort(_ array: [Int]) -> (sortedArray: [Int], sortiingActions: [SortingAction]) {
+    static func sort(_ array: [Int]) -> (sortedArray: [Int], sortingActions: [SortingAction]) {
         var actionIndex = 0
         var sortingArray = array
         var sortingActions = [SortingAction]()
