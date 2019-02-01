@@ -29,6 +29,7 @@ public class InsertionSortingAlgorithm {
         if numberA > numberB {
             return 1
         }
+        
         return 0
     }
 }
