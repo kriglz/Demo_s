@@ -27,9 +27,9 @@ public class GraphView: UIView {
             
             let box = ActionLayer()
             box.frame = rect
-            box.backgroundColor = UIColor.white
+            box.backgroundColor = UIColor.white.cgColor
             box.name = "\(index)"
-            self.addSubview(box)
+            self.layer.addSublayer(box)
         }
     }
     
@@ -48,17 +48,21 @@ public class GraphView: UIView {
         let iTranslation = CGFloat(width * 1.2) * CGFloat(deltaIndex)
         let jTranslation = -CGFloat(width * 1.2) * CGFloat(deltaIndex)
         
-//        iLayer.name = "\(j)"
-//        jLayer.name = "\(i)"
+        iLayer.name = "\(j)"
+        jLayer.name = "\(i)"
         
         iLayer.moveAction(by: iTranslation, actionIndex: actionIndex)
         jLayer.moveAction(by: jTranslation, actionIndex: actionIndex)
     }
     
     func subview(of name: String) -> ActionLayer? {
-        for view in self.subviews {
-            if let actionView = view as? ActionLayer, actionView.name == name {
-                return actionView
+        guard let sublayers = self.layer.sublayers else {
+            return nil
+        }
+        
+        for layer in sublayers {
+            if let actionLayer = layer as? ActionLayer, actionLayer.name == name {
+                return actionLayer
             }
         }
         

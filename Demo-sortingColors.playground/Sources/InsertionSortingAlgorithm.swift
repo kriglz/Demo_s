@@ -12,7 +12,6 @@ public class InsertionSortingAlgorithm {
             
             while (previousIndex >= 0 && compare(numberA: sortingArray[previousIndex], numberB: sortingArray[previousIndex + 1]) > 0) {
                 sortingArray.swapAt(previousIndex, previousIndex + 1)
-                sortingActions.append(SortingAction(actionIndex, start: previousIndex, end: previousIndex + 1))
                 
                 let sortingAction = SortingAction(actionIndex, start: previousIndex, end: previousIndex + 1)
                 sortingActions.append(sortingAction)

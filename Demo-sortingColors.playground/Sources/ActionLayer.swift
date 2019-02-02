@@ -1,11 +1,9 @@
 import SpriteKit
 
-public class ActionLayer: UIView {
+public class ActionLayer: CALayer {
     
     // MARK: - Properties
-    
-    public var name: String!
-    
+        
     // MARK: - Animation
     
     func moveAction(by translationLength: CGFloat, actionIndex: Int) {

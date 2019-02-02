@@ -3,8 +3,6 @@
 import PlaygroundSupport
 import UIKit
 
-//PlaygroundSupport.PlaygroundPage.current.needsIndefiniteExecution = true
-
 let rect = CGRect(x: 0 , y: 0, width: 440, height: 480)
 let view = GraphView(frame: rect)
 view.performSorting()
