@@ -16,9 +16,6 @@ public class SortingController {
     }
     
     private func generateUnsortedArray(of size: Int) -> [Int] {
-        return [15, 09, 08, 01, 04, 11, 07, 12, 13, 06, 05, 03, 16, 02, 10, 14]
+        return Array(0...size).shuffled()
     }
-    
-    
-    
 }

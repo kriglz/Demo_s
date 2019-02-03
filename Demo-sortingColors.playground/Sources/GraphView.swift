@@ -2,12 +2,13 @@ import UIKit
 
 public class GraphView: UIView {
 
-    let width: CGFloat = 10.0
-    let arraySize = 10
+    private let width: CGFloat = 5.0
+    private var elementsCount = 0
 
-    public func performSorting() {
-
-        let sortingController = SortingController(element: arraySize)
+    public func performSorting(elements count: Int) {
+        elementsCount = count
+        
+        let sortingController = SortingController(element: count)
         setupGraph(for: sortingController.unsortedArray)
         performSortingAnimation(sortingController.sortingActions)
     }
@@ -17,7 +18,7 @@ public class GraphView: UIView {
             let box = ActionLayer()
             box.frame = CGRect(x: 30.0, y: 30.0, width: width, height: width)
             box.position.x += CGFloat(index) * width
-            box.backgroundColor = UIColor(red: CGFloat(element) / CGFloat(arraySize), green: 0.0, blue: 1.0, alpha: 1.0).cgColor
+            box.backgroundColor = UIColor(red: CGFloat(element) / CGFloat(elementsCount), green: 0.0, blue: 1.0, alpha: 1.0).cgColor
             box.name = "\(index)"
             self.layer.addSublayer(box)
         }
