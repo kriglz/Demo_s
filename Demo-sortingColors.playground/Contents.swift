@@ -3,9 +3,19 @@
 import PlaygroundSupport
 import UIKit
 
-let rect = CGRect(x: 0 , y: 0, width: 440, height: 480)
-let view = GraphView(frame: rect)
-view.performSorting(elements: 30)
+let rect = CGRect(x: 0 , y: 0, width: 440, height: 400)
+let superview = UIView(frame: rect)
 
-PlaygroundSupport.PlaygroundPage.current.liveView = view
+var thinRect = CGRect(x: 0 , y: 0, width: 440, height: 30)
+
+for _ in 0...20 {
+    thinRect.origin.y += 10
+    
+    let view = GraphView(frame: thinRect)
+    superview.addSubview(view)
+    
+    view.performSorting(elements: 20)
+}
+
+PlaygroundSupport.PlaygroundPage.current.liveView = superview
 

@@ -2,7 +2,7 @@ import UIKit
 
 public class GraphView: UIView {
 
-    private let width: CGFloat = 5.0
+    private let width: CGFloat = 10.0
     private var elementsCount = 0
 
     public func performSorting(elements count: Int) {
@@ -16,7 +16,7 @@ public class GraphView: UIView {
     private func setupGraph(for unsortedArray: [Int]) {
         for (index, element) in unsortedArray.enumerated() {
             let box = ActionLayer()
-            box.frame = CGRect(x: 30.0, y: 30.0, width: width, height: width)
+            box.frame = CGRect(x: 0, y: 0, width: width, height: width)
             box.position.x += CGFloat(index) * width
             box.backgroundColor = UIColor(red: CGFloat(element) / CGFloat(elementsCount), green: 0.0, blue: 1.0, alpha: 1.0).cgColor
             box.name = "\(index)"
