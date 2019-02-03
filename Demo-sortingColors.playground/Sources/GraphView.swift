@@ -3,9 +3,9 @@ import UIKit
 public class GraphView: UIView {
 
     let width: CGFloat = 10.0
-    
+    let arraySize = 10
+
     public func performSorting() {
-        let arraySize = 10
 
         let sortingController = SortingController(element: arraySize)
         setupGraph(for: sortingController.unsortedArray)
@@ -13,16 +13,11 @@ public class GraphView: UIView {
     }
     
     private func setupGraph(for unsortedArray: [Int]) {
-        for (index, _) in unsortedArray.enumerated() {
-            let rect = CGRect(x: 30.0,
-                              y: 30.0,
-                              width: width,
-                              height: width)
-            
+        for (index, element) in unsortedArray.enumerated() {
             let box = ActionLayer()
-            box.frame = rect
+            box.frame = CGRect(x: 30.0, y: 30.0, width: width, height: width)
             box.position.x += CGFloat(index) * width
-            box.backgroundColor = UIColor.white.cgColor
+            box.backgroundColor = UIColor(red: CGFloat(element) / CGFloat(arraySize), green: 0.0, blue: 1.0, alpha: 1.0).cgColor
             box.name = "\(index)"
             self.layer.addSublayer(box)
         }
