@@ -2,7 +2,7 @@ import UIKit
 
 public class GraphView: UIView {
 
-    let width = 10.0
+    let width: CGFloat = 10.0
     
     public func performSorting() {
         let arraySize = 10
@@ -13,14 +13,15 @@ public class GraphView: UIView {
     }
     
     private func setupGraph(for unsortedArray: [Int]) {
-        for (index, number) in unsortedArray.enumerated() {
-            let rect = CGRect(x: Double(index) * width * 1.2 + 30.0,
+        for (index, _) in unsortedArray.enumerated() {
+            let rect = CGRect(x: 30.0,
                               y: 30.0,
                               width: width,
-                              height: width * Double(number))
+                              height: width)
             
             let box = ActionLayer()
             box.frame = rect
+            box.position.x += CGFloat(index) * width
             box.backgroundColor = UIColor.white.cgColor
             box.name = "\(index)"
             self.layer.addSublayer(box)
@@ -28,28 +29,28 @@ public class GraphView: UIView {
     }
     
     func performSortingAnimation(_ actions: [SortingAction]) {
-        actions.forEAch {
+        actions.forEach {
             swapElements($0.start, $0.end, actionIndex: $0.index)
         }
     }
     
     func swapElements(_ i: Int, _ j: Int, actionIndex: Int) {
-        guard let iLayer = subview(of: "\(i)"), let jLayer = subview(of: "\(j)") else {
+        guard let iElement = subview(name: "\(i)"), let jElement = subview(name: "\(j)") else {
             return
         }
         
         let deltaIndex = i.distance(to: j)
-        let iTranslation = CGFloat(width * 1.2) * CGFloat(deltaIndex)
-        let jTranslation = -CGFloat(width * 1.2) * CGFloat(deltaIndex)
+        let iTranslation = width * CGFloat(deltaIndex)
+        let jTranslation = -width * CGFloat(deltaIndex)
         
-        iLayer.name = "\(j)"
-        jLayer.name = "\(i)"
+        iElement.name = "\(j)"
+        jElement.name = "\(i)"
         
-        iLayer.moveAction(by: iTranslation, actionIndex: actionIndex)
-        jLayer.moveAction(by: jTranslation, actionIndex: actionIndex)
+        iElement.moveAction(by: iTranslation, actionIndex: actionIndex)
+        jElement.moveAction(by: jTranslation, actionIndex: actionIndex)
     }
     
-    func subview(of name: String) -> ActionLayer? {
+    func subview(name: String) -> ActionLayer? {
         guard let sublayers = self.layer.sublayers else {
             return nil
         }
