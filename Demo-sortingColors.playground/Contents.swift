@@ -14,8 +14,7 @@ for _ in 0...20 {
     let view = GraphView(frame: thinRect)
     superview.addSubview(view)
     
-    view.performSorting(elements: 20)
+    view.performSorting(elements: 30)
 }
 
 PlaygroundSupport.PlaygroundPage.current.liveView = superview
-
