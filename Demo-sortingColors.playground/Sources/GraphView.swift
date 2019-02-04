@@ -18,7 +18,7 @@ public class GraphView: UIView {
             let box = ActionLayer()
             box.frame = CGRect(x: 0, y: 0, width: width, height: width)
             box.position.y += CGFloat(index) * width
-            box.backgroundColor = UIColor(red: CGFloat(element) / CGFloat(elementsCount), green: 0.0, blue: 1.0, alpha: 1.0).cgColor
+            box.backgroundColor = UIColor(red: CGFloat(element) / CGFloat(elementsCount), green: 0, blue: 1, alpha: 1.0).cgColor
             box.name = "\(index)"
             self.layer.addSublayer(box)
         }

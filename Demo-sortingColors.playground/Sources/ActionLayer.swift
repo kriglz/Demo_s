@@ -2,7 +2,7 @@ import SpriteKit
 
 public class ActionLayer: CALayer {
     
-    private let actionDuration = 0.1
+    private let actionDuration = 0.05
         
     func moveAction(by translationLength: CGFloat, actionIndex: Int) {
         Timer.scheduledTimer(withTimeInterval: Double(actionIndex) * actionDuration, repeats: false) { [weak self] _ in
