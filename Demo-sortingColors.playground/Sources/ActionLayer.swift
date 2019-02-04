@@ -2,16 +2,12 @@ import SpriteKit
 
 public class ActionLayer: CALayer {
     
-    // MARK: - Properties
-    
-    private let animationDuration = 0.1
-    
-    // MARK: - Animation
-    
+    private let actionDuration = 0.1
+        
     func moveAction(by translationLength: CGFloat, actionIndex: Int) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + animationDuration * Double(actionIndex)) { [weak self] in
+        Timer.scheduledTimer(withTimeInterval: Double(actionIndex) * actionDuration, repeats: false) { [weak self] _ in
             guard let self = self else { return }
-            self.frame.origin.x += translationLength
+            self.position.y += translationLength
         }
     }
 }

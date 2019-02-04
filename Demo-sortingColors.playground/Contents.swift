@@ -6,10 +6,10 @@ import UIKit
 let rect = CGRect(x: 0 , y: 0, width: 440, height: 400)
 let superview = UIView(frame: rect)
 
-var thinRect = CGRect(x: 0 , y: 0, width: 440, height: 30)
+var thinRect = CGRect(x: 30 , y: 30, width: 440, height: 30)
 
-for _ in 0...20 {
-    thinRect.origin.y += 10
+for _ in 0...30 {
+    thinRect.origin.x += 10
     
     let view = GraphView(frame: thinRect)
     superview.addSubview(view)
