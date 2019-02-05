@@ -18,10 +18,17 @@ public class GraphView: UIView {
             let box = ActionLayer()
             box.frame = CGRect(x: 0, y: 0, width: width, height: width)
             box.position.y += CGFloat(index) * width
-            box.backgroundColor = UIColor(red: CGFloat(element) / CGFloat(elementsCount), green: 0, blue: 1, alpha: 1.0).cgColor
+            box.backgroundColor = gradientColor(for: CGFloat(element) / CGFloat(elementsCount)).cgColor
             box.name = "\(index)"
             self.layer.addSublayer(box)
         }
+    }
+    
+    private func gradientColor(for index: CGFloat) -> UIColor {
+        let color1 = Color(r: 40, g: 240, b: 140)
+        let color2 = Color(r: 18, g: 26, b: 218)
+        
+        return Color.gradientColor(color1, color2, percentage: index)
     }
     
     private func performSortingAnimation(_ actions: [SortingAction]) {
