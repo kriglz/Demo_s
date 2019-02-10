@@ -3,16 +3,7 @@
 import AppKit
 import PlaygroundSupport
 
-let nibFile = NSNib.Name("MyView")
-var topLevelObjects : NSArray?
-
-Bundle.main.loadNibNamed(nibFile, owner:nil, topLevelObjects: &topLevelObjects)
-let views = (topLevelObjects as! Array<Any>).filter { $0 is NSView }
-
-// Present the view in Playground
-PlaygroundPage.current.liveView = views[0] as! NSView
-
-class View: NSView {
+class ButtonView: NSView {
 
     override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
@@ -20,12 +11,14 @@ class View: NSView {
         self.wantsLayer = true
         self.layer?.backgroundColor = NSColor.black.cgColor
         
-        let button = Button()
-        button.target = self
-        button.action = #selector(colorBackground(_:))
+        let button = Button(target: self, action: #selector(colorBackground(_:)))
+        button.title = "Push me"
         
         self.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
         button.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         button.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
@@ -77,17 +70,25 @@ class Button: NSControl {
     }
     
     init() {
-        self.titleLabel = NSTextField(labelWithString: "Empty title")
-
+        self.titleLabel = NSTextField(labelWithString: "Empty text")
+        self.titleLabel.textColor = NSColor.blue
+        self.titleLabel.alignment = .center
+        
         super.init(frame: .zero)
         
         self.wantsLayer = true
         self.layer?.backgroundColor = NSColor.white.cgColor
+        self.layer?.borderColor = NSColor.yellow.cgColor
+        self.layer?.cornerRadius = 5.0
+        self.layer?.borderWidth = 3.0
         
         self.addSubview(self.titleLabel)
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-        self.titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        
+        self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        self.titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        self.titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
+        self.titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
     }
     
     required init?(coder: NSCoder) {
@@ -109,4 +110,17 @@ class Button: NSControl {
         
         self.isSelected = false
     }
+    
+    override func resetCursorRects() {
+        if self.isEnabled {
+            self.addCursorRect(self.bounds, cursor: NSCursor.pointingHand)
+        } else {
+            self.addCursorRect(self.bounds, cursor: NSCursor.iBeam)
+        }
+    }
 }
+
+let view = ButtonView(frame: NSRect(origin: .zero, size: CGSize(width: 400, height: 300)))
+
+PlaygroundPage.current.needsIndefiniteExecution = true
+PlaygroundPage.current.liveView = view
