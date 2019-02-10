@@ -34,13 +34,13 @@ public class GraphView: UIView {
     private func setupGraph(for unsortedArray: [[Int]]) {
         var deltaOriginX: CGFloat = 0.0
         
-        for columnUnsortedArray in unsortedArray {
-            for (index, element) in columnUnsortedArray.enumerated() {
+        for (columnIndex, columnElement) in unsortedArray.enumerated() {
+            for (rowIndex, rowElement) in columnElement.enumerated() {
                 let box = ActionLayer()
                 box.frame = CGRect(x: deltaOriginX, y: 0.0, width: pixelSize, height: pixelSize)
-                box.position.y += CGFloat(index) * pixelSize
-                box.backgroundColor = gradientColor(for: CGFloat(element) / CGFloat(rows)).cgColor
-                box.name = "\(index)"
+                box.position.y += CGFloat(rowIndex) * pixelSize
+                box.backgroundColor = gradientColor(for: CGFloat(rowElement) / CGFloat(rows)).cgColor
+                box.name = "\(columnIndex)\(rowIndex)"
                 self.layer.addSublayer(box)
             }
             
@@ -49,8 +49,17 @@ public class GraphView: UIView {
     }
     
     private func performSorting() {
-        let animation = self.reverse ? actions.reversed() : actions
-//        self.performSortingAnimation(animation)
+        let sortingActions = self.reverse ? actions.reversed() : actions
+        
+        for (columnIndex, columnElement) in sortingActions.enumerated() {
+            let totalNumberOfAction = columnElement.count + 1
+            
+            columnElement.forEach {
+                let index = self.reverse ? totalNumberOfAction - $0.index : $0.index
+                self.swapElements($0.start, $0.end, at: columnIndex, actionIndex: index)
+            }
+        }
+        
         self.reverse = !self.reverse
 
         DispatchQueue.main.asyncAfter(deadline: .now() + self.deadline + 2.0) {
@@ -64,24 +73,17 @@ public class GraphView: UIView {
         return Color.gradientColor(color1, color2, percentage: index)
     }
     
-    private func performSortingAnimation(_ actions: [SortingAction]) {
-        actions.forEach {
-            let index = self.reverse ? actions.count + 1 - $0.index : $0.index
-            swapElements($0.start, $0.end, actionIndex: index)
-        }
-    }
-    
-    private func swapElements(_ i: Int, _ j: Int, actionIndex: Int) {
-        guard let iElement = subview(name: "\(i)"), let jElement = subview(name: "\(j)") else {
+    private func swapElements(_ i: Int, _ j: Int, at column: Int, actionIndex: Int) {
+        guard let iElement = self.subview(name: "\(columnIndex)\(i)"), let jElement = self.subview(name: "\(columnIndex)\(j)") else {
             return
         }
+        
+        iElement.name = "\(columnIndex)\(j)"
+        jElement.name = "\(columnIndex)\(i)"
         
         let delta = i.distance(to: j)
         let iTranslation = pixelSize * CGFloat(delta)
         let jTranslation = -pixelSize * CGFloat(delta)
-        
-        iElement.name = "\(j)"
-        jElement.name = "\(i)"
         
         iElement.moveAction(by: iTranslation, actionIndex: actionIndex)
         jElement.moveAction(by: jTranslation, actionIndex: actionIndex)
