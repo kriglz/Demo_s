@@ -3,22 +3,14 @@
 import PlaygroundSupport
 import UIKit
 
-let rect = CGRect(x: 0 , y: 0, width: 440, height: 800)
-let superview = UIView(frame: rect)
+let screenWidth: CGFloat = 440.0
+let screenHeight: CGFloat = 400.0
+let pixelSize: CGFloat = 10.0
+let colums = screenWidth / pixelSize
+let rows = screenHeight / pixelSize
 
-var thinRect = CGRect(x: 30 , y: 30, width: 440, height: 30)
-
-func sort() {
-    for _ in 0...3 {
-        thinRect.origin.x += 10
-        
-        let view = GraphView(frame: thinRect)
-        superview.addSubview(view)
-        
-        view.performSorting(elements: 30)
-    }
-}
-
-sort()
+let superview = UIView(frame: CGRect(x: 0 , y: 0, width: screenWidth, height: screenHeight))
+let view = GraphView(columns: Int(colums), rows: Int(rows), pixelSize: pixelSize)
+superview.addSubview(view)
 
 PlaygroundSupport.PlaygroundPage.current.liveView = superview
