@@ -12,13 +12,9 @@ class ButtonView: NSView {
         self.layer?.backgroundColor = NSColor.black.cgColor
         
         let button = Button(target: self, action: #selector(colorBackground(_:)))
-        button.title = "Push me"
         
         self.addSubview(button)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
         button.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         button.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
     }
@@ -30,7 +26,7 @@ class ButtonView: NSView {
     @objc func colorBackground(_ sender: Button) {
         self.layer?.backgroundColor = NSColor.red.cgColor
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.layer?.backgroundColor = NSColor.black.cgColor
         }
     }
@@ -70,7 +66,7 @@ class Button: NSControl {
     }
     
     init() {
-        self.titleLabel = NSTextField(labelWithString: "Empty text")
+        self.titleLabel = NSTextField(labelWithString: "Push me in text now")
         self.titleLabel.textColor = NSColor.blue
         self.titleLabel.alignment = .center
         
@@ -85,10 +81,11 @@ class Button: NSControl {
         self.addSubview(self.titleLabel)
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
-        self.titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        self.titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
-        self.titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
+        self.titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
+        self.titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
+        
+        self.bottomAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: 10).isActive = true
+        self.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor, constant: 10).isActive = true
     }
     
     required init?(coder: NSCoder) {
