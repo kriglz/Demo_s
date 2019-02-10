@@ -7,7 +7,7 @@ public class GraphView: UIView {
     private let rows: Int
     
     private var reverse = false
-    private var actions = [SortingAction]()
+    private var actions = [[SortingAction]]()
     private var deadline = 0.0
 
     public init(columns: Int, rows: Int, pixelSize: CGFloat) {
@@ -19,6 +19,7 @@ public class GraphView: UIView {
         
         let size = MatrixSize(columns: columns, rows: rows)
         let sortingController = SortingController(sortingMatrixSize: size)
+        
         self.deadline = Double(sortingController.sortingActions.count) * ActionLayer.actionDuration
         self.actions = sortingController.sortingActions
         
@@ -30,20 +31,26 @@ public class GraphView: UIView {
         fatalError("Could not load")
     }
     
-    private func setupGraph(for unsortedArray: [Int]) {
-        for (index, element) in unsortedArray.enumerated() {
-            let box = ActionLayer()
-            box.frame = CGRect(x: 0, y: 0, width: pixelSize, height: pixelSize)
-            box.position.y += CGFloat(index) * pixelSize
-            box.backgroundColor = gradientColor(for: CGFloat(element) / CGFloat(rows)).cgColor
-            box.name = "\(index)"
-            self.layer.addSublayer(box)
+    private func setupGraph(for unsortedArray: [[Int]]) {
+        var deltaOriginX: CGFloat = 0.0
+        
+        for columnUnsortedArray in unsortedArray {
+            for (index, element) in columnUnsortedArray.enumerated() {
+                let box = ActionLayer()
+                box.frame = CGRect(x: deltaOriginX, y: 0.0, width: pixelSize, height: pixelSize)
+                box.position.y += CGFloat(index) * pixelSize
+                box.backgroundColor = gradientColor(for: CGFloat(element) / CGFloat(rows)).cgColor
+                box.name = "\(index)"
+                self.layer.addSublayer(box)
+            }
+            
+            deltaOriginX += pixelSize
         }
     }
     
     private func performSorting() {
         let animation = self.reverse ? actions.reversed() : actions
-        self.performSortingAnimation(animation)
+//        self.performSortingAnimation(animation)
         self.reverse = !self.reverse
 
         DispatchQueue.main.asyncAfter(deadline: .now() + self.deadline + 2.0) {
