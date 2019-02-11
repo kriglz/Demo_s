@@ -9,13 +9,20 @@ containerView.layer?.backgroundColor = NSColor.white.cgColor
 
 let image = NSImage(named: "vilnius.jpg")!
 let imageView = NSImageView()
+let layer = CALayer()
 
-imageView.layer = CALayer()
-imageView.layer?.contents = image
-imageView.layer?.cornerRadius = 20
-imageView.layer?.contentsGravity = .resizeAspectFill
+let desiredScaleFactor = containerView.window?.backingScaleFactor ?? 1
+let actualScaleFactor = image.recommendedLayerContentsScale(desiredScaleFactor)
+let layerContents = image.layerContents(forContentsScale: actualScaleFactor)
+
+layer.contents = layerContents
+layer.contentsScale = actualScaleFactor
 
 imageView.wantsLayer = true
+
+imageView.layer = layer
+imageView.layer?.cornerRadius = 20
+imageView.layer?.contentsGravity = .resizeAspectFill
 
 containerView.addSubview(imageView)
 imageView.translatesAutoresizingMaskIntoConstraints = false
