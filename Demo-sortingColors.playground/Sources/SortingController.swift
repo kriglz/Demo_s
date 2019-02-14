@@ -7,6 +7,10 @@ public class SortingController {
     private(set) var sortingActions = [[SortingAction]]()
 
     public init(sortingMatrixSize: MatrixSize) {
+        self.unsortedArray = []
+        self.sortedArray = []
+        self.sortingActions = []
+        
         for _ in 0...sortingMatrixSize.columns {
             let unsorted = self.generateUnsortedArray(of: sortingMatrixSize.rows)
             let sortingResult = InsertionSortingAlgorithm.sort(unsorted)
