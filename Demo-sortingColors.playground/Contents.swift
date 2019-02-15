@@ -3,7 +3,7 @@
 import PlaygroundSupport
 import UIKit
 
-let screenWidth: CGFloat = 100.0
+let screenWidth: CGFloat = 400.0
 let screenHeight: CGFloat = 200.0
 let pixelSize: CGFloat = 10.0
 let colums = screenWidth / pixelSize

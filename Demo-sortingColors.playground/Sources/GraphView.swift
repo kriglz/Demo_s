@@ -10,7 +10,7 @@ public class GraphView: UIView {
     private var actions = [[SortingAction]]()
     
     private var duration: Double {
-        return self.reverse ? 0.05 : 0.03
+        return self.reverse ? 0.07 : 0.05
     }
     
     private var deadline: Double {
@@ -54,7 +54,7 @@ public class GraphView: UIView {
                 box.frame = CGRect(x: deltaOriginX, y: 0.0, width: pixelSize, height: pixelSize)
                 box.position.y += CGFloat(rowIndex) * pixelSize
                 box.backgroundColor = gradientColor(for: CGFloat(rowActions) / CGFloat(rows)).cgColor
-                box.name = "\(columnIndex)\(rowIndex)"
+                box.name = "\(columnIndex)+\(rowIndex)"
                 self.layer.addSublayer(box)
             }
             
@@ -82,17 +82,17 @@ public class GraphView: UIView {
     
     private func gradientColor(for index: CGFloat) -> UIColor {
         let color1 = Color(r: 255, g: 0, b: 0)
-        let color2 = Color(r: 0, g: 20, b: 255)
+        let color2 = Color(r: 0, g: 0, b: 255)
         return Color.gradientColor(color1, color2, percentage: index)
     }
     
     private func swapElements(_ i: Int, _ j: Int, at column: Int, actionIndex: Int) {
-        guard let iElement = self.subview(name: "\(column)\(i)"), let jElement = self.subview(name: "\(column)\(j)") else {
+        guard let iElement = self.subview(name: "\(column)+\(i)"), let jElement = self.subview(name: "\(column)+\(j)") else {
             return
         }
         
-        iElement.name = "\(column)\(j)"
-        jElement.name = "\(column)\(i)"
+        iElement.name = "\(column)+\(j)"
+        jElement.name = "\(column)+\(i)"
         
         let delta = i.distance(to: j)
         let iTranslation = pixelSize * CGFloat(delta)
