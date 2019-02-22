@@ -4,92 +4,106 @@ import AppKit
 import PlaygroundSupport
 
 class ProgressIndicatorLayer: CAShapeLayer {
-    
-    var layer: CALayer?
-    
-    private let animationDuraion = 1.0
 
-    convenience init(in rect: NSRect) {
+    convenience init(circleIn rect: NSRect) {
         self.init()
         
         self.configureCircleClose(in: rect)
-//        self.configureCircle(in: rect)
+    }
+    
+    convenience init(markIn rect: NSRect) {
+        self.init()
+        
+        self.configureCheckMark(in: rect)
     }
     
     private func configureCircleClose(in rect: CGRect) {
         let bezierPath = NSBezierPath()
-        bezierPath.appendOval(in: rect)
+        bezierPath.appendArc(withCenter: NSPoint(x: rect.midX, y: rect.midY),
+                             radius: rect.size.width / 2,
+                             startAngle: 90,
+                             endAngle: 89.99)
         
         self.path = bezierPath.cgPath
-        
-        self.animateCircleClose()
     }
     
     private func configureCheckMark(in rect: NSRect) {
         let markPath = NSBezierPath()
         
-        let startPoint = NSPoint(x: rect.origin.x + rect.size.width / 4, y: rect.midY)
-        let middlePoint = NSPoint(x: rect.midX, y: rect.origin.x + rect.size.width / 4)
-        let endPoint = NSPoint(x: rect.origin.x + rect.size.width * 3 / 4, y: rect.origin.x + rect.size.width * 3 / 4)
+        let startPoint = NSPoint(x: rect.origin.x + rect.size.width * 0.27, y: rect.origin.y + rect.size.height * 0.45)
+        let middlePoint = NSPoint(x: rect.origin.x + rect.size.width * 0.43, y: rect.origin.y + rect.size.height * 0.35)
+        let endPoint = NSPoint(x: rect.origin.x + rect.size.width * 0.75, y: rect.origin.y + rect.size.height * 0.67)
         
         markPath.move(to: startPoint)
         markPath.line(to: middlePoint)
         markPath.line(to: endPoint)
+        
+        self.path = markPath.cgPath
     }
     
-    private func animateCircleClose() {
-        let animation = CABasicAnimation(keyPath: "strokeStart")
-        animation.fromValue = 1
-        animation.toValue = 0
-        animation.duration = self.animationDuraion
-        animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        animation.fillMode = .forwards
+    func animate(duration: Double, delay: Double) {
+        self.strokeEnd = 0
+        
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.fromValue = 0
+        animation.toValue = 1
+        animation.duration = duration
+        animation.beginTime = CACurrentMediaTime() + delay
+        
         animation.isRemovedOnCompletion = false
+        animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        animation.fillMode = .forwards
         
         self.add(animation, forKey: "closingAnimation")
     }
-    
-    private func configureCircle(in rect: NSRect) {
-        let bezierPath = NSBezierPath()
-        bezierPath.appendOval(in: rect)
-        
-        self.path = bezierPath.cgPath
-        
-        self.animateStroke()
-        self.animateRotation()
-    }
-    
-    private func animateStroke() {
-        let delay = 0.7
-        
-        let startAnimation = CABasicAnimation(keyPath: "strokeStart")
-        startAnimation.fromValue = 1
-        startAnimation.toValue = 0
-        startAnimation.duration = self.animationDuraion
-        
-        let endAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        endAnimation.fromValue = 1
-        endAnimation.toValue = 0
-        endAnimation.duration = self.animationDuraion
-        endAnimation.beginTime = startAnimation.beginTime + delay
-        
-        let strokeAnimation = CAAnimationGroup()
-        strokeAnimation.animations = [startAnimation, endAnimation]
-        strokeAnimation.duration = self.animationDuraion + delay
-        strokeAnimation.repeatCount = .infinity
-        strokeAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        
-        self.add(strokeAnimation, forKey: "strokeAnimation")
-    }
-    
-    private func animateRotation() {
-        let rotationAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotationAnimation.byValue = -CGFloat.pi / 3
-        rotationAnimation.duration = self.animationDuraion / 4
-        rotationAnimation.isCumulative = true
-        rotationAnimation.repeatCount = .infinity
+}
 
-        self.add(rotationAnimation, forKey: rotationAnimation.keyPath)
+class IndicatorView: NSView {
+    
+    var circle: ProgressIndicatorLayer?
+    var mark: ProgressIndicatorLayer?
+
+    convenience init(in rect: NSRect) {
+        self.init(frame: rect)
+        
+        self.wantsLayer = true
+        
+        let layerRect = NSRect(x: rect.midX - 50, y: rect.midY - 50, width: 100, height: 100)
+        
+        let strokeColor = NSColor.red.cgColor
+        let fillColor = NSColor.clear.cgColor
+        let lineWidth: CGFloat = 5.0
+        
+        self.circle = ProgressIndicatorLayer(circleIn: layerRect)
+        self.mark = ProgressIndicatorLayer(markIn: layerRect)
+
+        guard let mark = self.mark, let circle = self.circle else {
+            return
+        }
+
+        circle.strokeColor = strokeColor
+        circle.fillColor = fillColor
+        circle.lineWidth = lineWidth
+        circle.lineCap = .round
+        
+        mark.strokeColor = strokeColor
+        mark.fillColor = fillColor
+        mark.lineWidth = lineWidth
+        mark.lineCap = .round
+        
+        self.layer?.addSublayer(circle)
+        self.layer?.addSublayer(mark)
+
+        self.animate()
+    }
+    
+    func animate() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+            self?.circle?.animate(duration: 0.3, delay: 0)
+            self?.mark?.animate(duration: 0.35, delay: 0.1)
+            
+            self?.animate()
+        }
     }
 }
 
@@ -119,29 +133,7 @@ let mainView = NSView(frame: frame)
 mainView.wantsLayer = true
 mainView.layer?.backgroundColor = NSColor.white.cgColor
 
-let rect = NSRect(x: -25, y: -25, width: 50, height: 50)
-let progressIndicatorLayer = ProgressIndicatorLayer(in: rect)
-progressIndicatorLayer.strokeColor = NSColor.red.cgColor
-progressIndicatorLayer.lineWidth = 2
-progressIndicatorLayer.lineCap = .round
-progressIndicatorLayer.fillColor = NSColor.clear.cgColor
-
-progressIndicatorLayer.position = CGPoint(x: mainView.bounds.midX, y: mainView.bounds.midY)
-mainView.layer?.addSublayer(progressIndicatorLayer)
-
-let indicator = NSProgressIndicator()
-indicator.controlSize = .regular
-indicator.style = .spinning
-indicator.frame = NSRect(origin: CGPoint(x: progressIndicatorLayer.frame.origin.x - 25, y: progressIndicatorLayer.frame.origin.y - 25), size: rect.size)
-mainView.addSubview(indicator)
-
-indicator.startAnimation(nil)
-
-
-NSAnimationContext.runAnimationGroup { context in
-    context.duration = 1
-    
-    indicator.alphaValue = 0
-}
+let indicatoView = IndicatorView(in: frame)
+mainView.addSubview(indicatoView)
 
 PlaygroundPage.current.liveView = mainView
