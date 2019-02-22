@@ -147,11 +147,11 @@ class IndicatorView: NSView {
         
         self.wantsLayer = true
         
-        let layerRect = NSRect(x: rect.midX - 50, y: rect.midY - 50, width: 100, height: 100)
+        let layerRect = NSRect(x: rect.midX - 25, y: rect.midY - 25, width: 50, height: 50)
         
         let strokeColor = NSColor.controlAccentColor.cgColor
         let fillColor = NSColor.clear.cgColor
-        let lineWidth: CGFloat = 5.0
+        let lineWidth: CGFloat = 2.0
         
         self.circle = ProgressIndicatorLayer(type: .circle, in: layerRect)
         self.mark = ProgressIndicatorLayer(type: .mark, in: layerRect)
@@ -173,14 +173,15 @@ class IndicatorView: NSView {
         
         progressIndicator.strokeColor = strokeColor
         progressIndicator.fillColor = fillColor
-        progressIndicator.lineDashPattern = [1, 6]
-        progressIndicator.lineWidth = 20.0
+        progressIndicator.lineCap = .butt
+        progressIndicator.lineDashPattern = [2, 2]
+        progressIndicator.lineWidth = 4.0
         
         gradient.frame = rect
         gradient.type = .conic
         gradient.startPoint = CGPoint(x: 0.5, y: 0.5)
         gradient.endPoint = CGPoint(x: 0, y: 0.5)
-        gradient.colors = [NSColor.white.cgColor, NSColor.controlAccentColor.cgColor]
+        gradient.colors = [NSColor.controlAccentColor.cgColor, NSColor.controlAccentColor.cgColor, NSColor.white.cgColor, NSColor.controlAccentColor.cgColor]
         
         gradient.mask = progressIndicator
 
@@ -204,8 +205,8 @@ class IndicatorView: NSView {
     
     func rotationAnimation(duration: Double) {
         let rotation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotation.byValue = CGFloat.pi * 2
-        rotation.duration = duration
+        rotation.byValue = -CGFloat.pi * 2
+        rotation.duration = 0.7
         rotation.isCumulative = true
         rotation.repeatCount = .infinity
         
