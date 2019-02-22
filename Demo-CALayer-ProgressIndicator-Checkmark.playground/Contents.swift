@@ -5,16 +5,24 @@ import PlaygroundSupport
 
 class ProgressIndicatorLayer: CAShapeLayer {
 
-    convenience init(circleIn rect: NSRect) {
-        self.init()
-        
-        self.configureCircleClose(in: rect)
+    enum Shape {
+        case circle
+        case mark
     }
     
-    convenience init(markIn rect: NSRect) {
+    private var type = Shape.circle
+    
+    convenience init(type: Shape, in rect: NSRect) {
         self.init()
-        
-        self.configureCheckMark(in: rect)
+
+        self.type = type
+
+        switch type {
+        case .circle:
+            self.configureCircleClose(in: rect)
+        case .mark:
+            self.configureCheckMark(in: rect)
+        }
     }
     
     private func configureCircleClose(in rect: CGRect) {
@@ -42,19 +50,55 @@ class ProgressIndicatorLayer: CAShapeLayer {
     }
     
     func animate(duration: Double, delay: Double) {
+        switch self.type {
+        case .circle:
+            self.animateCircle(duration: duration, delay: delay)
+        case .mark:
+            self.animateMark(duration: duration, delay: delay)
+        }
+    }
+    
+    func animateCircle(duration: Double, delay: Double) {
         self.strokeEnd = 0
+
+        let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        strokeEndAnimation.fromValue = 0.5
+        strokeEndAnimation.toValue = 1
+//        strokeEndAnimation.duration = duration
+//        strokeEndAnimation.beginTime = CACurrentMediaTime() + delay
+
+        let strokeStartAnimation = CABasicAnimation(keyPath: "strokeStart")
+        strokeStartAnimation.fromValue = 0.5
+        strokeStartAnimation.toValue = 0
+//        strokeStartAnimation.duration = duration
+//        strokeStartAnimation.beginTime = CACurrentMediaTime() + delay
+
         
-        let animation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.fromValue = 0
-        animation.toValue = 1
-        animation.duration = duration
-        animation.beginTime = CACurrentMediaTime() + delay
+        let group = CAAnimationGroup()
+        group.animations = [strokeStartAnimation, strokeEndAnimation]
+        group.isRemovedOnCompletion = false
+        group.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        group.fillMode = .forwards
+        group.beginTime = CACurrentMediaTime() + delay
+        group.duration = duration
+
+        self.add(group, forKey: "closingAnimation")
+    }
+    
+    func animateMark(duration: Double, delay: Double) {
+        self.strokeEnd = 0
+
+        let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        strokeEndAnimation.fromValue = 0
+        strokeEndAnimation.toValue = 1
+        strokeEndAnimation.duration = duration
+        strokeEndAnimation.beginTime = CACurrentMediaTime() + delay
         
-        animation.isRemovedOnCompletion = false
-        animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
-        animation.fillMode = .forwards
+        strokeEndAnimation.isRemovedOnCompletion = false
+        strokeEndAnimation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        strokeEndAnimation.fillMode = .forwards
         
-        self.add(animation, forKey: "closingAnimation")
+        self.add(strokeEndAnimation, forKey: "strokeAnimation")
     }
 }
 
@@ -74,8 +118,8 @@ class IndicatorView: NSView {
         let fillColor = NSColor.clear.cgColor
         let lineWidth: CGFloat = 5.0
         
-        self.circle = ProgressIndicatorLayer(circleIn: layerRect)
-        self.mark = ProgressIndicatorLayer(markIn: layerRect)
+        self.circle = ProgressIndicatorLayer(type: .circle, in: layerRect)
+        self.mark = ProgressIndicatorLayer(type: .mark, in: layerRect)
 
         guard let mark = self.mark, let circle = self.circle else {
             return
@@ -99,8 +143,8 @@ class IndicatorView: NSView {
     
     func animate() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            self?.circle?.animate(duration: 0.3, delay: 0)
-            self?.mark?.animate(duration: 0.35, delay: 0.1)
+            self?.circle?.animate(duration: 0.25, delay: 0)
+            self?.mark?.animate(duration: 0.3, delay: 0.1)
             
             self?.animate()
         }
