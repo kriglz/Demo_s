@@ -8,6 +8,7 @@ class ProgressIndicatorLayer: CAShapeLayer {
     enum Shape {
         case circle
         case mark
+        case progressIndicator
     }
     
     private var type = Shape.circle
@@ -22,6 +23,8 @@ class ProgressIndicatorLayer: CAShapeLayer {
             self.configureCircleClose(in: rect)
         case .mark:
             self.configureCheckMark(in: rect)
+        case .progressIndicator:
+            self.configureProgressIndicator(in: rect)
         }
     }
     
@@ -33,6 +36,7 @@ class ProgressIndicatorLayer: CAShapeLayer {
                              endAngle: 269.99)
         
         self.path = bezierPath.cgPath
+        self.strokeEnd = 0
     }
     
     private func configureCheckMark(in rect: NSRect) {
@@ -47,6 +51,14 @@ class ProgressIndicatorLayer: CAShapeLayer {
         markPath.line(to: endPoint)
         
         self.path = markPath.cgPath
+        self.opacity = 0
+    }
+    
+    private func configureProgressIndicator(in rect: NSRect) {
+        let bezierPath = NSBezierPath()
+        bezierPath.appendOval(in: rect)
+        
+        self.path = bezierPath.cgPath
     }
     
     func animate(duration: Double, delay: Double) {
@@ -55,12 +67,12 @@ class ProgressIndicatorLayer: CAShapeLayer {
             self.animateCircle(duration: duration, delay: delay)
         case .mark:
             self.animateMark(duration: duration, delay: delay)
+        case .progressIndicator:
+            self.animateProgressIndicator(duration: duration, delay: delay)
         }
     }
     
-    func animateCircle(duration: Double, delay: Double) {
-        self.strokeEnd = 0
-
+    private func animateCircle(duration: Double, delay: Double) {
         let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd")
         strokeEndAnimation.fromValue = 0.5
         strokeEndAnimation.toValue = 1
@@ -80,9 +92,7 @@ class ProgressIndicatorLayer: CAShapeLayer {
         self.add(group, forKey: "closingAnimation")
     }
     
-    func animateMark(duration: Double, delay: Double) {
-        self.opacity = 0
-        
+    private func animateMark(duration: Double, delay: Double) {
         let opacityAnimation = CABasicAnimation(keyPath: "opacity")
         opacityAnimation.fromValue = 0
         opacityAnimation.toValue = 1
@@ -109,12 +119,28 @@ class ProgressIndicatorLayer: CAShapeLayer {
         
         self.add(strokeEndAnimation, forKey: "strokeAnimation")
     }
+    
+    private func animateProgressIndicator(duration: Double, delay: Double) {
+        let opacityAnimation = CABasicAnimation(keyPath: "opacity")
+        opacityAnimation.fromValue = 1
+        opacityAnimation.toValue = 0
+        opacityAnimation.beginTime = CACurrentMediaTime() + delay
+
+        opacityAnimation.isRemovedOnCompletion = false
+        opacityAnimation.fillMode = .forwards
+        opacityAnimation.duration = duration
+        
+        self.add(opacityAnimation, forKey: "rotationAnimation")
+    }
 }
 
 class IndicatorView: NSView {
     
     var circle: ProgressIndicatorLayer?
     var mark: ProgressIndicatorLayer?
+    var progressIndicator: ProgressIndicatorLayer?
+    
+    let gradient = CAGradientLayer()
 
     convenience init(in rect: NSRect) {
         self.init(frame: rect)
@@ -129,8 +155,9 @@ class IndicatorView: NSView {
         
         self.circle = ProgressIndicatorLayer(type: .circle, in: layerRect)
         self.mark = ProgressIndicatorLayer(type: .mark, in: layerRect)
-
-        guard let mark = self.mark, let circle = self.circle else {
+        self.progressIndicator = ProgressIndicatorLayer(type: .progressIndicator, in: layerRect)
+        
+        guard let mark = self.mark, let circle = self.circle, let progressIndicator = self.progressIndicator else {
             return
         }
 
@@ -144,19 +171,45 @@ class IndicatorView: NSView {
         mark.lineWidth = lineWidth
         mark.lineCap = .round
         
+        progressIndicator.strokeColor = strokeColor
+        progressIndicator.fillColor = fillColor
+        progressIndicator.lineDashPattern = [1, 6]
+        progressIndicator.lineWidth = 20.0
+        
+        gradient.frame = rect
+        gradient.type = .conic
+        gradient.startPoint = CGPoint(x: 0.5, y: 0.5)
+        gradient.endPoint = CGPoint(x: 0, y: 0.5)
+        gradient.colors = [NSColor.white.cgColor, NSColor.controlAccentColor.cgColor]
+        
+        gradient.mask = progressIndicator
+
         self.layer?.addSublayer(circle)
         self.layer?.addSublayer(mark)
+        self.layer?.addSublayer(gradient)
 
+        self.rotationAnimation(duration: 1.0)
         self.animate()
     }
     
     func animate() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            self?.circle?.animate(duration: 0.3, delay: 0)
-            self?.mark?.animate(duration: 0.6, delay: 0)
-            
+        self.circle?.animate(duration: 0.3, delay: 4)
+        self.mark?.animate(duration: 0.6, delay: 4)
+        self.progressIndicator?.animate(duration: 0.5, delay: 3.7)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 6.0) { [weak self] in
             self?.animate()
         }
+    }
+    
+    func rotationAnimation(duration: Double) {
+        let rotation = CABasicAnimation(keyPath: "transform.rotation.z")
+        rotation.byValue = CGFloat.pi * 2
+        rotation.duration = duration
+        rotation.isCumulative = true
+        rotation.repeatCount = .infinity
+        
+        self.gradient.add(rotation, forKey: "rotationAnimation")
     }
 }
 
