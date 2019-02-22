@@ -29,8 +29,8 @@ class ProgressIndicatorLayer: CAShapeLayer {
         let bezierPath = NSBezierPath()
         bezierPath.appendArc(withCenter: NSPoint(x: rect.midX, y: rect.midY),
                              radius: rect.size.width / 2,
-                             startAngle: 90,
-                             endAngle: 89.99)
+                             startAngle: 270,
+                             endAngle: 269.99)
         
         self.path = bezierPath.cgPath
     }
@@ -64,15 +64,10 @@ class ProgressIndicatorLayer: CAShapeLayer {
         let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd")
         strokeEndAnimation.fromValue = 0.5
         strokeEndAnimation.toValue = 1
-//        strokeEndAnimation.duration = duration
-//        strokeEndAnimation.beginTime = CACurrentMediaTime() + delay
-
+        
         let strokeStartAnimation = CABasicAnimation(keyPath: "strokeStart")
         strokeStartAnimation.fromValue = 0.5
         strokeStartAnimation.toValue = 0
-//        strokeStartAnimation.duration = duration
-//        strokeStartAnimation.beginTime = CACurrentMediaTime() + delay
-
         
         let group = CAAnimationGroup()
         group.animations = [strokeStartAnimation, strokeEndAnimation]
@@ -86,6 +81,20 @@ class ProgressIndicatorLayer: CAShapeLayer {
     }
     
     func animateMark(duration: Double, delay: Double) {
+        self.opacity = 0
+        
+        let opacityAnimation = CABasicAnimation(keyPath: "opacity")
+        opacityAnimation.fromValue = 0
+        opacityAnimation.toValue = 1
+        opacityAnimation.duration = duration
+        opacityAnimation.beginTime = CACurrentMediaTime() + delay
+
+        opacityAnimation.isRemovedOnCompletion = false
+        opacityAnimation.timingFunction = CAMediaTimingFunction(name: .easeIn)
+        opacityAnimation.fillMode = .forwards
+        
+        self.add(opacityAnimation, forKey: "opacityAnimation")
+        
         self.strokeEnd = 0
 
         let strokeEndAnimation = CABasicAnimation(keyPath: "strokeEnd")
@@ -114,7 +123,7 @@ class IndicatorView: NSView {
         
         let layerRect = NSRect(x: rect.midX - 50, y: rect.midY - 50, width: 100, height: 100)
         
-        let strokeColor = NSColor.red.cgColor
+        let strokeColor = NSColor.controlAccentColor.cgColor
         let fillColor = NSColor.clear.cgColor
         let lineWidth: CGFloat = 5.0
         
@@ -143,8 +152,8 @@ class IndicatorView: NSView {
     
     func animate() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
-            self?.circle?.animate(duration: 0.25, delay: 0)
-            self?.mark?.animate(duration: 0.3, delay: 0.1)
+            self?.circle?.animate(duration: 0.3, delay: 0)
+            self?.mark?.animate(duration: 0.6, delay: 0)
             
             self?.animate()
         }
