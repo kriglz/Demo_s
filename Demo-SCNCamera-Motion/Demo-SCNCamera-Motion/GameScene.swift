@@ -58,8 +58,7 @@ class GameScene: SCNScene, SCNSceneRendererDelegate {
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
         cameraNode.position.x = Float(cos(time / Double.pi))
 
-        ambientLightNode.light!.color = UIColor(red: CGFloat.random(in: 0.7...1), green: CGFloat.random(in: 0...1), blue: 0.5, alpha: 1)
-        background.contents = UIColor(red: CGFloat.random(in: 0.7...1), green: CGFloat.random(in: 0...1), blue: 0.5, alpha: 1)
+        ambientLightNode.light!.color = UIColor(red: CGFloat.random(in: 0.7...0.8), green: CGFloat.random(in: 0...0.1), blue: 0.5, alpha: 1)
     }
     
     func buildGrid() {

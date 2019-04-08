@@ -12,8 +12,8 @@ import SceneKit
 
 class GameViewController: UIViewController {
 
-    private let width = 30
-    private let height = 30
+    private let width = 100
+    private let height = 100
     
     private lazy var scaledSize = CGSize(width: width, height: height)
     
@@ -162,8 +162,9 @@ class GameViewController: UIViewController {
         var column = Double(index).truncatingRemainder(dividingBy: Double(width))
         column.round(.toNearestOrEven)
 
-        cube.simdPosition.x += Float(column) * 0.11
-        cube.simdPosition.y -= Float(row) * 0.11
+//        cube.simdPosition.z += Float(column) * 0.011
+        cube.simdPosition.x += Float(column) * 0.011
+        cube.simdPosition.y -= Float(row) * 0.011
 
 //        if let pixelData = starImagePixelData, index < pixelData.count - 1 {
 //            cube.geometry?.materials.first?.diffuse.contents = pixelData[index]
@@ -179,15 +180,15 @@ class GameViewController: UIViewController {
         
         scene.rootNode.addChildNode(cube)
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(row) / Double(width), execute: { [weak self] in
-            self?.flipAnimation(for: cube)
-        })
+//        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(row) / Double(width), execute: { [weak self] in
+//            self?.flipAnimation(for: cube)
+//        })
     }
     
     private func setupCube() -> SCNNode {
-        let cubeWidth = CGFloat(0.1)
+        let cubeWidth = CGFloat(0.001)
         
-        let geometry = SCNBox(width: cubeWidth, height: cubeWidth, length: cubeWidth, chamferRadius: 0)
+        let geometry = SCNBox(width: cubeWidth, height: cubeWidth, length: 1, chamferRadius: 0)
         geometry.materials.first?.diffuse.contents = UIColor.white
         
         let node = SCNNode(geometry: geometry)
