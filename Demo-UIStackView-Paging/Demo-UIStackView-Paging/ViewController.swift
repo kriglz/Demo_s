@@ -38,6 +38,12 @@ class ViewController: UIViewController {
         
         self.reloadData()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.contenView.scrollView.contentSize = CGSize(width: self.contenView.scrollView.contentSize.width / 2, height: self.contenView.scrollView.contentSize.height)
+    }
 
     func reloadData() {
         self.contenView.stackView.removeAllArrangedSubviews()
