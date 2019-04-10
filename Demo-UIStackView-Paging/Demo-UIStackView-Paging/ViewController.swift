@@ -12,7 +12,9 @@ class ViewController: UIViewController {
 
     let contenView = HorizontallyScrollableStackView()
     let inset: CGFloat = 20
-    let itemWidth: CGFloat = 248
+    var itemWidth: CGFloat {
+        return self.view.bounds.width / 2
+    }
     var spacing: CGFloat {
         return 0.5 * self.inset
     }
@@ -61,8 +63,19 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.updateContentSize()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        self.updateContentSize()
+    }
+    
+    func updateContentSize() {
         let width = self.itemWidth * 3 + self.spacing + self.contenView.bounds.width - self.inset
         let height = self.contenView.scrollView.contentSize.height
+        
+        print(CGSize(width: width, height: height))
+        
         self.contenView.scrollView.contentSize = CGSize(width: width, height: height)
     }
 
