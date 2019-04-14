@@ -11,38 +11,96 @@ import CoreMotion
 
 class ViewController: UIViewController {
 
-    let motionManager = CMMotionManager()
-    let imageView = UIImageView()
+    enum Position {
+        case left
+        case right
+        case top
+        case bottom
+        case center
+
+        func size(in rect: CGRect) -> CGSize {
+            switch self {
+            case .left, .right:
+                return CGSize(width: ViewController.length, height: rect.height)
+            case .top, .bottom:
+                return CGSize(width: rect.width, height: ViewController.length)
+            case .center:
+                return CGSize(width: ViewController.length, height: ViewController.length)
+            }
+        }
+    }
     
+    static let length: CGFloat = 50
+
+    let motionManager = CMMotionManager()
+    let activeView = UIView()
+    
+    var direction = Position.center
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let image = UIImage(named: "Camera")
-        imageView.image = image
-        imageView.contentMode = .scaleAspectFit
-
-        view.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        activeView.backgroundColor = .red
+        activeView.frame = CGRect(x: 0, y: 0, width: ViewController.length, height: ViewController.length)
+        
+        view.addSubview(activeView)
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        let center = CGPoint(x: view.frame.midX, y: view.frame.midY)
+        activeView.center = center
+
         guard motionManager.isDeviceMotionAvailable else {
             return
         }
 
         motionManager.deviceMotionUpdateInterval = 0.01
-        motionManager.startDeviceMotionUpdates(to: .main) { [weak self] (data, error) in
+        motionManager.startDeviceMotionUpdates(to: .main) { [unowned self] (data, error) in
             guard let data = data, error == nil else {
                 return
             }
             
-            let rotation = CGFloat(atan2(data.gravity.x, data.gravity.y)) - .pi
-            self?.imageView.transform = CGAffineTransform(rotationAngle: rotation)
+            var newX = center.x
+            var newY = center.y
+            var newDirectionX = Position.center
+            var newDirectionY = Position.center
+
+            if data.gravity.x > 0.2 {
+                newDirectionX = .right
+                newX = self.view.frame.maxX - 0.5 * ViewController.length
+            } else if data.gravity.x < -0.2 {
+                newDirectionX = .left
+                newX = 0.5 * ViewController.length
+            }
+            
+            if data.gravity.y > 0.2 {
+                newDirectionY = .top
+                newY = 0.5 * ViewController.length
+            } else if data.gravity.y < -0.2 {
+                newDirectionY = .bottom
+                newY = self.view.frame.maxY - 0.5 * ViewController.length
+            }
+       
+            if (newDirectionY == .center && newDirectionX != .center) {
+                self.direction = newDirectionX
+            } else if (newDirectionY != .center && newDirectionX == .center ) {
+                self.direction = newDirectionY
+            } else {
+                self.direction = .center
+            }
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+                self.activeView.center.x = newX
+                self.activeView.center.y = newY
+                self.activeView.bounds.size = self.direction.size(in: self.view.bounds)
+
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.5, animations: {
+//                    self.activeView.bounds.size = self.direction.size(in: self.view.bounds)
+                })
+            })
         }
     }
     
