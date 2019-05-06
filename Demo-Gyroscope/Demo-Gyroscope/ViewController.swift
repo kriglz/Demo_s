@@ -30,7 +30,7 @@ class ViewController: UIViewController {
         }
     }
     
-    static let length: CGFloat = 50
+    static let length: CGFloat = 200
 
     let motionManager = CMMotionManager()
     let activeView = UIView()
@@ -40,8 +40,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activeView.backgroundColor = .red
+//        activeView.backgroundColor = .red
         activeView.frame = CGRect(x: 0, y: 0, width: ViewController.length, height: ViewController.length)
+
+        activeView.layer.contents = UIImage(named: "lens")?.cgImage
+        activeView.layer.contentsGravity = .resizeAspectFill
         
         view.addSubview(activeView)
     }
@@ -49,13 +52,47 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        let center = CGPoint(x: view.frame.midX, y: view.frame.midY)
-        activeView.center = center
-
+        self.squareMotion()
+        self.cardFlipping()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        motionManager.stopDeviceMotionUpdates()
+    }
+    
+    private func cardFlipping() {
         guard motionManager.isDeviceMotionAvailable else {
             return
         }
+        
+        motionManager.deviceMotionUpdateInterval = 0.01
+        motionManager.startDeviceMotionUpdates(to: .main) { [unowned self] (data, error) in
+            guard let data = data, error == nil else {
+                return
+            }
+            
+            let xGravity = CGFloat(data.gravity.x)
+            let yGravity = CGFloat(data.gravity.y)
 
+            print(xGravity)
+            
+            let rotationTransformX = CATransform3DMakeRotation(xGravity, 0, 1, 0)
+            let rotationTransformY = CATransform3DMakeRotation(-yGravity, 1, 0, 0)
+
+            self.activeView.layer.transform = CATransform3DConcat(rotationTransformX, rotationTransformY)
+        }
+    }
+    
+    private func squareMotion() {
+        let center = CGPoint(x: view.frame.midX, y: view.frame.midY)
+        activeView.center = center
+        
+        guard motionManager.isDeviceMotionAvailable else {
+            return
+        }
+        
         motionManager.deviceMotionUpdateInterval = 0.01
         motionManager.startDeviceMotionUpdates(to: .main) { [unowned self] (data, error) in
             guard let data = data, error == nil else {
@@ -66,7 +103,7 @@ class ViewController: UIViewController {
             var newY = center.y
             var newDirectionX = Position.center
             var newDirectionY = Position.center
-
+            
             if data.gravity.x > 0.2 {
                 newDirectionX = .right
                 newX = self.view.frame.maxX - 0.5 * ViewController.length
@@ -82,7 +119,7 @@ class ViewController: UIViewController {
                 newDirectionY = .bottom
                 newY = self.view.frame.maxY - 0.5 * ViewController.length
             }
-       
+            
             if (newDirectionY == .center && newDirectionX != .center) {
                 self.direction = newDirectionX
             } else if (newDirectionY != .center && newDirectionX == .center ) {
@@ -95,19 +132,13 @@ class ViewController: UIViewController {
                 self.activeView.center.x = newX
                 self.activeView.center.y = newY
                 self.activeView.bounds.size = self.direction.size(in: self.view.bounds)
-
+                
             }, completion: { _ in
                 UIView.animate(withDuration: 0.5, animations: {
-//                    self.activeView.bounds.size = self.direction.size(in: self.view.bounds)
+                    //                    self.activeView.bounds.size = self.direction.size(in: self.view.bounds)
                 })
             })
         }
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        motionManager.stopDeviceMotionUpdates()
     }
 }
 
