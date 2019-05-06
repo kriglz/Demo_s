@@ -37,10 +37,10 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
         notification.soundName = NSUserNotificationDefaultSoundName
         
         notification.title = "Time has come!"
-        
+        notification.informativeText = "Claim it."
+
         notification.deliveryDate = NSDate(timeIntervalSinceNow: self.timeToFire) as Date
         
-        notification.hasActionButton = true
         notification.actionButtonTitle = "Open"
         
         return notification
@@ -72,7 +72,7 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
                 self.fireDate = timer.fireDate
             }
 
-            let delta =  Date().timeIntervalSince(self.fireDate!).rounded()
+            let delta =  Date().timeIntervalSince(self.fireDate!).rounded() + 1
             self.label.stringValue = "\(delta)"
             
             if delta >= self.timeToFire {
@@ -88,9 +88,9 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
         switch notification.activationType {
-        case .additionalActionClicked:
+        case .actionButtonClicked:
             NSWorkspace.shared.launchApplication(withBundleIdentifier: "com.planner5d.Planner-5D.macOS",
-                                                 options: .andHideOthers,
+                                                 options: .default,
                                                  additionalEventParamDescriptor: nil,
                                                  launchIdentifier: nil)
         default:
