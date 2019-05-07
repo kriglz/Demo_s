@@ -8,29 +8,64 @@
 
 import Cocoa
 
-class ViewController: NSViewController, NSUserNotificationCenterDelegate {
-
-    let notificationCenter = NSUserNotificationCenter.default
-    var fireDate: Date?
+class ViewController: NSViewController {
     
-    let timeToFire = 5.0
+    static let timeToFire = 5.0
 
-    lazy var button: NSButton = {
+    var fireDate: Date?
+    var userNotifications: UserNotification?
+    
+    lazy var fireButton: NSButton = {
         let button = NSButton()
         button.bezelStyle = .rounded
         button.keyEquivalent = "\r"
-        button.title = "Schedule notification for \(self.timeToFire) sec"
+        button.title = "Schedule notification for \(ViewController.timeToFire) sec"
         button.target = self
         button.action = #selector(self.scheduleNotification(_:))
         return button
     }()
     
-    lazy var label: NSTextField = {
-        let label = NSTextField(labelWithString: "00")
-        label.drawsBackground = false
-        return label
+    lazy var cleanupButton: NSButton = {
+        let button = NSButton()
+        button.bezelStyle = .rounded
+        button.title = "Cleanup"
+        button.target = self
+        button.action = #selector(self.cleanup(_:))
+        return button
     }()
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.view.addSubview(self.fireButton)
+        self.view.addSubview(self.cleanupButton)
+        
+        self.fireButton.translatesAutoresizingMaskIntoConstraints = false
+        self.cleanupButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        self.fireButton.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        self.fireButton.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        
+        self.cleanupButton.centerXAnchor.constraint(equalTo: self.fireButton.centerXAnchor).isActive = true
+        self.cleanupButton.topAnchor.constraint(equalTo: self.fireButton.bottomAnchor, constant: 10).isActive = true
+    }
+
+    @objc func scheduleNotification(_ sender: NSButton) {
+        self.userNotifications = UserNotification.shared
+        self.userNotifications?.fire()
+    }
+    
+    @objc func cleanup(_ sender: NSButton) {
+        self.userNotifications = nil
+    }
+}
+
+class UserNotification: NSObject, NSUserNotificationCenterDelegate {
+    
+    let notificationCenter = NSUserNotificationCenter.default
+
+    static let shared = UserNotification()
+    
     var notification: NSUserNotification {
         let notification = NSUserNotification()
         notification.identifier = "Notification"
@@ -38,61 +73,34 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
         
         notification.title = "Time has come!"
         notification.informativeText = "Claim it."
-
-        notification.deliveryDate = NSDate(timeIntervalSinceNow: self.timeToFire) as Date
+        
+        notification.deliveryDate = NSDate(timeIntervalSinceNow: ViewController.timeToFire) as Date
         
         notification.actionButtonTitle = "Open"
         
         return notification
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    private override init() {
+        super.init()
         self.notificationCenter.delegate = self
-
-        self.view.addSubview(self.button)
-        self.view.addSubview(self.label)
-        
-        self.button.translatesAutoresizingMaskIntoConstraints = false
-        self.label.translatesAutoresizingMaskIntoConstraints = false
-        
-        self.button.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-        self.button.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-        
-        self.label.centerXAnchor.constraint(equalTo: self.button.centerXAnchor).isActive = true
-        self.label.bottomAnchor.constraint(equalTo: self.button.topAnchor, constant: -10).isActive = true
     }
 
-    @objc func scheduleNotification(_ sender: NSButton) {
+    func fire() {
         self.notificationCenter.scheduleNotification(self.notification)
-        
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-            if self.fireDate == nil {
-                self.fireDate = timer.fireDate
-            }
-
-            let delta =  Date().timeIntervalSince(self.fireDate!).rounded() + 1
-            self.label.stringValue = "\(delta)"
-            
-            if delta >= self.timeToFire {
-                timer.invalidate()
-                self.fireDate = nil
-            }
-        }
     }
     
     func userNotificationCenter(_ center: NSUserNotificationCenter, shouldPresent notification: NSUserNotification) -> Bool {
         return true
     }
-    
+
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
         switch notification.activationType {
         case .actionButtonClicked:
             if NSApp.windows.first!.isMiniaturized {
                 NSApp.windows.first?.deminiaturize(self)
             }
-
+            
             NSWorkspace.shared.launchApplication(withBundleIdentifier: "KG.Demo-UserNotifications",
                                                  options: .default,
                                                  additionalEventParamDescriptor: nil,
