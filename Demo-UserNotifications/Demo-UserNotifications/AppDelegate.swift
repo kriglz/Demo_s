@@ -11,16 +11,26 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-
-
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        // Insert code here to initialize your application
+        let alert = NSAlert()
+
+        if let userInfo = aNotification.userInfo,
+            let userNotification = userInfo[NSApplication.launchUserNotificationUserInfoKey] as? NSUserNotification {
+            alert.messageText = "userNotification"
+            alert.informativeText = "\(userNotification)"
+        } else {
+            alert.messageText = "applicationDidFinishLaunching"
+        }
+        
+        alert.runModal()
     }
 
-    func applicationWillTerminate(_ aNotification: Notification) {
-        // Insert code here to tear down your application
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if flag {
+            return false
+        }
+        
+        NSApp.windows.first?.makeKeyAndOrderFront(self)
+        return true
     }
-
-
 }
-

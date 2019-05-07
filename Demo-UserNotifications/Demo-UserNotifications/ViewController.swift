@@ -89,7 +89,11 @@ class ViewController: NSViewController, NSUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: NSUserNotificationCenter, didActivate notification: NSUserNotification) {
         switch notification.activationType {
         case .actionButtonClicked:
-            NSWorkspace.shared.launchApplication(withBundleIdentifier: "com.planner5d.Planner-5D.macOS",
+            if NSApp.windows.first!.isMiniaturized {
+                NSApp.windows.first?.deminiaturize(self)
+            }
+
+            NSWorkspace.shared.launchApplication(withBundleIdentifier: "KG.Demo-UserNotifications",
                                                  options: .default,
                                                  additionalEventParamDescriptor: nil,
                                                  launchIdentifier: nil)
