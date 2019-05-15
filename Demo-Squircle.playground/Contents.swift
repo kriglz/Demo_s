@@ -86,8 +86,10 @@ let rect = CGRect(x: 100, y: 200, width: 200, height: 200)
 let squircle = CAShapeLayer()
 squircle.bounds = viewController.view.frame
 squircle.path = UIBezierPath.superellipse(in: rect, cornerRadius: 20).cgPath
+squircle.fillColor = UIColor.clear.cgColor
+squircle.strokeColor = UIColor.blue.cgColor
 let squircleView = UIView(frame: viewController.view.frame)
-squircleView.alpha = 0.3
+squircleView.alpha = 1
 squircleView.layer.addSublayer(squircle)
 
 let borderView = UIView(frame: rect)
