@@ -10,62 +10,45 @@ import UIKit
 
 class ProgressIndicatorView: UIView {
     
-    private let strokeWidth: CGFloat = 10
-    private let indicatorLayer = CAShapeLayer()
-    private let indicatorView = UIView()
-    private let rainbowView = UIImageView(image: UIImage(named: "rainbow.png"))
-
     var progress: Float = 0 {
         didSet {
-            guard progress != oldValue else { return }
-            
-            let animation = CABasicAnimation(keyPath: "strokeEnd")
-            animation.duration = 0.3
-            animation.fromValue = indicatorLayer.presentation()?.value(forKeyPath: "strokeEnd") ?? 0
-            animation.toValue = progress
-            animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-            animation.fillMode = .forwards
-            animation.isRemovedOnCompletion = false
-            
-            indicatorLayer.removeAllAnimations()
-            indicatorLayer.add(animation, forKey: "animateCircle")
+            indicatorView.progress = progress
         }
     }
+    
+    private let lineWidth: CGFloat = 7
+    
+    private let backgroundView = BackgroundView()
+    private let indicatorView = IndicatorView()
+    private let placeholderIconView = UserPlaceholderView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-               
-        indicatorLayer.lineWidth = strokeWidth
-        indicatorLayer.fillColor = UIColor.clear.cgColor
-        indicatorLayer.strokeColor = UIColor.black.cgColor
+                
+        indicatorView.lineWidth = lineWidth
         
-        indicatorLayer.strokeStart = 0
-        indicatorLayer.strokeEnd = 0
-        indicatorLayer.lineCap = .round
-        
-        rainbowView.contentMode = .scaleToFill
-        
+        addSubview(backgroundView)
         addSubview(indicatorView)
-        indicatorView.addSubview(rainbowView)
-
+        addSubview(placeholderIconView)
+     
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
         indicatorView.translatesAutoresizingMaskIntoConstraints = false
-        rainbowView.translatesAutoresizingMaskIntoConstraints = false
-
+        placeholderIconView.translatesAutoresizingMaskIntoConstraints = false
+        
+        backgroundView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        backgroundView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        backgroundView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        
         indicatorView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         indicatorView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         indicatorView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         indicatorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
-        rainbowView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        rainbowView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        rainbowView.heightAnchor.constraint(equalTo: rainbowView.widthAnchor).isActive = true
-        rainbowView.topAnchor.constraint(equalTo: topAnchor, constant: 182).isActive = true
-        
-        rainbowView.rotate()
-        
-//        UIView.animate(withDuration: 1, delay: 0, options: .repeat, animations: { [weak self] in
-//            self?.rainbowView.transform = CGAffineTransform.init(rotationAngle: 2 * .pi)
-//        }, completion: nil)
+        placeholderIconView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        placeholderIconView.widthAnchor.constraint(equalTo: widthAnchor, constant: -50).isActive = true
+        placeholderIconView.heightAnchor.constraint(equalTo: placeholderIconView.widthAnchor).isActive = true
+        placeholderIconView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 301).isActive = true
     }
     
     required init?(coder: NSCoder) {
@@ -75,46 +58,50 @@ class ProgressIndicatorView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let radius = 0.5 * bounds.size.width - 2 * strokeWidth
-        let center = CGPoint(x: frame.midX, y: frame.height * 0.43)
+        backgroundView.path = circleClipPath(small: false, inner: true)
+        indicatorView.path = circlePath(small: false, inner: false)
         
-        let bezierPath = UIBezierPath()
-        let startAngle = 0.5 * CGFloat.pi
-        bezierPath.addArc(withCenter: center, radius: radius, startAngle: startAngle, endAngle: startAngle - 2 * CGFloat.pi, clockwise: false)
-        
-        indicatorLayer.path = bezierPath.cgPath
-        indicatorLayer.frame = bounds
-        
-        indicatorView.layer.mask = indicatorLayer
+        indicatorView.alpha = 0 // hide at first
     }
     
-//
-//    override func draw(_ rect: CGRect) {
-//        guard let context = UIGraphicsGetCurrentContext() else { return }
-//        context.beginTransparencyLayer(auxiliaryInfo: nil)
-//
-//
-//        let startAngle = CGFloat(-Float.pi * 2 * 0.25)
-//        let endAngle = CGFloat((Float.pi * 2 * (-0.25 + progress)))
-//
-//        context.setLineCap(.round)
-//        context.setStrokeColor(UIColor.white.cgColor)
-//        context.setLineWidth(strokeWidth)
-//        context.addArc(center: circleCenter, radius: circleRadius, startAngle: startAngle, endAngle: endAngle, clockwise: false)
-//        context.strokePath()
-//
-//        context.endTransparencyLayer()
-//    }
-}
-
-extension UIImageView {
+    func circleClipPath(small: Bool, inner: Bool) -> CGPath {
+        let bezierPath = UIBezierPath(roundedRect: bounds, cornerRadius: 0)
+        
+        let scaleCoefficient: CGFloat = small ? 0.134 : 0.424
+        let offsetCoefficient: CGFloat = inner ? 0.5 * lineWidth : 0
+        
+        let rect = CGRect(x: 25,
+                          y: (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) * 0.187,
+                          width: bounds.width - 50,
+                          height: 0.444 * (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) )
+        
+        let radius = rect.width * scaleCoefficient - offsetCoefficient //scaleCoefficient * bounds.size.width - offsetCoefficient
+        let center = CGPoint(x: rect.midX, y: rect.midY) //CGPoint(x: bounds.midX, y: bounds.height * 0.43 + safeAreaInsets.top)
+        
+        let startAngle = 0.5 * CGFloat.pi
+        let circlePath = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: startAngle - 2 * CGFloat.pi, clockwise: false)
+        
+        bezierPath.append(circlePath)
+        bezierPath.usesEvenOddFillRule = true
+        
+        return bezierPath.cgPath
+    }
     
-    func rotate() {
-        let rotation : CABasicAnimation = CABasicAnimation(keyPath: "transform.rotation.z")
-        rotation.toValue = NSNumber(value: Double.pi * 2)
-        rotation.duration = 10
-        rotation.isCumulative = true
-        rotation.repeatCount = Float.greatestFiniteMagnitude
-        layer.add(rotation, forKey: "rotationAnimation")
+    func circlePath(small: Bool, inner: Bool) -> CGPath {
+        let scaleCoefficient: CGFloat = small ? 0.134 : 0.424
+        let offsetCoefficient: CGFloat = inner ? 0.5 * lineWidth : 0
+        
+        let rect = CGRect(x: 25,
+                          y: (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) * 0.187,
+                          width: bounds.width - 50,
+                          height: 0.444 * (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) )
+        
+        let radius = rect.width * scaleCoefficient - offsetCoefficient //scaleCoefficient * bounds.size.width - offsetCoefficient
+        let center = CGPoint(x: rect.midX, y: rect.midY) //CGPoint(x: bounds.midX, y: bounds.height * 0.43 + safeAreaInsets.top)
+        
+        let startAngle = 0.5 * CGFloat.pi
+        let circlePath = UIBezierPath(arcCenter: center, radius: radius, startAngle: startAngle, endAngle: startAngle - 2 * CGFloat.pi, clockwise: false)
+        
+        return circlePath.cgPath
     }
 }
