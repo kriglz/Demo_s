@@ -49,6 +49,15 @@ class ProgressIndicatorView: UIView {
         placeholderIconView.widthAnchor.constraint(equalTo: widthAnchor, constant: -50).isActive = true
         placeholderIconView.heightAnchor.constraint(equalTo: placeholderIconView.widthAnchor).isActive = true
         placeholderIconView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 301).isActive = true
+        
+        placeholderIconView.alpha = 0
+        
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { timer in
+//            self.placeholderIconView.scaleUpAndDisappear(duration: 0.05)
+
+            self.indicatorView.animatePath(self.circlePath(small: false), duration: 0.5)
+            self.backgroundView.animatePath(self.circleClipPath(small: false), duration: 0.5)
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -58,24 +67,23 @@ class ProgressIndicatorView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        backgroundView.path = circleClipPath(small: false, inner: true)
-        indicatorView.path = circlePath(small: false, inner: false)
+        backgroundView.path = circleClipPath(small: true)
+        indicatorView.path = circlePath(small: true)
         
-        indicatorView.alpha = 0 // hide at first
+//        indicatorView.alpha = 0 // hide at first
     }
     
-    func circleClipPath(small: Bool, inner: Bool) -> CGPath {
+    func circleClipPath(small: Bool) -> CGPath {
         let bezierPath = UIBezierPath(roundedRect: bounds, cornerRadius: 0)
         
         let scaleCoefficient: CGFloat = small ? 0.134 : 0.424
-        let offsetCoefficient: CGFloat = inner ? 0.5 * lineWidth : 0
         
         let rect = CGRect(x: 25,
                           y: (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) * 0.187,
                           width: bounds.width - 50,
                           height: 0.444 * (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) )
         
-        let radius = rect.width * scaleCoefficient - offsetCoefficient //scaleCoefficient * bounds.size.width - offsetCoefficient
+        let radius = rect.width * scaleCoefficient - 0.5 * lineWidth //scaleCoefficient * bounds.size.width - offsetCoefficient
         let center = CGPoint(x: rect.midX, y: rect.midY) //CGPoint(x: bounds.midX, y: bounds.height * 0.43 + safeAreaInsets.top)
         
         let startAngle = 0.5 * CGFloat.pi
@@ -87,16 +95,15 @@ class ProgressIndicatorView: UIView {
         return bezierPath.cgPath
     }
     
-    func circlePath(small: Bool, inner: Bool) -> CGPath {
+    func circlePath(small: Bool) -> CGPath {
         let scaleCoefficient: CGFloat = small ? 0.134 : 0.424
-        let offsetCoefficient: CGFloat = inner ? 0.5 * lineWidth : 0
         
         let rect = CGRect(x: 25,
                           y: (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) * 0.187,
                           width: bounds.width - 50,
                           height: 0.444 * (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) )
         
-        let radius = rect.width * scaleCoefficient - offsetCoefficient //scaleCoefficient * bounds.size.width - offsetCoefficient
+        let radius = rect.width * scaleCoefficient //scaleCoefficient * bounds.size.width
         let center = CGPoint(x: rect.midX, y: rect.midY) //CGPoint(x: bounds.midX, y: bounds.height * 0.43 + safeAreaInsets.top)
         
         let startAngle = 0.5 * CGFloat.pi

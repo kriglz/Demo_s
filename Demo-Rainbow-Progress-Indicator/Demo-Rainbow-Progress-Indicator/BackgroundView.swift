@@ -30,17 +30,16 @@ class BackgroundView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-//    
-//    func animatePath(_ path: CGPath, duration: TimeInterval) {
-//        let animation = CASpringAnimation(keyPath: "path")
-//        
-//        animation.damping = 5
-//        animation.toValue = path
-//        animation.duration = duration
-//        animation.timingFunction = CAMediaTimingFunction(name: .easeIn)
-//        animation.fillMode = .both
-//        animation.isRemovedOnCompletion = false
-//        
-//        overlayLayer.add(animation, forKey: animation.keyPath)
-//    }
+    
+    func animatePath(_ path: CGPath, duration: TimeInterval) {
+        let animation = CABasicAnimation(keyPath: "path")
+        
+        animation.toValue = path
+        animation.duration = duration
+        animation.timingFunction = CAMediaTimingFunction(name: .linear)
+        animation.fillMode = .both
+        animation.isRemovedOnCompletion = false
+        
+        overlayLayer.add(animation, forKey: animation.keyPath)
+    }
 }
