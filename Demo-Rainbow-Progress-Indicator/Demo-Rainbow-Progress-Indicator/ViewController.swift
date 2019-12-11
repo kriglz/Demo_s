@@ -34,12 +34,20 @@ class ViewController: UIViewController {
         progressIndicator.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         progressIndicator.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-//        var progress: Float = 0
-//        
-//        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-//            progressIndicator.progress = progress
-//            progress = progress > 1 ? 0 : progress + 30/360
-//        }
+        var progress: Float = 0
+        
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            progressIndicator.progress = progress
+            progress = progress > 1 ? 0 : progress + 30/360
+        }
     }
 }
 
+class CondettiView: UIView {
+    
+    class LineLayer: CAShapeLayer {
+        
+    }
+    
+    
+}

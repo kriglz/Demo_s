@@ -17,7 +17,6 @@
 		890391CC239F010B00DC9258 /* photo.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 890391CB239F010B00DC9258 /* photo.jpeg */; };
 		890391CE239F035700DC9258 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890391CD239F035700DC9258 /* BackgroundView.swift */; };
 		890391DD23A0250900DC9258 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890391DC23A0250900DC9258 /* IndicatorView.swift */; };
-		890391DF23A042F700DC9258 /* UserPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890391DE23A042F700DC9258 /* UserPlaceholderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +32,6 @@
 		890391CB239F010B00DC9258 /* photo.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = photo.jpeg; sourceTree = "<group>"; };
 		890391CD239F035700DC9258 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		890391DC23A0250900DC9258 /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
-		890391DE23A042F700DC9258 /* UserPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPlaceholderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,7 +66,6 @@
 			children = (
 				890391B9239EF81F00DC9258 /* ViewController.swift */,
 				890391C9239EF85300DC9258 /* ProgressIndicatorView.swift */,
-				890391DE23A042F700DC9258 /* UserPlaceholderView.swift */,
 				890391CD239F035700DC9258 /* BackgroundView.swift */,
 				890391DC23A0250900DC9258 /* IndicatorView.swift */,
 				890391CB239F010B00DC9258 /* photo.jpeg */,
@@ -157,7 +154,6 @@
 				890391CA239EF85300DC9258 /* ProgressIndicatorView.swift in Sources */,
 				890391CE239F035700DC9258 /* BackgroundView.swift in Sources */,
 				890391BA239EF81F00DC9258 /* ViewController.swift in Sources */,
-				890391DF23A042F700DC9258 /* UserPlaceholderView.swift in Sources */,
 				890391B6239EF81F00DC9258 /* AppDelegate.swift in Sources */,
 				890391DD23A0250900DC9258 /* IndicatorView.swift in Sources */,
 				890391B8239EF81F00DC9258 /* SceneDelegate.swift in Sources */,

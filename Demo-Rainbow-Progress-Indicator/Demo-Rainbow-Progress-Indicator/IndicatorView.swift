@@ -13,7 +13,6 @@ class IndicatorView: UIView {
     var path: CGPath? {
         didSet {
             indicatorBackgroundLayer.path = path
-            backgroundLayer.path = path
 
             indicatorMaskLayer.path = path
             indicatorView.layer.mask = indicatorMaskLayer
@@ -24,6 +23,10 @@ class IndicatorView: UIView {
         didSet {
             guard progress != oldValue else { return }
                         
+            indicatorView.alpha = 1
+
+            CATransaction.begin()
+            
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.duration = 0.3
             animation.fromValue = indicatorMaskLayer.presentation()?.value(forKeyPath: "strokeEnd") ?? 0
@@ -31,9 +34,16 @@ class IndicatorView: UIView {
             animation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
             animation.fillMode = .forwards
             animation.isRemovedOnCompletion = false
+
+            CATransaction.setCompletionBlock { [weak self] in
+                guard let self = self else { return }
+                print("completed \(self.progress)")
+            }
             
             indicatorMaskLayer.removeAllAnimations()
             indicatorMaskLayer.add(animation, forKey: "animateCircle")
+            
+            CATransaction.commit()
         }
     }
     
@@ -47,7 +57,6 @@ class IndicatorView: UIView {
     private let indicatorMaskLayer = CAShapeLayer()
     private let indicatorView = UIView()
     private let indicatorBackgroundLayer = CAShapeLayer()
-    private let backgroundLayer = CAShapeLayer()
 
     private let rainbowView = UIImageView(image: UIImage(named: "rainbow"))
     
@@ -58,20 +67,17 @@ class IndicatorView: UIView {
         indicatorMaskLayer.strokeColor = UIColor.black.cgColor
         
         indicatorMaskLayer.strokeStart = 0
-//        indicatorMaskLayer.strokeEnd = 0
+        indicatorMaskLayer.strokeEnd = 0
         indicatorMaskLayer.lineCap = .round
         
         indicatorBackgroundLayer.fillColor = UIColor.clear.cgColor
         indicatorBackgroundLayer.strokeColor = UIColor.white.withAlphaComponent(0.3).cgColor
-
-        backgroundLayer.fillColor = UIColor.black.withAlphaComponent(0.7).cgColor
 
         rainbowView.contentMode = .scaleToFill
 
         indicatorView.clipsToBounds = true
         indicatorView.layer.masksToBounds = true
 
-        layer.addSublayer(backgroundLayer)
         layer.addSublayer(indicatorBackgroundLayer)
         
         addSubview(indicatorView)
@@ -91,7 +97,7 @@ class IndicatorView: UIView {
         rainbowView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 301).isActive = true
         
         indicatorView.alpha = 0
-//        indicatorBackgroundLayer.opacity = 0
+        indicatorBackgroundLayer.opacity = 0
 
 //        rainbowView.rotate()
     }
@@ -101,9 +107,6 @@ class IndicatorView: UIView {
     }
 
     func animatePath(_ path: CGPath, duration: TimeInterval) {
-//        indicatorView.alpha = 1
-//        indicatorBackgroundLayer.opacity = 1
-
         let pathAnimation = CABasicAnimation(keyPath: "path")
 
         pathAnimation.toValue = path
@@ -114,15 +117,6 @@ class IndicatorView: UIView {
 
         indicatorMaskLayer.add(pathAnimation, forKey: pathAnimation.keyPath)
         indicatorBackgroundLayer.add(pathAnimation, forKey: pathAnimation.keyPath)
-
-        let opacityAnimation = CABasicAnimation(keyPath: "opacity")
-        opacityAnimation.toValue = 0
-        opacityAnimation.duration = duration * 0.1
-        opacityAnimation.timingFunction = CAMediaTimingFunction(name: .linear)
-        opacityAnimation.fillMode = .both
-        opacityAnimation.isRemovedOnCompletion = false
-        
-        backgroundLayer.add(opacityAnimation, forKey: opacityAnimation.keyPath)
     }
 }
 

@@ -20,20 +20,22 @@ class ProgressIndicatorView: UIView {
     
     private let backgroundView = BackgroundView()
     private let indicatorView = IndicatorView()
-    private let placeholderIconView = UserPlaceholderView()
+    private let confettiView = UIImageView(image: UIImage(named: "confetti"))
 
     override init(frame: CGRect) {
         super.init(frame: frame)
                 
         indicatorView.lineWidth = lineWidth
         
+        confettiView.alpha = 0
+        
         addSubview(backgroundView)
         addSubview(indicatorView)
-        addSubview(placeholderIconView)
+        addSubview(confettiView)
      
         backgroundView.translatesAutoresizingMaskIntoConstraints = false
         indicatorView.translatesAutoresizingMaskIntoConstraints = false
-        placeholderIconView.translatesAutoresizingMaskIntoConstraints = false
+        confettiView.translatesAutoresizingMaskIntoConstraints = false
         
         backgroundView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         backgroundView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
@@ -45,19 +47,11 @@ class ProgressIndicatorView: UIView {
         indicatorView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
         indicatorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
         
-        placeholderIconView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        placeholderIconView.widthAnchor.constraint(equalTo: widthAnchor, constant: -50).isActive = true
-        placeholderIconView.heightAnchor.constraint(equalTo: placeholderIconView.widthAnchor).isActive = true
-        placeholderIconView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 301).isActive = true
+        confettiView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        confettiView.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 301).isActive = true
+               
         
-        placeholderIconView.alpha = 0
-        
-        Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { timer in
-//            self.placeholderIconView.scaleUpAndDisappear(duration: 0.05)
-
-            self.indicatorView.animatePath(self.circlePath(small: false), duration: 0.5)
-            self.backgroundView.animatePath(self.circleClipPath(small: false), duration: 0.5)
-        }
+//        placeholderIconView.alpha = 0
     }
     
     required init?(coder: NSCoder) {
@@ -67,8 +61,8 @@ class ProgressIndicatorView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        backgroundView.path = circleClipPath(small: true)
-        indicatorView.path = circlePath(small: true)
+        backgroundView.path = circleClipPath(small: false)
+        indicatorView.path = circlePath(small: false)
         
 //        indicatorView.alpha = 0 // hide at first
     }
@@ -76,7 +70,7 @@ class ProgressIndicatorView: UIView {
     func circleClipPath(small: Bool) -> CGPath {
         let bezierPath = UIBezierPath(roundedRect: bounds, cornerRadius: 0)
         
-        let scaleCoefficient: CGFloat = small ? 0.134 : 0.424
+        let scaleCoefficient: CGFloat = small ? 0 : 0.424 // 0.134
         
         let rect = CGRect(x: 25,
                           y: (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) * 0.187,
@@ -96,7 +90,7 @@ class ProgressIndicatorView: UIView {
     }
     
     func circlePath(small: Bool) -> CGPath {
-        let scaleCoefficient: CGFloat = small ? 0.134 : 0.424
+        let scaleCoefficient: CGFloat = small ? 0 : 0.424 // 0.134
         
         let rect = CGRect(x: 25,
                           y: (bounds.height - safeAreaInsets.top - safeAreaInsets.bottom) * 0.187,
