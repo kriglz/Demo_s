@@ -52,6 +52,9 @@ class CarouselFlowLayout: UICollectionViewLayout {
         let standardWidth = Cell.width
         let featuredWidth = Cell.featuredWidth
         
+        let standardHeight = self.height * 0.5
+        let featuredHeight = self.height
+        
         var frame = CGRect.zero
         var x: CGFloat = 0
         
@@ -61,15 +64,20 @@ class CarouselFlowLayout: UICollectionViewLayout {
             
             // Initially set the height of the cell to the standard height
             var width = standardWidth
+            var height = standardHeight
 
             if indexPath.item == featuredItemIndex {
                 width = featuredWidth - max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
-
+                height = featuredHeight - max((featuredHeight - standardHeight) * nextItemPercentageOffset, 0)
+                
             } else if indexPath.item == (featuredItemIndex + 1) && indexPath.item != numberOfItems {
                 width = standardWidth + max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
+                height = standardHeight + max((featuredHeight - standardHeight) * nextItemPercentageOffset, 0)
             }
             
-            frame = CGRect(x: x, y: 0, width: width, height: height)
+            let y: CGFloat = (self.height - height) * 0.5
+
+            frame = CGRect(x: x, y: y, width: width, height: height)
             attributes.frame = frame
             cache.append(attributes)
     
