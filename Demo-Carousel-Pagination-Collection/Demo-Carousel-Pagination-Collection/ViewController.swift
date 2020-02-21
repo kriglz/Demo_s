@@ -14,9 +14,6 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
 
     private lazy var collectionView: UICollectionView = {
         let collectionViewLayout = CarouselFlowLayout()
-//        collectionViewLayout.scrollDirection = .horizontal
-//        collectionViewLayout.minimumLineSpacing = 20
-//        collectionViewLayout.minimumInteritemSpacing = 0
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.showsHorizontalScrollIndicator = false
@@ -24,7 +21,12 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         collectionView.register(Cell.self, forCellWithReuseIdentifier: Cell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-
+        collectionView.contentInsetAdjustmentBehavior = .never
+        
+        let inset = (view.bounds.width - Cell.featuredWidth) / 2
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+        collectionViewLayout.contentInset = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+        
         return collectionView
     }()
     

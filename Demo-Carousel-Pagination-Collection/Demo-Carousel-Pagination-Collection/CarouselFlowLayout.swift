@@ -10,17 +10,23 @@ import UIKit
 
 class CarouselFlowLayout: UICollectionViewLayout {
     
+    // MARK: - Public properties
+
+    var contentInset: UIEdgeInsets = .zero
+    
+    // MARK: - Private properties
+    
     let dragOffset: CGFloat = 100.0
     
     var cache: [UICollectionViewLayoutAttributes] = []
     
     var featuredItemIndex: Int {
         // Use max to make sure the featureItemIndex is never < 0
-        return max(0, Int(collectionView!.contentOffset.x / dragOffset))
+        return max(0, Int((collectionView!.contentOffset.x + contentInset.left) / dragOffset))
     }
     
     var nextItemPercentageOffset: CGFloat {
-        return (collectionView!.contentOffset.x / dragOffset) - CGFloat(featuredItemIndex)
+        return ((collectionView!.contentOffset.x + contentInset.left) / dragOffset) - CGFloat(featuredItemIndex)
     }
     
     var width: CGFloat {
@@ -36,7 +42,7 @@ class CarouselFlowLayout: UICollectionViewLayout {
     }
     
     override var collectionViewContentSize: CGSize {
-        let contentWidth = (CGFloat(numberOfItems) * dragOffset) + (width - dragOffset)
+        let contentWidth = CGFloat(numberOfItems - 1) * Cell.width + Cell.featuredWidth
         return CGSize(width: contentWidth, height: height)
     }
     
@@ -53,27 +59,18 @@ class CarouselFlowLayout: UICollectionViewLayout {
             let indexPath = IndexPath(item: item, section: 0)
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             
-            // Important because each cell has to slide over the top of the previous one
-            attributes.zIndex = item
-            
             // Initially set the height of the cell to the standard height
             var width = standardWidth
+
             if indexPath.item == featuredItemIndex {
-                // The featured cell
-                let xOffset = standardWidth * nextItemPercentageOffset
-                x = collectionView!.contentOffset.x - xOffset
-                width = featuredWidth
+                width = featuredWidth - max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
+
             } else if indexPath.item == (featuredItemIndex + 1) && indexPath.item != numberOfItems {
-                // The cell directly below the featured cell, which grows as the user scrolls
-                let maxX = x + standardWidth
                 width = standardWidth + max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
-                x = maxX - width
             }
             
             frame = CGRect(x: x, y: 0, width: width, height: height)
-            
             attributes.frame = frame
-            
             cache.append(attributes)
     
             x = frame.maxX
