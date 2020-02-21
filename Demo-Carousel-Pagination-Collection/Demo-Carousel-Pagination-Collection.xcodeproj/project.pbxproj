@@ -14,6 +14,7 @@
 		894F8AFF2400585E00E5370F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 894F8AFE2400585E00E5370F /* Assets.xcassets */; };
 		894F8B022400585E00E5370F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 894F8B002400585E00E5370F /* LaunchScreen.storyboard */; };
 		894F8B0A24005CC300E5370F /* Cell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894F8B0924005CC300E5370F /* Cell.swift */; };
+		894F8B0C24005D1900E5370F /* CarouselFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894F8B0B24005D1900E5370F /* CarouselFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		894F8B012400585E00E5370F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		894F8B032400585E00E5370F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		894F8B0924005CC300E5370F /* Cell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cell.swift; sourceTree = "<group>"; };
+		894F8B0B24005D1900E5370F /* CarouselFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarouselFlowLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 			children = (
 				894F8AF92400585800E5370F /* ViewController.swift */,
 				894F8B0924005CC300E5370F /* Cell.swift */,
+				894F8B0B24005D1900E5370F /* CarouselFlowLayout.swift */,
 				894F8AF52400585800E5370F /* AppDelegate.swift */,
 				894F8AF72400585800E5370F /* SceneDelegate.swift */,
 				894F8AFB2400585800E5370F /* Main.storyboard */,
@@ -143,6 +146,7 @@
 			files = (
 				894F8AFA2400585800E5370F /* ViewController.swift in Sources */,
 				894F8B0A24005CC300E5370F /* Cell.swift in Sources */,
+				894F8B0C24005D1900E5370F /* CarouselFlowLayout.swift in Sources */,
 				894F8AF62400585800E5370F /* AppDelegate.swift in Sources */,
 				894F8AF82400585800E5370F /* SceneDelegate.swift in Sources */,
 			);

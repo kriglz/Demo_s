@@ -11,13 +11,12 @@ import UIKit
 class ViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     private let itemsCount = 12
-    private let cellWidth: CGFloat = 250
 
     private lazy var collectionView: UICollectionView = {
-        let collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.scrollDirection = .horizontal
-        collectionViewLayout.minimumLineSpacing = 20
-        collectionViewLayout.minimumInteritemSpacing = 0
+        let collectionViewLayout = CarouselFlowLayout()
+//        collectionViewLayout.scrollDirection = .horizontal
+//        collectionViewLayout.minimumLineSpacing = 20
+//        collectionViewLayout.minimumInteritemSpacing = 0
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.showsHorizontalScrollIndicator = false
@@ -42,9 +41,9 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: cellWidth, height: collectionView.bounds.height)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        return CGSize(width: Cell.width, height: collectionView.bounds.height)
+//    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return itemsCount
@@ -54,8 +53,8 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         return collectionView.dequeueReusableCell(withReuseIdentifier: Cell.identifier, for: indexPath)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let inset = 0.5 * (collectionView.bounds.width - cellWidth)
-        return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        let inset = 0.5 * (collectionView.bounds.width - Cell.width)
+//        return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
+//    }
 }

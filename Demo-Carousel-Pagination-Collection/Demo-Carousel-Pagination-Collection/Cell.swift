@@ -1,8 +1,18 @@
+//
+//  Cell.swift
+//  Demo-Carousel-Pagination-Collection
+//
+//  Created by Kristina Gelzinyte on 2/21/20.
+//  Copyright © 2020 Kristina Gelzinyte. All rights reserved.
+//
+
 import UIKit
 
 class Cell: UICollectionViewCell {
     
     static let identifier = "CellIdentifier"
+    static let width: CGFloat = 100
+    static let featuredWidth: CGFloat = 200
     
     override init(frame: CGRect) {
         super.init(frame: frame)
