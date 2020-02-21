@@ -16,7 +16,7 @@ class CarouselFlowLayout: UICollectionViewLayout {
     
     // MARK: - Private properties
     
-    let dragOffset: CGFloat = 100.0
+    let dragOffset: CGFloat = Cell.width
     
     var cache: [UICollectionViewLayoutAttributes] = []
     
@@ -98,8 +98,8 @@ class CarouselFlowLayout: UICollectionViewLayout {
     
     // Return the content offset of the nearest cell which achieves the nice snapping effect, similar to a paged UIScrollView
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
-        let itemIndex = round(proposedContentOffset.x / dragOffset)
-        let xOffset = itemIndex * dragOffset
+        let itemIndex = round((proposedContentOffset.x + contentInset.left) / dragOffset)
+        let xOffset = itemIndex * Cell.width - contentInset.left
         return CGPoint(x: xOffset, y: 0)
     }
     
