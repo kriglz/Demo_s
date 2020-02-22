@@ -52,7 +52,7 @@ class CarouselFlowLayout: UICollectionViewLayout {
         let standardWidth = Cell.width
         let featuredWidth = Cell.featuredWidth
         
-        let standardHeight = self.height * 0.5
+        let standardHeight = Cell.height
         let featuredHeight = self.height
         
         var frame = CGRect.zero
@@ -66,11 +66,13 @@ class CarouselFlowLayout: UICollectionViewLayout {
             var width = standardWidth
             var height = standardHeight
 
+            // Current featured, about to be not featured
             if indexPath.item == featuredItemIndex {
                 width = featuredWidth - max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
                 height = featuredHeight - max((featuredHeight - standardHeight) * nextItemPercentageOffset, 0)
                 
-            } else if indexPath.item == (featuredItemIndex + 1) && indexPath.item != numberOfItems {
+            // Item not featured, but about to be featured
+            } else if indexPath.item == (featuredItemIndex + 1) {
                 width = standardWidth + max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
                 height = standardHeight + max((featuredHeight - standardHeight) * nextItemPercentageOffset, 0)
             }

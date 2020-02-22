@@ -33,13 +33,23 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
                 
+        let guideLineView = UIView()
+        guideLineView.backgroundColor = .red
+        
+        view.addSubview(guideLineView)
         view.addSubview(collectionView)
         
+        guideLineView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        guideLineView.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        guideLineView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        guideLineView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        guideLineView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.5).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: 106).isActive = true
         collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
     

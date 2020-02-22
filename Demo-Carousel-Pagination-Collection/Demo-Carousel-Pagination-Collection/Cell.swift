@@ -11,8 +11,9 @@ import UIKit
 class Cell: UICollectionViewCell {
     
     static let identifier = "CellIdentifier"
-    static let width: CGFloat = 100
-    static let featuredWidth: CGFloat = 200
+    static let width: CGFloat = 70
+    static let height: CGFloat = 70
+    static let featuredWidth: CGFloat = 106
     
     override init(frame: CGRect) {
         super.init(frame: frame)
