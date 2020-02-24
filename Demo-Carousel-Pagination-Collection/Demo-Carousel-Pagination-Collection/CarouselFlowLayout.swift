@@ -79,22 +79,22 @@ class CarouselFlowLayout: UICollectionViewLayout {
                 height = standardHeight + max((featuredHeight - standardHeight) * nextItemPercentageOffset, 0)
             
             } else if indexPath.item == (featuredItemIndex + 2) {
-                attributes.zIndex = Int(nextItemPercentageOffset * 100 + 50)
+                attributes.zIndex = Int(nextItemPercentageOffset * 30 + 70)
               
             } else if indexPath.item == (featuredItemIndex + 3) {
-                attributes.zIndex = Int(nextItemPercentageOffset * 50)
+                attributes.zIndex = Int(nextItemPercentageOffset * 70)
                 
             } else if indexPath.item > (featuredItemIndex + 3) {
-                attributes.zIndex = 0
+                attributes.zIndex = 1
                 
             } else if indexPath.item == (featuredItemIndex - 1) {
-                attributes.zIndex = Int(100 - nextItemPercentageOffset * 50)
+                attributes.zIndex = Int(100 - nextItemPercentageOffset * 30)
                 
             } else if indexPath.item == (featuredItemIndex - 2) {
-                attributes.zIndex = Int(50 - 100 * nextItemPercentageOffset)
+                attributes.zIndex = Int(70 - 100 * nextItemPercentageOffset)
                 
             } else if indexPath.item < (featuredItemIndex - 2) {
-                attributes.zIndex = 0
+                attributes.zIndex = 1
                 
             }
             
