@@ -15,15 +15,35 @@ class Cell: UICollectionViewCell {
     static let height: CGFloat = 70
     static let featuredWidth: CGFloat = 106
     
+    private let colorView = UIView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        layer.cornerRadius = 20
-        backgroundColor = UIColor.random
+        colorView.layer.cornerRadius = 20
+        colorView.backgroundColor = UIColor.random
+        
+        addSubview(colorView)
+        
+        colorView.translatesAutoresizingMaskIntoConstraints = false
+        
+        colorView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
+        colorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
+        colorView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        colorView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
     }
     
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+        
+        let constant = max(0, min(1, alpha))
+        colorView.transform = CGAffineTransform.identity.concatenating(CGAffineTransform(scaleX: constant, y: constant))
+
+        print(constant)
     }
 }
 
