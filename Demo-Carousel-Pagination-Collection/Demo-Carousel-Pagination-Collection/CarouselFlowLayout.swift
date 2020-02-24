@@ -66,6 +66,8 @@ class CarouselFlowLayout: UICollectionViewLayout {
             var width = standardWidth
             var height = standardHeight
 
+            attributes.zIndex = 100
+            
             // Current featured, about to be not featured
             if indexPath.item == featuredItemIndex {
                 width = featuredWidth - max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
@@ -77,22 +79,22 @@ class CarouselFlowLayout: UICollectionViewLayout {
                 height = standardHeight + max((featuredHeight - standardHeight) * nextItemPercentageOffset, 0)
             
             } else if indexPath.item == (featuredItemIndex + 2) {
-                attributes.alpha = nextItemPercentageOffset + 0.5
+                attributes.zIndex = Int(nextItemPercentageOffset * 100 + 50)
               
             } else if indexPath.item == (featuredItemIndex + 3) {
-                attributes.alpha = nextItemPercentageOffset * 0.5
+                attributes.zIndex = Int(nextItemPercentageOffset * 50)
                 
             } else if indexPath.item > (featuredItemIndex + 3) {
-                attributes.alpha = 0
+                attributes.zIndex = 0
                 
             } else if indexPath.item == (featuredItemIndex - 1) {
-                attributes.alpha = 1 - nextItemPercentageOffset * 0.5
+                attributes.zIndex = Int(100 - nextItemPercentageOffset * 50)
                 
             } else if indexPath.item == (featuredItemIndex - 2) {
-                attributes.alpha = 0.5 - nextItemPercentageOffset
+                attributes.zIndex = Int(50 - 100 * nextItemPercentageOffset)
                 
             } else if indexPath.item < (featuredItemIndex - 2) {
-                attributes.alpha = 0
+                attributes.zIndex = 0
                 
             }
             

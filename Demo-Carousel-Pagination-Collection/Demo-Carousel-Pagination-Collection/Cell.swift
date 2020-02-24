@@ -15,22 +15,26 @@ class Cell: UICollectionViewCell {
     static let height: CGFloat = 70
     static let featuredWidth: CGFloat = 106
     
-    private let colorView = UIView()
+    private let emojiView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        let images = animationImages(named: "1_Grinning Face", range: 0...18, format:  "%02d")
+        emojiView.image = images.first
+        emojiView.animationImages = images
+        emojiView.startAnimating()
+        emojiView.contentMode = .scaleAspectFit
         
-        colorView.layer.cornerRadius = 20
-        colorView.backgroundColor = UIColor.random
+        addSubview(emojiView)
         
-        addSubview(colorView)
+        emojiView.translatesAutoresizingMaskIntoConstraints = false
         
-        colorView.translatesAutoresizingMaskIntoConstraints = false
-        
-        colorView.leadingAnchor.constraint(equalTo: leadingAnchor).isActive = true
-        colorView.trailingAnchor.constraint(equalTo: trailingAnchor).isActive = true
-        colorView.topAnchor.constraint(equalTo: topAnchor).isActive = true
-        colorView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
+        let constant: CGFloat = 10
+        emojiView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -constant).isActive = true
+        emojiView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: constant).isActive = true
+        emojiView.topAnchor.constraint(equalTo: topAnchor, constant: -constant).isActive = true
+        emojiView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: constant).isActive = true
     }
     
     required init?(coder: NSCoder) {
@@ -40,10 +44,20 @@ class Cell: UICollectionViewCell {
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
         
-        let constant = max(0, min(1, alpha))
-        colorView.transform = CGAffineTransform.identity.concatenating(CGAffineTransform(scaleX: constant, y: constant))
-
-        print(constant)
+        let ratio = CGFloat(layoutAttributes.zIndex) / 100
+        let constant = max(0, min(1, ratio))
+        emojiView.transform = CGAffineTransform.identity.concatenating(CGAffineTransform(scaleX: constant, y: constant))
+    }
+    
+    private func animationImages(named: String, range: ClosedRange<Int>, format: String) -> [UIImage] {
+        var images = [UIImage]()
+        range.forEach {
+            if let image = UIImage(named: named + String(format: format, $0)) {
+                images.append(image)
+            }
+        }
+        
+        return images
     }
 }
 

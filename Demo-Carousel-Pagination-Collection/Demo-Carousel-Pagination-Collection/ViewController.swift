@@ -49,13 +49,9 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
         
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: 106).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: Cell.featuredWidth).isActive = true
         collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        return CGSize(width: Cell.width, height: collectionView.bounds.height)
-//    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return itemsCount
@@ -64,9 +60,4 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return collectionView.dequeueReusableCell(withReuseIdentifier: Cell.identifier, for: indexPath)
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        let inset = 0.5 * (collectionView.bounds.width - Cell.width)
-//        return UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
-//    }
 }
