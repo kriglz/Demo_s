@@ -31,7 +31,7 @@ class Cell: UICollectionViewCell {
         
         emojiView.translatesAutoresizingMaskIntoConstraints = false
         
-        let constant: CGFloat = 10
+        let constant: CGFloat = 8
         emojiView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: -constant).isActive = true
         emojiView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: constant).isActive = true
         emojiView.topAnchor.constraint(equalTo: topAnchor, constant: -constant).isActive = true
@@ -50,15 +50,14 @@ class Cell: UICollectionViewCell {
         let scale = max(0, min(1, abs(distanceToNeighborRatio)))
         let scaleTransform = CGAffineTransform.identity.concatenating(CGAffineTransform(scaleX: scale, y: scale))
         
-//        print(distanceToNeighborRatio, scale)
+        let directionMultiplier: CGFloat = layoutAttributes.zIndex < 0 ? -1 : 1
+        let delta = CGFloat(abs(layoutAttributes.zIndex)) / 100
+        let translation = directionMultiplier * (1 - delta) * layoutAttributes.size.width
+        let translationTransform = CGAffineTransform.identity.concatenating(CGAffineTransform(translationX: translation, y: 0))
+                
+        emojiView.transform = scaleTransform.concatenating(translationTransform)
+//        emojiView.transform = translationTransform.concatenating(scaleTransform)
 
-//        let translation = abs(layoutAttributes.zIndex) < 100 ? CGFloat(layoutAttributes.zIndex.signum()) * (100 - CGFloat(abs(layoutAttributes.zIndex))) * layoutAttributes.size.width * 1 / 100 : 0
-//        let translationTransform = CGAffineTransform.identity.concatenating(CGAffineTransform(translationX: translation, y: 0))
-        
-//        print(layoutAttributes.zIndex, translation)
-        
-        emojiView.transform = scaleTransform // translationTransform.concatenating(scaleTransform)
-        
         if abs(layoutAttributes.zIndex) == 100, layoutAttributes.size.width == Cell.featuredWidth {
             emojiView.startAnimating()
         } else {
