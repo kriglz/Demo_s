@@ -98,6 +98,7 @@ class CarouselFlowLayout: UICollectionViewLayout {
                 attributes.zIndex = -Int(Cell.featuredRatio * (1 - nextItemPercentageOffset) + 100 * nextItemPercentageOffset)
 
             // Item 2 positions from featured @right, when scrolling off bounds for left to right
+            // It's different from the one above because item needs to shrink vs expand
             } else if indexPath.item == (featuredItemIndex + 2) {
                 attributes.zIndex = -Int(Cell.featuredRatio * (1 - abs(nextItemPercentageOffset)))
 
