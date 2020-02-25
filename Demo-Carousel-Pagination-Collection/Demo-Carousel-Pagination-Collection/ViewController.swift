@@ -17,7 +17,7 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.showsHorizontalScrollIndicator = false
-        collectionView.backgroundColor = .clear
+        collectionView.backgroundColor = .white
         collectionView.register(Cell.self, forCellWithReuseIdentifier: Cell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -33,24 +33,33 @@ class ViewController: UIViewController, UICollectionViewDataSource, UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
                 
-        let guideLineView = UIView()
-        guideLineView.backgroundColor = .red
+        view.backgroundColor = .random
         
-        view.addSubview(guideLineView)
+//        let guideLineView = UIView()
+//        guideLineView.backgroundColor = .red
+        
+//        view.addSubview(guideLineView)
         view.addSubview(collectionView)
         
-        guideLineView.translatesAutoresizingMaskIntoConstraints = false
+//        guideLineView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
-        guideLineView.widthAnchor.constraint(equalToConstant: 1).isActive = true
-        guideLineView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        guideLineView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        guideLineView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//        guideLineView.widthAnchor.constraint(equalToConstant: 1).isActive = true
+//        guideLineView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+//        guideLineView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        guideLineView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         collectionView.heightAnchor.constraint(equalToConstant: Cell.featuredWidth).isActive = true
         collectionView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let offset = CGPoint(x: Cell.featuredWidth / 2, y: 0)
+        collectionView.setContentOffset(offset, animated: true)
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
