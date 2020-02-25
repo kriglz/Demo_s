@@ -58,7 +58,7 @@ class Cell: UICollectionViewCell {
         emojiView.transform = scaleTransform.concatenating(translationTransform)
 //        emojiView.transform = translationTransform.concatenating(scaleTransform)
 
-        if abs(layoutAttributes.zIndex) == 100, layoutAttributes.size.width == Cell.featuredWidth {
+        if layoutAttributes.size.width == Cell.featuredWidth {
             emojiView.startAnimating()
         } else {
             emojiView.stopAnimating()
