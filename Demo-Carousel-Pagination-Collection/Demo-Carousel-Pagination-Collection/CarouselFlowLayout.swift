@@ -22,7 +22,8 @@ class CarouselFlowLayout: UICollectionViewLayout {
     
     var featuredItemIndex: Int {
         // Use max to make sure the featureItemIndex is never < 0
-        return max(0, Int((collectionView!.contentOffset.x + contentInset.left) / dragOffset))
+        let contentOffset = collectionView!.contentOffset.x + contentInset.left
+        return Int(contentOffset / dragOffset)
     }
     
     var nextItemPercentageOffset: CGFloat {
@@ -70,32 +71,34 @@ class CarouselFlowLayout: UICollectionViewLayout {
             
             // Current featured, about to be not featured
             if indexPath.item == featuredItemIndex {
-                width = featuredWidth - max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
-                height = featuredHeight - max((featuredHeight - standardHeight) * nextItemPercentageOffset, 0)
-                
-            // Item not featured, but about to be featured
+                let offset = max((featuredWidth - standardWidth) * abs(nextItemPercentageOffset), 0)
+                width = featuredWidth - offset
+                height = featuredHeight - offset
+
+            // Item not featured, but might be featured in the right
             } else if indexPath.item == (featuredItemIndex + 1) {
-                width = standardWidth + max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
-                height = standardHeight + max((featuredHeight - standardHeight) * nextItemPercentageOffset, 0)
-            
+                let offset = max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
+                width = standardWidth + offset
+                height = standardHeight + offset
+
             } else if indexPath.item == (featuredItemIndex + 2) {
-                attributes.zIndex = Int(nextItemPercentageOffset * 30 + 70)
-              
+                attributes.zIndex = -Int(nextItemPercentageOffset * 30 + 70)
+
             } else if indexPath.item == (featuredItemIndex + 3) {
-                attributes.zIndex = Int(nextItemPercentageOffset * 70)
+                attributes.zIndex = -Int(nextItemPercentageOffset * 70)
                 
             } else if indexPath.item > (featuredItemIndex + 3) {
-                attributes.zIndex = 0
+                attributes.zIndex = -1
                 
+            // Item not featured, but might be featured in the left
             } else if indexPath.item == (featuredItemIndex - 1) {
                 attributes.zIndex = Int(100 - nextItemPercentageOffset * 30)
                 
             } else if indexPath.item == (featuredItemIndex - 2) {
-                attributes.zIndex = Int(70 - 100 * nextItemPercentageOffset)
+                attributes.zIndex = Int(70 - 70 * nextItemPercentageOffset)
                 
             } else if indexPath.item < (featuredItemIndex - 2) {
-                attributes.zIndex = 0
-                
+                attributes.zIndex = 1
             }
             
             let y: CGFloat = (self.height - height) * 0.5
