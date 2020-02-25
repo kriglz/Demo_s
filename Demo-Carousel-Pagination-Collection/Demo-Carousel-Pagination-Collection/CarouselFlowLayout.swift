@@ -63,13 +63,16 @@ class CarouselFlowLayout: UICollectionViewLayout {
             let indexPath = IndexPath(item: item, section: 0)
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             
-            // Initially set the height of the cell to the standard height
+            /// Width of the cell, by default not featured
             var width = standardWidth
+            /// Height of the cell, by default not featured
             var height = standardHeight
 
+            // zIndex abs value is used in cell to transform the content scale
+            // zIndex value and sign is used in cell to transform the content translation
             attributes.zIndex = 100
             
-            // Current featured, about to be not featured
+            // Current featured, about to be not featured @center
             if indexPath.item == featuredItemIndex {
                 let delta = max((featuredWidth - standardWidth) * abs(nextItemPercentageOffset), 0)
                 width = featuredWidth - delta
@@ -90,32 +93,31 @@ class CarouselFlowLayout: UICollectionViewLayout {
                     attributes.zIndex = scale
                 }
 
+            // Item 2 positions from featured @right, when scrolling from in bounds from right to left
+            } else if indexPath.item == (featuredItemIndex + 2), nextItemPercentageOffset >= 0 {
+                attributes.zIndex = -Int(Cell.featuredRatio * (1 - nextItemPercentageOffset) + 100 * nextItemPercentageOffset)
+
+            // Item 2 positions from featured @right, when scrolling off bounds for left to right
             } else if indexPath.item == (featuredItemIndex + 2) {
-                print(featuredItemIndex, nextItemPercentageOffset)
-                
-                if nextItemPercentageOffset >= 0 {
-                    attributes.zIndex = -Int(nextItemPercentageOffset * (100 - Cell.featuredRatio) + Cell.featuredRatio)
-               
-                } else {
-                    attributes.zIndex = -Int(Cell.featuredRatio - Cell.featuredRatio * abs(nextItemPercentageOffset))
-                }
-                
+                attributes.zIndex = -Int(Cell.featuredRatio * (1 - abs(nextItemPercentageOffset)))
 
-                
-
+            // Item 3 positions from featured @right
             } else if indexPath.item == (featuredItemIndex + 3), nextItemPercentageOffset > 0 {
                 attributes.zIndex = -Int(nextItemPercentageOffset * Cell.featuredRatio)
                 
+            // Item more than 3 positions from featured @right
             } else if indexPath.item >= (featuredItemIndex + 3) {
                 attributes.zIndex = -1
                 
-            // Item not featured, but might be featured @left
+            // Item 1 position from featured @left
             } else if indexPath.item == (featuredItemIndex - 1) {
                 attributes.zIndex = Int(100 - nextItemPercentageOffset * (100 - Cell.featuredRatio))
                 
+            // Item 2 positions from featured @left
             } else if indexPath.item == (featuredItemIndex - 2) {
-                attributes.zIndex = Int(Cell.featuredRatio - Cell.featuredRatio * nextItemPercentageOffset)
+                attributes.zIndex = Int(Cell.featuredRatio * (1 - nextItemPercentageOffset))
                 
+            // Item more than 2 positions from featured @left
             } else if indexPath.item < (featuredItemIndex - 2) {
                 attributes.zIndex = 1
             }
@@ -130,7 +132,6 @@ class CarouselFlowLayout: UICollectionViewLayout {
         }
     }
     
-    // Return all attributes in the cache whose frame intersects with the rect passed to the method
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var layoutAttributes: [UICollectionViewLayoutAttributes] = []
         for attributes in cache {
@@ -141,15 +142,15 @@ class CarouselFlowLayout: UICollectionViewLayout {
         return layoutAttributes
     }
     
-    // Return the content offset of the nearest cell which achieves the nice snapping effect, similar to a paged UIScrollView
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+        // Return the content offset of the nearest cell which achieves the nice snapping effect
         let itemIndex = round((proposedContentOffset.x + contentInset.left) / dragOffset)
         let xOffset = itemIndex * Cell.width - contentInset.left
         return CGPoint(x: xOffset, y: 0)
     }
     
-    // Return true so that the layout is continuously invalidated as the user scrolls
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        // Return true so that the layout is continuously invalidated as the user scrolls
         return true
     }
 }
