@@ -86,11 +86,11 @@ class CarouselFlowLayout: UICollectionViewLayout {
 
                 // Only for left to right off bounds scroll
                 if nextItemPercentageOffset < 0 {
-                    let scaleDelta = (featuredWidth - standardWidth) * nextItemPercentageOffset
-                    let absScaleDelta = abs(scaleDelta)
-                    let scaleRatio = 1 - (absScaleDelta / featuredWidth)
-                    let scale =  -Int(100 * scaleRatio)
-                    attributes.zIndex = scale
+                    let delta = (featuredWidth - standardWidth) * nextItemPercentageOffset
+                    let absDelta = abs(delta)
+                    let ratio = 1 - (absDelta / featuredWidth)
+                    let distanceFromTheNeighbor =  -Int(100 * ratio)
+                    attributes.zIndex = distanceFromTheNeighbor
                 }
 
             // Item 2 positions from featured @right, when scrolling from in bounds from right to left
