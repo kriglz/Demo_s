@@ -14,7 +14,8 @@ class Cell: UICollectionViewCell {
     static let width: CGFloat = 70
     static let height: CGFloat = 70
     static let featuredWidth: CGFloat = 106
-    
+    static let featuredRatio: CGFloat = 70 * 100 / 106
+
     private let emojiView = UIImageView()
     
     override init(frame: CGRect) {
@@ -23,7 +24,7 @@ class Cell: UICollectionViewCell {
         let images = animationImages(named: "1_Grinning Face", range: 0...18, format:  "%02d")
         emojiView.image = images.first
         emojiView.animationImages = images
-        emojiView.startAnimating()
+        emojiView.animationDuration = Double(images.count) * 0.07
         emojiView.contentMode = .scaleAspectFit
         
         addSubview(emojiView)
@@ -44,9 +45,25 @@ class Cell: UICollectionViewCell {
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
         
-        let ratio = CGFloat(layoutAttributes.zIndex) / 100
-        let constant = max(0, min(1, ratio))
-        emojiView.transform = CGAffineTransform.identity.concatenating(CGAffineTransform(scaleX: constant, y: constant))
+        let distanceToNeighborRatio = CGFloat(layoutAttributes.zIndex) / 100
+        
+        let scale = max(0, min(1, abs(distanceToNeighborRatio)))
+        let scaleTransform = CGAffineTransform.identity.concatenating(CGAffineTransform(scaleX: scale, y: scale))
+        
+//        print(distanceToNeighborRatio, scale)
+
+//        let translation = abs(layoutAttributes.zIndex) < 100 ? CGFloat(layoutAttributes.zIndex.signum()) * (100 - CGFloat(abs(layoutAttributes.zIndex))) * layoutAttributes.size.width * 1 / 100 : 0
+//        let translationTransform = CGAffineTransform.identity.concatenating(CGAffineTransform(translationX: translation, y: 0))
+        
+//        print(layoutAttributes.zIndex, translation)
+        
+        emojiView.transform = scaleTransform // translationTransform.concatenating(scaleTransform)
+        
+        if abs(layoutAttributes.zIndex) == 100, layoutAttributes.size.width == Cell.featuredWidth {
+            emojiView.startAnimating()
+        } else {
+            emojiView.stopAnimating()
+        }
     }
     
     private func animationImages(named: String, range: ClosedRange<Int>, format: String) -> [UIImage] {

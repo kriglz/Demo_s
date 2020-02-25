@@ -71,31 +71,50 @@ class CarouselFlowLayout: UICollectionViewLayout {
             
             // Current featured, about to be not featured
             if indexPath.item == featuredItemIndex {
-                let offset = max((featuredWidth - standardWidth) * abs(nextItemPercentageOffset), 0)
-                width = featuredWidth - offset
-                height = featuredHeight - offset
+                let delta = max((featuredWidth - standardWidth) * abs(nextItemPercentageOffset), 0)
+                width = featuredWidth - delta
+                height = featuredHeight - delta
 
-            // Item not featured, but might be featured in the right
+            // Item not featured, but might be featured @right
             } else if indexPath.item == (featuredItemIndex + 1) {
-                let offset = max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
-                width = standardWidth + offset
-                height = standardHeight + offset
+                let delta = max((featuredWidth - standardWidth) * nextItemPercentageOffset, 0)
+                width = standardWidth + delta
+                height = standardHeight + delta
+
+                // Only for left to right off bounds scroll
+                if nextItemPercentageOffset < 0 {
+                    let scaleDelta = (featuredWidth - standardWidth) * nextItemPercentageOffset
+                    let absScaleDelta = abs(scaleDelta)
+                    let scaleRatio = 1 - (absScaleDelta / featuredWidth)
+                    let scale =  -Int(100 * scaleRatio)
+                    attributes.zIndex = scale
+                }
 
             } else if indexPath.item == (featuredItemIndex + 2) {
-                attributes.zIndex = -Int(nextItemPercentageOffset * 30 + 70)
-
-            } else if indexPath.item == (featuredItemIndex + 3) {
-                attributes.zIndex = -Int(nextItemPercentageOffset * 70)
+                print(featuredItemIndex, nextItemPercentageOffset)
                 
-            } else if indexPath.item > (featuredItemIndex + 3) {
+                if nextItemPercentageOffset >= 0 {
+                    attributes.zIndex = -Int(nextItemPercentageOffset * (100 - Cell.featuredRatio) + Cell.featuredRatio)
+               
+                } else {
+                    attributes.zIndex = -Int(Cell.featuredRatio - Cell.featuredRatio * abs(nextItemPercentageOffset))
+                }
+                
+
+                
+
+            } else if indexPath.item == (featuredItemIndex + 3), nextItemPercentageOffset > 0 {
+                attributes.zIndex = -Int(nextItemPercentageOffset * Cell.featuredRatio)
+                
+            } else if indexPath.item >= (featuredItemIndex + 3) {
                 attributes.zIndex = -1
                 
-            // Item not featured, but might be featured in the left
+            // Item not featured, but might be featured @left
             } else if indexPath.item == (featuredItemIndex - 1) {
-                attributes.zIndex = Int(100 - nextItemPercentageOffset * 30)
+                attributes.zIndex = Int(100 - nextItemPercentageOffset * (100 - Cell.featuredRatio))
                 
             } else if indexPath.item == (featuredItemIndex - 2) {
-                attributes.zIndex = Int(70 - 70 * nextItemPercentageOffset)
+                attributes.zIndex = Int(Cell.featuredRatio - Cell.featuredRatio * nextItemPercentageOffset)
                 
             } else if indexPath.item < (featuredItemIndex - 2) {
                 attributes.zIndex = 1
